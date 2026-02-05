@@ -1,0 +1,136 @@
+/* ===== PAGE ===== */
+.signature-page {
+  min-height: 100vh;
+  background: #f4f6fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ===== CARD ===== */
+.signature-wrapper {
+  background: #ffffff;
+  width: 100%;
+  max-width: 720px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+}
+
+/* ===== HEADER ===== */
+.signature-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.signature-header h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #0247aa;
+}
+
+.signature-header p {
+  font-size: 14px;
+  color: #666;
+  margin-top: 6px;
+}
+
+/* ===== PDF ===== */
+.signature-pdf-wrapper {
+  border: 1px solid #e6eaf2;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 460px;
+  margin-bottom: 20px;
+}
+
+.signature-pdf {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+/* ===== CHECKBOX ===== */
+.signature-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.signature-checkbox input {
+  margin-top: 3px;
+}
+
+/* ===== ACTIONS ===== */
+.signature-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.signature-select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #e6eaf2;
+  background: #f8f9fc;
+  color: #555;
+}
+
+/* ===== BUTTON ===== */
+.signature-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #0247aa, #0b5ed7);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signature-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(2, 71, 170, 0.25);
+}
+
+.signature-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== SUCCESS ===== */
+.signature-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 0;
+  color: #1e7f43;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.signature-success span {
+  font-size: 32px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .signature-wrapper {
+    padding: 16px;
+  }
+
+  .signature-pdf-wrapper {
+    height: 360px;
+  }
+}

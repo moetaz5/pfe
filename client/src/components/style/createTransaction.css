@@ -1,0 +1,264 @@
+/* =========================
+   SAME DESIGN SYSTEM (MediCom)
+========================= */
+:root {
+  --primary: #0247AA;
+  --secondary: #497BC1;
+  --accent: #A0BADF;
+  --white: #ffffff;
+  --black: #000000;
+
+  --bg: #f5f7fb;
+  --text: #1f2937;
+  --muted: #6b7280;
+
+  --card: #ffffff;
+  --border: #e6eaf2;
+  --shadow: 0 10px 30px rgba(2, 71, 170, 0.08);
+
+  --radius: 16px;
+  --transition: 0.2s ease-in-out;
+}
+
+/* Page container */
+.page {
+  padding: 24px;
+  background: var(--bg);
+  min-height: 100vh;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: var(--text);
+}
+
+.full-width-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Header like transactions */
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.page-head-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.page-head h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.page-head p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Main card */
+.create-card {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+/* Title inside card */
+.create-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* Form layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 12px;
+  outline: none;
+  font-size: 14px;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.input:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 4px rgba(73, 123, 193, 0.15);
+}
+
+/* Upload area */
+.upload-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.upload-box {
+  border: 2px dashed rgba(160, 186, 223, 0.9);
+  background: rgba(160, 186, 223, 0.12);
+  border-radius: var(--radius);
+  padding: 16px;
+  transition: var(--transition);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upload-box:hover {
+  border-color: var(--secondary);
+  background: rgba(73, 123, 193, 0.08);
+}
+
+.upload-box.dragging {
+  border-color: var(--primary);
+  background: rgba(2, 71, 170, 0.08);
+}
+
+.upload-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.upload-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.file-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  word-break: break-word;
+}
+
+/* Buttons (same as transactions) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: var(--transition);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: 0 8px 20px rgba(2, 71, 170, 0.2);
+}
+
+.btn-primary:hover {
+  background: #013b8d;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-outline:hover {
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+/* Footer actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* Full width fields */
+.full {
+  grid-column: 1 / -1;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-actions {
+    width: 100%;
+    justify-content: stretch;
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+.success-box {
+  background: #e6f4ea;
+  color: #1e7f43;
+  border: 1px solid #cce7d6;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+

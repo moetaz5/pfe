@@ -1,0 +1,147 @@
+/* ================= PDF PREVIEW ================= */
+.pdf-preview {
+  margin: 16px 0;
+  border: 1px solid #e6eaf2;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f9fafb;
+}
+
+.pdf-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  font-weight: 700;
+  color: #0247AA;
+  background: #f1f5ff;
+}
+
+.pdf-preview-frame {
+  height: 480px;
+  background: #fff;
+}
+
+.pdf-preview-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ================= STATUS ================= */
+.status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+.status.waiting {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.processing {
+  background: #e7f1ff;
+  color: #0247AA;
+}
+
+.status.signed {
+  background: #e6f4ea;
+  color: #1e7f43;
+}
+
+/* ================= MODAL ================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  width: 90%;
+  max-width: 1000px;
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* ================= SEARCH ================= */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 10px 12px;
+  border: 1px solid #e6eaf2;
+  border-radius: 12px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+/* ================= PDF PREVIEW ================= */
+.pdf-preview {
+  margin-top: 16px;
+  border: 1px solid #e6eaf2;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 420px;
+}
+
+.pdf-preview iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ================= MODAL ================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  width: 90%;
+  max-width: 1100px;
+  height: 85vh;
+  border-radius: 16px;
+  padding: 16px;
+  position: relative;
+}
+
+.modal-pdf {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  font-size: 30px;
+  cursor: pointer;
+}
