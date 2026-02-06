@@ -814,16 +814,16 @@ app.get("/api/statistiques", verifyToken, (req, res) => {
               }
               stats.transactionsEnAttente = r4[0]?.total || 0;
 
-              // 5️⃣ Factures totales + montant
-              db.query(
-                "SELECT COUNT(*) AS total, SUM(montant) AS totalMontant FROM factures",
-                (err, r5) => {
-                  if (err) {
-                    console.error("❌ Erreur factures:", err);
-                    return res.status(500).json({ message: "Erreur serveur" });
-                  }
-                  stats.totalFactures = r5[0]?.total || 0;
-                  stats.totalMontant = r5[0]?.totalMontant || 0;
+              // 5️⃣ Factures totales (sans montant)
+db.query(
+  "SELECT COUNT(*) AS total FROM factures",
+  (err, r5) => {
+    if (err) {
+      console.error("❌ Erreur factures:", err);
+      return res.status(500).json({ message: "Erreur serveur" });
+    }
+    stats.totalFactures = r5[0]?.total || 0;
+
 
                   // 6️⃣ Factures terminées
                   db.query(

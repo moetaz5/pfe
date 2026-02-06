@@ -1,0 +1,258 @@
+/* =========================
+   Mediacom Palette + Modern UI (SCOPED)
+   Bigger card – no inner scroll
+   ========================= */
+
+.contact-scope{
+  --primary: #0247AA;
+  --secondary: #497BC1;
+  --accent: #A0BADF;
+  --white: #FFFFFF;
+  --black: #000000;
+
+  --bg: #F6F8FC;
+  --text: #0B1220;
+  --muted: #5C6B7A;
+
+  --card: rgba(255,255,255,0.78);
+  --cardBorder: rgba(160,186,223,0.35);
+  --shadow: 0 12px 30px rgba(2,71,170,0.12);
+
+  --radius: 16px;
+  --radius-sm: 12px;
+
+  --ring: 0 0 0 4px rgba(73,123,193,0.25);
+}
+
+/* Scoped reset */
+.contact-scope,
+.contact-scope *{
+  box-sizing: border-box;
+}
+
+/* Container */
+.contact-scope{
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(160,186,223,0.45), transparent 60%),
+    radial-gradient(900px 500px at 90% 20%, rgba(73,123,193,0.28), transparent 55%),
+    radial-gradient(1100px 700px at 60% 100%, rgba(2,71,170,0.18), transparent 60%),
+    var(--bg);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.4;
+  padding: 36px 16px;
+  display: grid;
+  place-items: start center;
+}
+
+/* Page wrapper */
+.contact-scope .page{
+  width: 100%;
+  display: grid;
+  place-items: start center;
+}
+
+/* Header */
+.contact-scope .page-head{
+  width: min(900px, 100%);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.contact-scope .page-head h2{
+  margin: 0;
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--black);
+}
+
+.contact-scope .page-head p{
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14.5px;
+}
+
+/* Card form – BIGGER */
+.contact-scope .form-card{
+  width: min(900px, 90%);
+  background: var(--card);
+  border: 1px solid var(--cardBorder);
+  border-radius: var(--radius);
+
+  /* ⬆️ bigger inner space */
+  padding: 24px;
+
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+
+  /* ❌ no inner scroll */
+  overflow: hidden;
+}
+
+/* Glow background */
+.contact-scope .form-card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background: linear-gradient(90deg,
+    rgba(2,71,170,0.12),
+    rgba(73,123,193,0.10),
+    rgba(160,186,223,0.12)
+  );
+  filter: blur(16px);
+  z-index: 0;
+}
+
+.contact-scope .form-card > *{
+  position: relative;
+  z-index: 1;
+}
+
+/* Alerts */
+.contact-scope .alert{
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+  border: 1px solid transparent;
+}
+
+.contact-scope .alert.success{
+  background: rgba(160,186,223,0.25);
+  border-color: rgba(73,123,193,0.25);
+  color: #0c2f66;
+}
+
+.contact-scope .alert.error{
+  background: rgba(2,71,170,0.10);
+  border-color: rgba(2,71,170,0.25);
+  color: #0b2c5f;
+}
+
+/* Form grid */
+.contact-scope .form-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px; /* ⬆️ more breathing space */
+}
+
+.contact-scope .field{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-scope .field label{
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.contact-scope .field select,
+.contact-scope .field textarea{
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(160,186,223,0.55);
+  background: rgba(255,255,255,0.9);
+  color: var(--text);
+  padding: 12px;
+  outline: none;
+}
+
+.contact-scope .field textarea{
+  resize: vertical;
+  min-height: 140px;
+}
+
+/* Buttons */
+.contact-scope .form-actions{
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.contact-scope .btn{
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.contact-scope .btn.primary{
+  color: var(--white);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.contact-scope .btn.ghost{
+  color: var(--primary);
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(160,186,223,0.55);
+}
+
+/* Responsive */
+@media (max-width: 640px){
+  .contact-scope .form-card{
+    width: 95%;
+    padding: 20px;
+  }
+
+  .contact-scope .form-actions{
+    flex-direction: column;
+  }
+
+  .contact-scope .btn{
+    width: 100%;
+  }
+}
+/* ===== Make this section bigger (select + textarea + buttons) ===== */
+
+/* bigger labels */
+.contact-scope .field label{
+  font-size: 15px;
+}
+
+/* bigger select */
+.contact-scope .field select{
+  min-height: 56px;
+  padding: 14px 16px;
+  font-size: 16px;
+}
+
+/* bigger textarea (Message) */
+.contact-scope .field textarea{
+  min-height: 400px;     /* ⬅️ كبّرها كيف تحب */
+  padding: 16px;
+  font-size: 16px;
+}
+
+/* buttons bigger */
+.contact-scope .btn{
+  padding: 14px 22px;
+  font-size: 16px;
+}
+
+/* if you want buttons wider like in screenshot */
+.contact-scope .form-actions{
+  gap: 16px;
+}
+
+.contact-scope .btn.primary{
+  min-width: 220px;
+}
+
+.contact-scope .btn.ghost{
+  min-width: 180px;
+}

@@ -1,0 +1,106 @@
+/* =========================
+   Mediacom Dashboard Theme (SCOPED)
+   Applies only inside .stat-scope
+   ========================= */
+
+.stat-scope{
+  --primary: #0247AA;
+  --secondary: #497BC1;
+  --accent: #A0BADF;
+  --bg: #F6F8FC;
+  --text: #0B1220;
+  --muted: #5C6B7A;
+
+  --card-bg: rgba(255,255,255,0.85);
+  --card-border: rgba(160,186,223,0.35);
+  --shadow: 0 12px 30px rgba(2,71,170,0.12);
+  --radius: 16px;
+}
+
+/* Optional scoped reset */
+.stat-scope,
+.stat-scope * {
+  box-sizing: border-box;
+}
+
+/* Page */
+.stat-scope .stat-page{
+  min-height: 100vh;
+  padding: 32px 16px;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(160,186,223,0.45), transparent 60%),
+    radial-gradient(900px 500px at 90% 20%, rgba(73,123,193,0.28), transparent 55%),
+    radial-gradient(1100px 700px at 60% 100%, rgba(2,71,170,0.18), transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+}
+
+/* Container */
+.stat-scope .stat-container{
+  width: min(1100px, 100%);
+  margin: auto;
+}
+
+/* Header */
+.stat-scope .stat-header{
+  margin-bottom: 24px;
+}
+
+.stat-scope .stat-header h2{
+  margin: 0;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.stat-scope .stat-header p{
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+/* Cards */
+.stat-scope .stat-card{
+  background: var(--card-bg) !important;
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--card-border) !important;
+  box-shadow: var(--shadow) !important;
+  backdrop-filter: blur(10px);
+}
+
+.stat-scope .stat-card-title{
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.stat-scope .stat-card-value{
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+/* Section titles */
+.stat-scope .stat-section-title{
+  margin: 16px 0 8px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+/* Chart wrapper */
+.stat-scope .stat-chart{
+  height: 320px;
+}
+
+/* Skeleton spacing */
+.stat-scope .stat-skeleton{
+  margin: 12px 0;
+}
+
+/* Responsive */
+@media (max-width: 640px){
+  .stat-scope .stat-header h2{
+    font-size: 22px;
+  }
+}

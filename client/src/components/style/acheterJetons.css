@@ -1,0 +1,218 @@
+/* =========================
+   Mediacom Palette + Modern UI (SCOPED)
+   NO inner scroll – reduced size
+   Applies only inside .page-scope
+   ========================= */
+
+.page-scope{
+  --primary: #0247AA;
+  --secondary: #497BC1;
+  --accent: #A0BADF;
+  --white: #FFFFFF;
+  --black: #000000;
+
+  --bg: #F6F8FC;
+  --text: #0B1220;
+  --muted: #5C6B7A;
+
+  --card: rgba(255,255,255,0.78);
+  --cardBorder: rgba(160,186,223,0.35);
+  --shadow: 0 12px 30px rgba(2,71,170,0.12);
+
+  --radius: 16px;
+  --radius-sm: 12px;
+}
+
+/* Scoped reset */
+.page-scope,
+.page-scope *{
+  box-sizing: border-box;
+}
+
+/* Page background */
+.page-scope{
+  min-height: 100vh;
+  padding: 36px 16px;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(160,186,223,0.45), transparent 60%),
+    radial-gradient(900px 500px at 90% 20%, rgba(73,123,193,0.28), transparent 55%),
+    radial-gradient(1100px 700px at 60% 100%, rgba(2,71,170,0.18), transparent 60%),
+    var(--bg);
+  font-family: ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Helvetica, Arial;
+  display: grid;
+  place-items: start center;
+}
+
+/* Page wrapper */
+.page-scope .page{
+  width: 100%;
+  display: grid;
+  place-items: start center;
+}
+
+/* Header */
+.page-scope .page-head{
+  width: min(800px, 80%);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-scope .page-head h2{
+  margin: 0;
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 800;
+  color: var(--black);
+}
+
+.page-scope .page-head p{
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Card (NO SCROLL INSIDE) */
+.page-scope .form-card{
+  width: min(800px, 100%);
+  background: var(--card);
+  border: 1px solid var(--cardBorder);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  position: relative;
+
+  /* ❌ no inner scroll */
+  overflow: hidden;
+}
+
+/* Glow effect */
+.page-scope .form-card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background: linear-gradient(90deg,
+    rgba(2,71,170,0.12),
+    rgba(73,123,193,0.10),
+    rgba(160,186,223,0.12)
+  );
+  filter: blur(16px);
+  z-index: 0;
+}
+
+.page-scope .form-card > *{
+  position: relative;
+  z-index: 1;
+}
+
+/* Buttons */
+.page-scope .btn{
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 800;
+  cursor: pointer;
+  border: 0;
+}
+
+.page-scope .btn.primary{
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.page-scope .btn.ghost{
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(160,186,223,0.55);
+  color: var(--primary);
+}
+
+/* Extras */
+.page-scope .center{
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.page-scope .center-card{
+  text-align: center;
+  display: grid;
+  gap: 10px;
+  place-items: center;
+  max-width: 700px;
+}
+
+.page-scope .title{
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--black);
+}
+
+.page-scope .btn.large{
+  padding: 12px 20px;
+  font-size: 15px;
+}
+
+/* Info list */
+.page-scope .info-list{
+  width: min(800px, 80%);
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(160,186,223,0.35);
+}
+
+.page-scope .info-list > div{
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 640px){
+  .page-scope .page-head,
+  .page-scope .form-card,
+  .page-scope .info-list{
+    width: 95%;
+  }
+
+  .page-scope .btn{
+    width: 100%;
+  }
+}
+/* ===== Bigger "Pack personnalisé" card ===== */
+
+.page-scope .center-card{
+  max-width: 1000px;      /* ⬅️ الكادر أعرض */
+  width: 95%;
+  padding: 32px 28px;     /* ⬅️ مسافة داخلية أكبر */
+  gap: 30px;
+}
+
+/* Title bigger */
+.page-scope .center-card h2,
+.page-scope .center-card .title{
+  font-size: 26px;
+  font-weight: 900;
+}
+
+/* Subtitle bigger */
+.page-scope .center-card p{
+  font-size: 18px;
+  color: var(--muted);
+}
+
+/* Big CTA button */
+.page-scope .center-card .btn{
+  width: 100%;            /* ⬅️ الزر يعمّر العرض */
+  max-width: 700px;
+  padding: 18px 28px;     /* ⬅️ أطول */
+  font-size: 18px;
+  border-radius: 999px;
+}
+

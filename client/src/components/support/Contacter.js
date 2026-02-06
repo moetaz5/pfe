@@ -1,8 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import "../style/information.css";
+import "../style/contacter.css";
 
-const API_URL = "http://localhost:5000"; // change si besoin
+const API_URL = "http://localhost:5000";
 
 const Contacter = () => {
   const [form, setForm] = useState({ type: "", message: "" });
@@ -24,7 +24,6 @@ const Contacter = () => {
     try {
       setLoading(true);
 
-      // مثال إرسال للباك (بدّل الرابط حسب backend متاعك)
       const res = await axios.post(
         `${API_URL}/api/support/contact`,
         {
@@ -50,56 +49,58 @@ const Contacter = () => {
   };
 
   return (
-    <div className="page">
-      <div className="page-head">
-        <div>
-          <h2>Contacter le support</h2>
-          <p>Veuillez décrire votre demande ci-dessous.</p>
+    <div className="contact-scope">
+      <div className="page">
+        <div className="page-head">
+          <div>
+            <h2>Contacter le support</h2>
+            <p>Veuillez décrire votre demande ci-dessous.</p>
+          </div>
         </div>
+
+        <form className="form-card" onSubmit={onSubmit}>
+          {err && <div className="alert error">{err}</div>}
+          {msg && <div className="alert success">{msg}</div>}
+
+          <div className="form-grid">
+            <div className="field full">
+              <label>Type de demande</label>
+              <select name="type" value={form.type} onChange={onChange}>
+                <option value="">-- Sélectionner --</option>
+                <option value="technique">Demande technique</option>
+                <option value="commerciale">Demande commerciale</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+
+            <div className="field full">
+              <label>Message</label>
+              <textarea
+                name="message"
+                rows="6"
+                value={form.message}
+                onChange={onChange}
+                placeholder="Décrivez votre problème..."
+              />
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button className="btn primary" type="submit" disabled={loading}>
+              {loading ? "Envoi..." : "Envoyer"}
+            </button>
+
+            <button
+              className="btn ghost"
+              type="button"
+              onClick={onReset}
+              disabled={loading}
+            >
+              Annuler
+            </button>
+          </div>
+        </form>
       </div>
-
-      <form className="form-card" onSubmit={onSubmit}>
-        {err && <div className="alert error">{err}</div>}
-        {msg && <div className="alert success">{msg}</div>}
-
-        <div className="form-grid">
-          <div className="field full">
-            <label>Type de demande</label>
-            <select name="type" value={form.type} onChange={onChange}>
-              <option value="">-- Sélectionner --</option>
-              <option value="technique">Demande technique</option>
-              <option value="commerciale">Demande commerciale</option>
-              <option value="autre">Autre</option>
-            </select>
-          </div>
-
-          <div className="field full">
-            <label>Message</label>
-            <textarea
-              name="message"
-              rows="6"
-              value={form.message}
-              onChange={onChange}
-              placeholder="Décrivez votre problème..."
-            />
-          </div>
-        </div>
-
-        <div className="form-actions">
-          <button className="btn primary" type="submit" disabled={loading}>
-            {loading ? "Envoi..." : "Envoyer"}
-          </button>
-
-          <button
-            className="btn ghost"
-            type="button"
-            onClick={onReset}
-            disabled={loading}
-          >
-            Annuler
-          </button>
-        </div>
-      </form>
     </div>
   );
 };
