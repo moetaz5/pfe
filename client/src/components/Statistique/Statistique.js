@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "../style/statistique.css";
 
-import { Typography, Grid, Card, CardContent } from "@mui/material";
+import { Typography } from "@mui/material";
 
 import {
   BarChart,
@@ -21,7 +21,7 @@ import {
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 
 /* ================= CONFIG ================= */
-const COLORS = ["#0247AA", "#497BC1", "#A0BADF", "#000000"];
+const COLORS = ["#0f5ad1", "#0ea5a4", "#f59e0b", "#0f172a"];
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -79,64 +79,70 @@ const StatistiqueContent = () => {
   ];
 
   const pieData = [
-    { name: "Validées", value: stats.transactionsValidees },
+    { name: "Validees", value: stats.transactionsValidees },
     { name: "En attente", value: stats.transactionsEnAttente },
+  ];
+
+  const kpis = [
+    { label: "Utilisateurs", value: stats.utilisateurs, hint: "Comptes actifs" },
+    { label: "Transactions", value: stats.totalTransactions, hint: "Total traite" },
+    { label: "Factures", value: stats.totalFactures, hint: "Documents PDF" },
+    {
+      label: "Validations",
+      value: stats.transactionsValidees,
+      hint: "Transactions validees",
+    },
   ];
 
   return (
     <div className="stat-scope">
       <div className="stat-page">
         <div className="stat-container">
-          {/* Header */}
-          <div className="stat-header">
-            <h2>Dashboard Statistiques</h2>
-            <p>Vue d’ensemble sur l’activité et l’état des transactions</p>
+          <div className="stat-hero">
+            <div className="stat-title">
+              <h2>Dashboard statistiques</h2>
+              <p>Vue d’ensemble sur l’activité et l’état des transactions</p>
+            </div>
+            <div className="stat-pill">Données globales</div>
           </div>
 
-          {/* Cards */}
-          <Grid container spacing={3} sx={{ mb: 4 }}>
-            {[
-              { label: "Utilisateurs", value: stats.utilisateurs },
-              { label: "Transactions", value: stats.totalTransactions },
-              { label: "Factures", value: stats.totalFactures },
-              
-            ].map((item, i) => (
-              <Grid item xs={12} sm={6} md={3} key={i}>
-                <Card className="stat-card">
-                  <CardContent>
-                    <div className="stat-card-title">{item.label}</div>
-                    <div className="stat-card-value">{item.value}</div>
-                  </CardContent>
-                </Card>
-              </Grid>
+          <div className="stat-kpis">
+            {kpis.map((item, i) => (
+              <div className="stat-kpi-card" key={i}>
+                <div className="stat-kpi-label">{item.label}</div>
+                <div className="stat-kpi-value">{item.value}</div>
+                <div className="stat-kpi-hint">{item.hint}</div>
+              </div>
             ))}
-          </Grid>
+          </div>
 
-          {/* Bar chart */}
-          <div className="stat-section-title">Activité</div>
-          <Card className="stat-card" sx={{ mb: 4 }}>
-            <CardContent>
+          <div className="stat-panels">
+            <div className="stat-panel">
+              <div className="stat-panel-head">
+                <h3>Activité</h3>
+                <p>Transactions vs factures</p>
+              </div>
               <div className="stat-chart">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barData}>
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="value" fill="#0247AA" radius={[10, 10, 0, 0]} />
+                    <Bar dataKey="value" fill="#0f5ad1" radius={[10, 10, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Pie chart */}
-          <div className="stat-section-title">Statut Transactions</div>
-          <Card className="stat-card" sx={{ mb: 4 }}>
-            <CardContent>
+            <div className="stat-panel">
+              <div className="stat-panel-head">
+                <h3>Statut des transactions</h3>
+                <p>Répartition globale</p>
+              </div>
               <div className="stat-chart">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={pieData} dataKey="value" label>
+                    <Pie data={pieData} dataKey="value" labelLine={false} label>
                       {pieData.map((_, i) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
@@ -145,25 +151,39 @@ const StatistiqueContent = () => {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-            </CardContent>
-          </Card>
+              <div className="stat-legend">
+                {pieData.map((item, i) => (
+                  <div className="stat-legend-item" key={item.name}>
+                    <div className="stat-legend-left">
+                      <span
+                        className="stat-legend-swatch"
+                        style={{ background: COLORS[i % COLORS.length] }}
+                      />
+                      <span>{item.name}</span>
+                    </div>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-          {/* Monthly chart */}
-          <div className="stat-section-title">Transactions par mois</div>
-          <Card className="stat-card">
-            <CardContent>
+            <div className="stat-panel stat-panel-wide">
+              <div className="stat-panel-head">
+                <h3>Transactions par mois</h3>
+                <p>Volume de transactions par période</p>
+              </div>
               <div className="stat-chart">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={stats.transactionsParMois}>
                     <XAxis dataKey="mois" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="total" fill="#497BC1" radius={[10, 10, 0, 0]} />
+                    <Bar dataKey="total" fill="#0ea5a4" radius={[10, 10, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>

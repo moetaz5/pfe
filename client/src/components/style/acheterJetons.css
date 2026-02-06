@@ -1,218 +1,118 @@
-/* =========================
-   Mediacom Palette + Modern UI (SCOPED)
-   NO inner scroll – reduced size
-   Applies only inside .page-scope
-   ========================= */
+/* ===================== Acheter Jetons (match transactions/contacter) ===================== */
 
-.page-scope{
-  --primary: #0247AA;
-  --secondary: #497BC1;
-  --accent: #A0BADF;
-  --white: #FFFFFF;
-  --black: #000000;
-
-  --bg: #F6F8FC;
-  --text: #0B1220;
-  --muted: #5C6B7A;
-
-  --card: rgba(255,255,255,0.78);
-  --cardBorder: rgba(160,186,223,0.35);
-  --shadow: 0 12px 30px rgba(2,71,170,0.12);
-
-  --radius: 16px;
-  --radius-sm: 12px;
+.page-scope {
+  min-height: 100vh;
+  background-color: #f4f7fa;
 }
 
-/* Scoped reset */
 .page-scope,
-.page-scope *{
+.page-scope * {
   box-sizing: border-box;
 }
 
-/* Page background */
-.page-scope{
-  min-height: 100vh;
-  padding: 36px 16px;
-  color: var(--text);
-  background:
-    radial-gradient(1200px 600px at 20% 10%, rgba(160,186,223,0.45), transparent 60%),
-    radial-gradient(900px 500px at 90% 20%, rgba(73,123,193,0.28), transparent 55%),
-    radial-gradient(1100px 700px at 60% 100%, rgba(2,71,170,0.18), transparent 60%),
-    var(--bg);
-  font-family: ui-sans-serif, system-ui, -apple-system,
-    Segoe UI, Roboto, Helvetica, Arial;
-  display: grid;
-  place-items: start center;
-}
-
-/* Page wrapper */
-.page-scope .page{
-  width: 100%;
-  display: grid;
-  place-items: start center;
-}
-
-/* Header */
-.page-scope .page-head{
-  width: min(800px, 80%);
-  margin-bottom: 18px;
+.page-scope .page {
   display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.page-scope .page-head h2{
-  margin: 0;
-  font-size: clamp(20px, 2vw, 26px);
-  font-weight: 800;
-  color: var(--black);
-}
-
-.page-scope .page-head p{
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-/* Card (NO SCROLL INSIDE) */
-.page-scope .form-card{
-  width: min(800px, 100%);
-  background: var(--card);
-  border: 1px solid var(--cardBorder);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
-  position: relative;
-
-  /* ❌ no inner scroll */
-  overflow: hidden;
-}
-
-/* Glow effect */
-.page-scope .form-card::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background: linear-gradient(90deg,
-    rgba(2,71,170,0.12),
-    rgba(73,123,193,0.10),
-    rgba(160,186,223,0.12)
-  );
-  filter: blur(16px);
-  z-index: 0;
-}
-
-.page-scope .form-card > *{
-  position: relative;
-  z-index: 1;
-}
-
-/* Buttons */
-.page-scope .btn{
-  border-radius: 999px;
-  padding: 10px 16px;
-  font-weight: 800;
-  cursor: pointer;
-  border: 0;
-}
-
-.page-scope .btn.primary{
-  color: #fff;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-}
-
-.page-scope .btn.ghost{
-  background: rgba(255,255,255,0.65);
-  border: 1px solid rgba(160,186,223,0.55);
-  color: var(--primary);
-}
-
-/* Extras */
-.page-scope .center{
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  padding: 30px;
+  min-height: 100vh;
 }
 
-.page-scope .center-card{
-  text-align: center;
-  display: grid;
-  gap: 10px;
-  place-items: center;
-  max-width: 700px;
+.page-scope .page-head {
+  text-align: left;
+  margin-bottom: 40px;
+  width: 100%;
 }
 
-.page-scope .title{
+.page-scope .page-head h2 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #2c3e50;
   margin: 0;
-  font-size: 18px;
-  font-weight: 900;
-  color: var(--black);
 }
 
-.page-scope .btn.large{
-  padding: 12px 20px;
-  font-size: 15px;
+.page-scope .page-head p {
+  font-size: 1.1em;
+  color: #7f8c8d;
+  margin-top: 10px;
+}
+
+/* Card */
+.page-scope .form-card {
+  width: 100%;
+  max-width: none;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Centered content inside the card */
+.page-scope .center {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.page-scope .center-card {
+  display: grid;
+  gap: 12px;
+}
+
+.page-scope .title {
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Button */
+.page-scope .btn {
+  padding: 10px 15px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s;
+}
+
+.page-scope .btn:hover {
+  background-color: #2980b9;
+}
+
+.page-scope .btn.large {
+  padding: 12px 18px;
+  font-size: 1.05em;
 }
 
 /* Info list */
-.page-scope .info-list{
-  width: min(800px, 80%);
+.page-scope .info-list {
+  width: 100%;
   margin-top: 18px;
   display: grid;
   gap: 10px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.65);
-  border: 1px solid rgba(160,186,223,0.35);
+  padding: 16px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
 }
 
-.page-scope .info-list > div{
-  color: var(--muted);
+.page-scope .info-list > div {
+  color: #7f8c8d;
   font-weight: 600;
 }
 
 /* Responsive */
-@media (max-width: 640px){
-  .page-scope .page-head,
-  .page-scope .form-card,
-  .page-scope .info-list{
-    width: 95%;
-  }
-
-  .page-scope .btn{
-    width: 100%;
+@media (max-width: 768px) {
+  .page-scope .form-card {
+    padding: 15px;
   }
 }
-/* ===== Bigger "Pack personnalisé" card ===== */
 
-.page-scope .center-card{
-  max-width: 1000px;      /* ⬅️ الكادر أعرض */
-  width: 95%;
-  padding: 32px 28px;     /* ⬅️ مسافة داخلية أكبر */
-  gap: 30px;
+@media (max-width: 480px) {
+  .page-scope .page-head h2 {
+    font-size: 1.6em;
+  }
 }
-
-/* Title bigger */
-.page-scope .center-card h2,
-.page-scope .center-card .title{
-  font-size: 26px;
-  font-weight: 900;
-}
-
-/* Subtitle bigger */
-.page-scope .center-card p{
-  font-size: 18px;
-  color: var(--muted);
-}
-
-/* Big CTA button */
-.page-scope .center-card .btn{
-  width: 100%;            /* ⬅️ الزر يعمّر العرض */
-  max-width: 700px;
-  padding: 18px 28px;     /* ⬅️ أطول */
-  font-size: 18px;
-  border-radius: 999px;
-}
-
