@@ -1,0 +1,392 @@
+/* ===================== General Layout ===================== */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background-color: #f4f7fa;
+  min-height: 100vh;
+}
+
+.page-head {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-head h2 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.page-head p {
+  font-size: 1.1em;
+  color: #7f8c8d;
+  margin-top: 10px;
+}
+
+/* ===================== Transaction List ===================== */
+.transactions-list {
+  width: 100%;
+  max-width: 800px;
+}
+
+.transaction-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.transaction-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-header h4 {
+  font-size: 1.5em;
+  color: #2c3e50;
+}
+
+.transaction-header p {
+  color: #7f8c8d;
+  font-size: 1.1em;
+}
+
+.toggle-icon {
+  font-size: 1.5em;
+  color: #3498db;
+}
+
+.transaction-details {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ecf0f1;
+  border-radius: 8px;
+}
+
+.files-container {
+  display: flex;
+  gap: 15px;
+}
+
+.files-container .btn {
+  padding: 10px 15px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s;
+}
+
+.files-container .btn:hover {
+  background-color: #2980b9;
+}
+
+/* ===================== Responsive Design ===================== */
+@media (max-width: 768px) {
+  .transaction-card {
+    padding: 15px;
+  }
+
+  .files-container .btn {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-head h2 {
+    font-size: 1.6em;
+  }
+}
+/* ===================== General Layout ===================== */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background-color: #f4f7fa;
+  min-height: 100vh;
+}
+
+.page-head {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-head h2 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.page-head p {
+  font-size: 1.1em;
+  color: #7f8c8d;
+  margin-top: 10px;
+}
+
+/* ===================== Search Bar ===================== */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.1em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  outline: none;
+}
+
+.search-container input:focus {
+  border-color: #3498db;
+}
+
+.search-container .search-icon {
+  font-size: 1.5em;
+  color: #3498db;
+}
+
+/* ===================== Transaction List ===================== */
+.transactions-list {
+  width: 100%;
+  max-width: 800px;
+}
+
+.transaction-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.transaction-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-header h4 {
+  font-size: 1.5em;
+  color: #2c3e50;
+}
+
+.transaction-header p {
+  color: #7f8c8d;
+  font-size: 1.1em;
+}
+
+.toggle-icon {
+  font-size: 1.5em;
+  color: #3498db;
+}
+
+.transaction-details {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ecf0f1;
+  border-radius: 8px;
+}
+
+.files-container {
+  display: flex;
+  gap: 15px;
+}
+
+.files-container .btn {
+  padding: 10px 15px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s;
+}
+
+.files-container .btn:hover {
+  background-color: #2980b9;
+}
+
+/* ===================== Responsive Design ===================== */
+@media (max-width: 768px) {
+  .transaction-card {
+    padding: 15px;
+  }
+
+  .files-container .btn {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-head h2 {
+    font-size: 1.6em;
+  }
+}
+/* ===================== General Layout ===================== */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background-color: #f4f7fa;
+  min-height: 100vh;
+}
+
+.page-head {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-head h2 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.page-head p {
+  font-size: 1.1em;
+  color: #7f8c8d;
+  margin-top: 10px;
+}
+
+/* ===================== Search Bar ===================== */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.1em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  outline: none;
+}
+
+.search-container input:focus {
+  border-color: #3498db;
+}
+
+.search-container .search-icon {
+  font-size: 1.5em;
+  color: #3498db;
+}
+
+/* ===================== Transaction List ===================== */
+.transactions-list {
+  width: 100%;
+  max-width: 800px;
+}
+
+.transaction-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.transaction-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-header h4 {
+  font-size: 1.5em;
+  color: #2c3e50;
+}
+
+.transaction-header p {
+  color: #7f8c8d;
+  font-size: 1.1em;
+}
+
+.toggle-icon {
+  font-size: 1.5em;
+  color: #3498db;
+}
+
+.transaction-details {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ecf0f1;
+  border-radius: 8px;
+}
+
+.files-container {
+  display: flex;
+  gap: 15px;
+}
+
+.files-container .btn {
+  padding: 10px 15px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s;
+}
+
+.files-container .btn:hover {
+  background-color: #2980b9;
+}
+
+/* ===================== Responsive Design ===================== */
+@media (max-width: 768px) {
+  .transaction-card {
+    padding: 15px;
+  }
+
+  .files-container .btn {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-head h2 {
+    font-size: 1.6em;
+  }
+}
+

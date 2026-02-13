@@ -1,0 +1,286 @@
+import React, { useContext, useState } from "react";
+import {
+  NavLink,
+  Outlet,
+  useLocation,
+  useNavigate,
+  Navigate
+} from "react-router-dom";
+
+import {
+  FaSignature,
+  FaFileInvoice,
+  FaUser,
+  FaBuilding,
+  FaHeadset,
+  FaCode,
+  FaSignOutAlt,
+  FaBell,
+  FaBars,
+  FaSearch,
+  FaUsers,
+  FaChartBar
+} from "react-icons/fa";
+
+import {
+  Sidebar,
+  Menu,
+  MenuItem,
+  SubMenu
+} from "react-pro-sidebar";
+
+import { AuthContext } from "../context/AuthContext";
+import "./style/dashboard.css";
+import logo from "./assets/logo.png";
+
+const Dashboard = () => {
+  const { user, logout, loading } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [collapsed, setCollapsed] = useState(false);
+
+  if (loading) return <p className="loading">Chargement...</p>;
+  if (!user) return <Navigate to="/login" replace />;
+
+  const isAdmin = user.role === "ADMIN";
+  const isUser = user.role === "USER";
+
+  const isDashboardHome =
+    location.pathname === "/dashboard" ||
+    location.pathname === "/dashboard/";
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
+
+  return (
+    <div className="dash">
+
+      {/* ================= SIDEBAR ================= */}
+      <Sidebar
+        collapsed={collapsed}
+        rootStyles={{
+          backgroundColor: "var(--panel)",
+          borderRight: "1px solid var(--border)",
+          height: "100vh"
+        }}
+      >
+        <div className="sidebar-header-pro">
+          <div className="brand">
+            <img src={logo} alt="Medica-Sign" className="brand-logo" />
+            {!collapsed && (
+              <div className="brand-text">
+                <h3>Medica-Sign</h3>
+                <p>{user.name}</p>
+              </div>
+            )}
+          </div>
+
+          <button
+            className="icon-btn"
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            <FaBars />
+          </button>
+        </div>
+
+        <Menu>
+
+          {/* ================= USER ================= */}
+          {isUser && (
+            <>
+              <MenuItem
+                icon={<FaSignature />}
+                component={<NavLink to="CreateTransaction" />}
+              >
+                Création de transaction
+              </MenuItem>
+
+              <MenuItem
+                icon={<FaFileInvoice />}
+                component={<NavLink to="MyTransactions" />}
+              >
+                Mes transactions
+              </MenuItem>
+
+              <MenuItem
+                icon={<FaFileInvoice />}
+                component={<NavLink to="facture" />}
+              >
+                Mes factures
+              </MenuItem>
+            </>
+          )}
+
+          {/* ================= ADMIN ================= */}
+          {isAdmin && (
+            <>
+              <MenuItem
+                icon={<FaUsers />}
+                component={<NavLink to="GestionUtilisateur" />}
+              >
+                Gestion utilisateurs
+              </MenuItem>
+
+              <MenuItem
+                icon={<FaFileInvoice />}
+                component={<NavLink to="admin/transactions" />}
+              >
+                Toutes transactions
+              </MenuItem>
+
+              <MenuItem
+                icon={<FaChartBar />}
+                component={<NavLink to="StatistiqueAdmin" />}
+              >
+                Statistiques
+              </MenuItem>
+              <MenuItem
+                icon={<FaChartBar />}
+                component={<NavLink to="GestionDemandesJetons" />}
+              >
+                Gestion des demandes de jetons
+              </MenuItem>
+              <MenuItem
+                icon={<FaChartBar />}
+                component={<NavLink to="GestionConfirmationFinaleJetons" />}
+              >
+                Confirmation finale jetons
+              </MenuItem>
+            </>
+          )}
+
+          {/* ================= PROFIL ================= */}
+          <SubMenu icon={<FaUser />} label="Mon profil">
+            <MenuItem component={<NavLink to="profil" />}>
+              Mes informations
+            </MenuItem>
+
+            <MenuItem component={<NavLink to="profil/ProfilEdit" />}>
+              Modifier profil
+            </MenuItem>
+
+            <MenuItem component={<NavLink to="profil/ChangePassword" />}>
+              Changer mot de passe
+            </MenuItem>
+
+            <MenuItem component={<NavLink to="profil/Signature" />}>
+              Ma signature
+            </MenuItem>
+
+            <MenuItem component={<NavLink to="profil/Certification" />}>
+              Certifier mon compte
+            </MenuItem>
+          </SubMenu>
+
+          {/* ================= ORGANISATION ================= */}
+          <SubMenu icon={<FaBuilding />} label="Organisation">
+            <MenuItem component={<NavLink to="SigningRoom" />}>
+              Signing Room
+            </MenuItem>
+
+            <MenuItem component={<NavLink to="statistique" />}>
+              Statistiques
+            </MenuItem>
+          </SubMenu>
+
+          {/* ================= SUPPORT ================= */}
+          <SubMenu icon={<FaHeadset />} label="Support">
+            <MenuItem component={<NavLink to="contacter" />}>
+              Contacter
+            </MenuItem>
+
+            <MenuItem component={<NavLink to="AcheterJetons" />}>
+              Acheter des jetons
+            </MenuItem>
+         
+          <MenuItem component={<NavLink to="MesDemandesJetons" />}>
+              Mes demandes de jetons
+            </MenuItem>
+          </SubMenu>
+
+          {/* ================= DEVELOPPEUR ================= */}
+          <SubMenu icon={<FaCode />} label="Développeur">
+            <MenuItem component={<NavLink to="TokenAPI" />}>
+              Token API
+            </MenuItem>
+
+            <MenuItem component={<NavLink to="dev/api" />}>
+              Échange API
+            </MenuItem>
+          </SubMenu>
+
+        </Menu>
+
+        <div className="sidebar-footer-pro">
+          <button className="logout" onClick={handleLogout}>
+            <FaSignOutAlt />
+            {!collapsed && <span>Déconnexion</span>}
+          </button>
+        </div>
+      </Sidebar>
+
+      {/* ================= MAIN ================= */}
+      <div className="main">
+
+        <header className="topbar">
+          <div className="search">
+            <FaSearch />
+            <input placeholder="Rechercher…" />
+          </div>
+
+          <div className="top-actions">
+            <button className="chip">Aide</button>
+            <button className="chip">FAQ</button>
+
+            <button className="icon-btn notif">
+              <FaBell />
+              <span className="badge">3</span>
+            </button>
+
+            <div className="avatar">
+              {String(user.name || "U").charAt(0).toUpperCase()}
+            </div>
+          </div>
+        </header>
+
+        <main className="content">
+          {isDashboardHome && (
+            <div className="welcome">
+              <div>
+                <h2>
+                  Bienvenue, {user.name}{" "}
+                  {isAdmin && (
+                    <span style={{ color: "#e11d48" }}> (ADMIN)</span>
+                  )}
+                </h2>
+                <p>
+                  Veuillez sélectionner une option dans le menu pour commencer.
+                </p>
+              </div>
+
+              {isUser && (
+                <div className="welcome-actions">
+                  <NavLink className="btn primary" to="CreateTransaction">
+                    Nouvelle signature
+                  </NavLink>
+                  <NavLink className="btn ghost" to="MyTransactions">
+                    Voir transactions
+                  </NavLink>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="card">
+            <Outlet />
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;

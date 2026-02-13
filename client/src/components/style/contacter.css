@@ -1,0 +1,309 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap");
+
+/* ===================== Contacter (Modern UI) ===================== */
+
+.contact-scope {
+  --ink: #0f172a;
+  --slate: #475569;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --brand: #0f5ad1;
+  --brand-2: #0ea5a4;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --radius: 18px;
+}
+
+.contact-scope,
+.contact-scope * {
+  box-sizing: border-box;
+}
+
+.contact-scope {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 500px at 12% 5%, rgba(14, 165, 164, 0.12), transparent 60%),
+    radial-gradient(900px 500px at 95% 10%, rgba(15, 90, 209, 0.12), transparent 60%),
+    linear-gradient(180deg, #f7f9fc 0%, #f2f6fb 100%);
+  padding: 32px 18px 48px;
+  color: var(--ink);
+  font-family: "Sora", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+}
+
+.contact-scope .page {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 24px;
+}
+
+/* Header */
+.contact-scope .page-head {
+  text-align: left;
+}
+
+.contact-scope .page-head h2 {
+  margin: 0;
+  font-size: clamp(24px, 2.6vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.contact-scope .page-head p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14.5px;
+}
+
+/* Card */
+.contact-scope .form-card {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 16px;
+}
+
+/* Alerts */
+.contact-scope .alert {
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 13.5px;
+  border: 1px solid transparent;
+}
+
+.contact-scope .alert.success {
+  background: #ecf7ff;
+  border-color: #b9ddf6;
+  color: #2c3e50;
+}
+
+.contact-scope .alert.error {
+  background: #ffeaea;
+  border-color: #f5b7b1;
+  color: #7f2d2d;
+}
+
+/* Form */
+.contact-scope .form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.contact-scope .form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.contact-scope .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-scope .field label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.contact-scope .field input,
+.contact-scope .field select,
+.contact-scope .field textarea {
+  width: 100%;
+  padding: 12px 12px;
+  font-size: 1em;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  outline: none;
+  background: var(--card);
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.contact-scope .field select:focus,
+.contact-scope .field input:focus,
+.contact-scope .field textarea:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.contact-scope .field textarea {
+  resize: vertical;
+  min-height: 180px;
+}
+
+/* Layout */
+.contact-scope .contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.contact-scope .contact-side {
+  display: grid;
+  gap: 18px;
+}
+
+.contact-scope .contact-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 16px;
+}
+
+.contact-scope .contact-card.primary {
+  border: none;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow: 0 14px 24px rgba(15, 90, 209, 0.22);
+}
+
+.contact-scope .card-head h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.contact-scope .card-head p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.contact-scope .contact-card.primary .card-head p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.contact-scope .contact-info {
+  display: grid;
+  gap: 14px;
+}
+
+.contact-scope .info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contact-scope .info-item svg {
+  opacity: 0.85;
+}
+
+.contact-scope .info-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+.contact-scope .info-value {
+  display: block;
+  font-weight: 600;
+}
+
+.contact-scope .contact-card.primary .info-label,
+.contact-scope .contact-card.primary .info-value {
+  color: #fff;
+}
+
+.contact-scope .muted-note {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Buttons */
+.contact-scope .form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.contact-scope .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
+}
+
+.contact-scope .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.contact-scope .btn.primary {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(15, 90, 209, 0.18);
+}
+
+.contact-scope .btn.primary:hover {
+  transform: translateY(-1px);
+}
+
+.contact-scope .btn.ghost {
+  background: #eef2f7;
+  color: var(--ink);
+}
+
+.contact-scope .btn.ghost:hover {
+  background: #e2e8f0;
+}
+
+.contact-scope .btn.outline {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.contact-scope .btn.outline:hover {
+  background: #f8fafc;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .contact-scope .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-scope .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-scope .form-actions {
+    flex-direction: column;
+  }
+
+  .contact-scope .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 960px) {
+  .contact-scope .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}

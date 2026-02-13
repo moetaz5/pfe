@@ -1,0 +1,201 @@
+.final-token-page .final-token-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.final-token-page .final-token-filter-row label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.final-token-page .final-token-empty {
+  padding: 18px;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.final-token-page .final-token-status-pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.final-token-page .final-token-proof-btn {
+  margin-top: 8px;
+  width: fit-content;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.final-token-page .final-token-proof-btn:hover {
+  background: #dbeafe;
+}
+
+.final-token-decision-modal .ant-modal-content {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(
+      460px 240px at -12% -28%,
+      color-mix(in srgb, var(--primary) 16%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      440px 240px at 112% 128%,
+      color-mix(in srgb, var(--primary-2) 16%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--panel) 65%, var(--panel-2) 35%),
+      var(--panel)
+    ),
+    var(--panel);
+  box-shadow:
+    0 26px 56px color-mix(in srgb, var(--text) 22%, transparent),
+    0 8px 24px color-mix(in srgb, var(--primary) 12%, transparent);
+  padding: 24px;
+}
+
+.final-token-decision-modal .ant-modal-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+}
+
+.final-token-decision-modal .ant-modal-mask {
+  backdrop-filter: blur(4px);
+}
+
+.final-token-decision-modal .ant-modal-header {
+  background: transparent;
+  border-bottom: 0;
+  padding: 2px 0 10px;
+}
+
+.final-token-decision-modal .ant-modal-title {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.final-token-decision-content {
+  display: grid;
+  gap: 14px;
+}
+
+.final-token-decision-content p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.final-token-decision-content .ant-input {
+  border-radius: 14px;
+  border-color: var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 14px;
+  padding: 10px 12px;
+}
+
+.final-token-decision-content .ant-input:focus,
+.final-token-decision-content .ant-input-focused {
+  border-color: var(--primary);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--primary) 14%, transparent),
+    0 2px 8px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.final-token-decision-modal .ant-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 0;
+  padding: 14px 0 0;
+}
+
+.final-token-decision-modal .ant-modal-footer .ant-btn {
+  border-radius: 14px;
+  height: 42px;
+  font-weight: 800;
+  padding: 0 22px;
+  margin: 0;
+  transition: all 0.2s ease;
+}
+
+.final-token-decision-modal .ant-modal-footer .ant-btn-default {
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--panel-2) 70%, #ffffff 30%);
+  color: var(--text);
+}
+
+.final-token-decision-modal .ant-modal-footer .ant-btn-default:hover {
+  border-color: var(--primary-2);
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary-2) 12%, #ffffff);
+  transform: translateY(-1px);
+}
+
+.final-token-decision-modal .ant-modal-footer .ant-btn-primary {
+  border: 0;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--primary) 34%, transparent);
+}
+
+.final-token-decision-modal .ant-modal-footer .ant-btn-primary:hover {
+  filter: saturate(1.08);
+  transform: translateY(-1px);
+}
+
+.final-token-decision-modal
+  .ant-modal-footer
+  .ant-btn-primary.ant-btn-dangerous {
+  background: linear-gradient(
+    135deg,
+    var(--danger),
+    color-mix(in srgb, var(--danger) 70%, #ef4444)
+  );
+  box-shadow: 0 12px 22px color-mix(in srgb, var(--danger) 34%, transparent);
+}
+
+@media (max-width: 640px) {
+  .final-token-decision-modal .ant-modal-content {
+    border-radius: 18px;
+    padding: 20px;
+  }
+
+  .final-token-decision-modal .ant-modal-title {
+    font-size: 19px;
+  }
+
+  .final-token-decision-modal .ant-modal-footer .ant-btn {
+    flex: 1;
+  }
+}
