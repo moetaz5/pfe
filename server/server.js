@@ -1,4 +1,4 @@
-require("dotenv").config();
+﻿require("dotenv").config();
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -17,6 +17,32 @@ const crypto = require("crypto");
 
 
 const app = express();
+// ===================== BASE64 HELPERS =====================
+const bufferToB64 = (buf) => {
+  if (!buf) return null;
+  if (Buffer.isBuffer(buf)) return buf.toString("base64");
+  return null;
+};
+
+const b64ToBuffer = (b64) => {
+  if (!b64) return null;
+  return Buffer.from(String(b64), "base64");
+};
+
+// accepte: base64 direct OU xml string => on convertit en base64
+const ensureBase64String = (value) => {
+  if (!value) return null;
+  const v = String(value);
+
+  // Si ça ressemble à du XML, on encode en base64
+  if (v.trim().startsWith("<")) {
+    return Buffer.from(v, "utf8").toString("base64");
+  }
+
+  // Sinon on considère que c'est déjà base64
+  return v;
+};
+
 /* ===================== EMAIL SIGNATURE ===================== */
 const sendSignatureEmail = async (email, transactionId) => {
   const link = `http://localhost:3000/signature/${transactionId}`;
@@ -47,9 +73,12 @@ const sendSignatureEmail = async (email, transactionId) => {
   });
 };
 
+
 /* ===================== MIDDLEWARES ===================== */
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
+
 
 app.use(
   cors({
@@ -641,45 +670,37 @@ app.get("/api/factures/available", verifyToken, (req, res) => {
 
 
 /* ===================== FACTURES (UPLOAD PDF) ===================== */
+/* ===================== FACTURES (BASE64) ===================== */
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-app.post(
-  "/api/factures",
-  verifyToken,
-  upload.single("fichier_pdf"),
-  (req, res) => {
+/* UPLOAD facture PDF -> stock base64 */
+app.post("/api/factures", verifyToken, upload.single("fichier_pdf"), (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: "Fichier PDF manquant" });
 
-    if (!req.file) {
-      return res.status(400).json({ message: "Fichier PDF manquant" });
-    }
-
-    const fichierPdf = req.file.buffer;
-    const originalName = req.file.originalname; // ✅ NOM RÉEL
+    const pdfBase64 = req.file.buffer.toString("base64");
+    const originalName = req.file.originalname;
 
     const sql = `
       INSERT INTO factures (user_id, statut, fichier_pdf, file_name)
       VALUES (?, ?, ?, ?)
     `;
 
-    db.query(
-      sql,
-      [req.user.id, "en attente", fichierPdf, originalName],
-      (err, result) => {
-        if (err) {
-          console.error("FACTURE INSERT ERROR:", err);
-          return res.status(500).json({ message: "Erreur serveur" });
-        }
-
-        res.status(201).json({
-          message: "Facture ajoutée avec succès",
-          id: result.insertId,
-        });
+    db.query(sql, [req.user.id, "en attente", pdfBase64, originalName], (err, result) => {
+      if (err) {
+        console.error("FACTURE INSERT ERROR:", err);
+        return res.status(500).json({ message: "Erreur serveur" });
       }
-    );
+      res.status(201).json({ message: "Facture ajoutée avec succès", id: result.insertId });
+    });
+  } catch (e) {
+    console.error("FACTURE UPLOAD ERROR:", e);
+    res.status(500).json({ message: "Erreur serveur" });
   }
-);
+});
 
+/* LIST factures */
 app.get("/api/factures", verifyToken, (req, res) => {
   const sql = `
     SELECT id, statut, file_name
@@ -687,15 +708,28 @@ app.get("/api/factures", verifyToken, (req, res) => {
     WHERE user_id = ?
     ORDER BY id DESC
   `;
-
   db.query(sql, [req.user.id], (err, results) => {
     if (err) return res.status(500).json([]);
-    res.json(results);
+    res.json(results || []);
   });
 });
 
+/* LIST factures disponibles (en attente) */
+app.get("/api/factures/available", verifyToken, (req, res) => {
+  const sql = `
+    SELECT id, statut, file_name
+    FROM factures
+    WHERE user_id = ?
+      AND statut = 'en attente'
+    ORDER BY id DESC
+  `;
+  db.query(sql, [req.user.id], (err, results) => {
+    if (err) return res.status(500).json([]);
+    res.json(results || []);
+  });
+});
 
-
+/* DOWNLOAD facture -> decode base64 */
 app.get("/api/factures/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
@@ -706,26 +740,21 @@ app.get("/api/factures/:id", verifyToken, (req, res) => {
   `;
 
   db.query(sql, [id, req.user.id], (err, results) => {
-    if (err || results.length === 0)
-      return res.status(404).json({ message: "Facture non trouvée" });
+    if (err || !results.length) return res.status(404).json({ message: "Facture non trouvée" });
 
     const facture = results[0];
+    const pdfBuffer = Buffer.from(facture.fichier_pdf, "base64");
 
     res.setHeader("Content-Type", "application/pdf");
-
-    // ✅ envoyer vrai nom
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="${facture.file_name}"`
-    );
-
-    res.send(facture.fichier_pdf);
+    res.setHeader("Content-Disposition", `attachment; filename="${facture.file_name}"`);
+    res.send(pdfBuffer);
   });
 });
 
 
 /* ===================== TRANSACTIONS ===================== */
 /* ===================== CRÉATION TRANSACTION ===================== */
+/* ===================== TRANSACTIONS (BASE64) ===================== */
 app.post(
   "/api/transactions",
   verifyToken,
@@ -735,12 +764,7 @@ app.post(
   ]),
   async (req, res) => {
     try {
-      const {
-        facture_number,
-        signataire_email,
-        client_email,
-        existing_facture_ids,
-      } = req.body;
+      const { facture_number, signataire_email, client_email, existing_facture_ids } = req.body;
 
       if (!facture_number || !signataire_email || !client_email) {
         return res.status(400).json({ message: "Champs manquants" });
@@ -751,33 +775,19 @@ app.post(
 
       let pairs = [];
 
-      /* ===============================
-         1️⃣ FACTURES EXISTANTES
-      =============================== */
-
+      // 1) Factures existantes
       if (existing_facture_ids) {
-        const ids = Array.isArray(existing_facture_ids)
-          ? existing_facture_ids
-          : [existing_facture_ids];
+        const ids = Array.isArray(existing_facture_ids) ? existing_facture_ids : [existing_facture_ids];
 
         for (const id of ids) {
-          const [rows] = await db
-            .promise()
-            .query(
-              "SELECT id, fichier_pdf, file_name, statut FROM factures WHERE id = ? AND user_id = ?",
-              [id, req.user.id]
-            );
+          const [rows] = await db.promise().query(
+            "SELECT id, fichier_pdf, file_name, statut FROM factures WHERE id = ? AND user_id = ?",
+            [id, req.user.id]
+          );
 
-          if (!rows.length) {
-            return res
-              .status(404)
-              .json({ message: `Facture ${id} introuvable` });
-          }
-
+          if (!rows.length) return res.status(404).json({ message: `Facture ${id} introuvable` });
           if (rows[0].statut !== "en attente") {
-            return res.status(400).json({
-              message: `Facture ${id} n'est pas disponible`,
-            });
+            return res.status(400).json({ message: `Facture ${id} n'est pas disponible` });
           }
 
           const baseName = rows[0].file_name
@@ -786,139 +796,95 @@ app.post(
 
           pairs.push({
             filename: baseName,
-            pdfBuffer: rows[0].fichier_pdf,
-            xmlBuffer: null,
+            pdfB64: rows[0].fichier_pdf, // ✅ déjà base64
+            xmlB64: null,
             factureId: id,
           });
         }
       }
 
-      /* ===============================
-         2️⃣ NOUVEAUX PDF
-      =============================== */
-
+      // 2) Nouveaux PDF + XML
       if (pdfFiles.length > 0) {
-        if (xmlFiles.length === 0) {
-          return res.status(400).json({ message: "Aucun XML importé" });
-        }
+        if (xmlFiles.length === 0) return res.status(400).json({ message: "Aucun XML importé" });
 
         const xmlMap = {};
         xmlFiles.forEach((xml) => {
-          const base = path
-            .parse(xml.originalname)
-            .name.trim()
-            .toLowerCase();
+          const base = path.parse(xml.originalname).name.trim().toLowerCase();
           xmlMap[base] = xml;
         });
 
         for (const pdf of pdfFiles) {
-          const base = path
-            .parse(pdf.originalname)
-            .name.trim()
-            .toLowerCase();
-
+          const base = path.parse(pdf.originalname).name.trim().toLowerCase();
           const xml = xmlMap[base];
-
-          if (!xml) {
-            return res.status(400).json({
-              message: `XML introuvable pour ${pdf.originalname}`,
-            });
-          }
+          if (!xml) return res.status(400).json({ message: `XML introuvable pour ${pdf.originalname}` });
 
           pairs.push({
             filename: base,
-            pdfBuffer: pdf.buffer,
-            xmlBuffer: xml.buffer,
+            pdfB64: pdf.buffer.toString("base64"),
+            xmlB64: xml.buffer.toString("base64"),
           });
         }
       }
 
-      if (pairs.length === 0) {
-        return res.status(400).json({
-          message: "Aucune facture sélectionnée",
-        });
-      }
+      if (!pairs.length) return res.status(400).json({ message: "Aucune facture sélectionnée" });
 
-      /* ===============================
-         3️⃣ MATCH XML POUR EXISTANT
-      =============================== */
-
+      // 3) Match XML pour existants
       if (existing_facture_ids && xmlFiles.length > 0) {
         const xmlMap = {};
         xmlFiles.forEach((xml) => {
-          const base = path
-            .parse(xml.originalname)
-            .name.trim()
-            .toLowerCase();
+          const base = path.parse(xml.originalname).name.trim().toLowerCase();
           xmlMap[base] = xml;
         });
 
         for (let p of pairs) {
-          if (!p.xmlBuffer) {
+          if (!p.xmlB64) {
             const xml = xmlMap[p.filename];
-            if (!xml) {
-              return res.status(400).json({
-                message: `XML manquant pour ${p.filename}`,
-              });
-            }
-            p.xmlBuffer = xml.buffer;
+            if (!xml) return res.status(400).json({ message: `XML manquant pour ${p.filename}` });
+            p.xmlB64 = xml.buffer.toString("base64");
           }
         }
       }
 
-      /* ===============================
-         4️⃣ CREER TRANSACTION
-      =============================== */
-
+      // 4) Créer transaction
       const [txRes] = await db.promise().query(
         `
-        INSERT INTO transactions
-        (facture_number, signataire_email, client_email, user_id, statut)
-        VALUES (?, ?, ?, ?, 'créé')
+          INSERT INTO transactions
+          (facture_number, signataire_email, client_email, user_id, statut)
+          VALUES (?, ?, ?, ?, 'créé')
         `,
         [facture_number, signataire_email, client_email, req.user.id]
       );
 
       const transactionId = txRes.insertId;
 
-      /* ===============================
-         5️⃣ INSERER DOCUMENTS
-      =============================== */
-
+      // 5) Insérer documents base64
       for (const p of pairs) {
         await db.promise().query(
           `
-          INSERT INTO transaction_documents
-          (transaction_id, filename, pdf_file, xml_file, statut)
-          VALUES (?, ?, ?, ?, 'créé')
+            INSERT INTO transaction_documents
+            (transaction_id, filename, pdf_file, xml_file, statut)
+            VALUES (?, ?, ?, ?, 'créé')
           `,
-          [transactionId, p.filename, p.pdfBuffer, p.xmlBuffer]
+          [transactionId, p.filename, p.pdfB64, p.xmlB64]
         );
 
-        // 🔥 Mettre facture en_transaction
         if (p.factureId) {
-          await db
-            .promise()
-            .query(
-              "UPDATE factures SET statut = 'en_transaction' WHERE id = ?",
-              [p.factureId]
-            );
+          await db.promise().query("UPDATE factures SET statut='en_transaction' WHERE id = ?", [p.factureId]);
         }
       }
 
       await sendSignatureEmail(signataire_email, transactionId);
 
-      res.status(201).json({
-        message: "Transaction créée avec succès",
-        transactionId,
-      });
+      res.status(201).json({ message: "Transaction créée avec succès", transactionId });
     } catch (e) {
       console.error("CREATE TX ERROR:", e);
       res.status(500).json({ message: "Erreur serveur" });
     }
   }
 );
+
 /* ===================== EXTERNAL CREATE TRANSACTION ===================== */
+/* ===================== EXTERNAL CREATE TRANSACTION (MULTIPART -> BASE64) ===================== */
 app.post(
   "/api/external/transactions",
   verifyApiToken,
@@ -928,11 +894,7 @@ app.post(
   ]),
   async (req, res) => {
     try {
-      const {
-        facture_number,
-        signataire_email,
-        client_email,
-      } = req.body;
+      const { facture_number, signataire_email, client_email } = req.body;
 
       if (!facture_number || !signataire_email || !client_email) {
         return res.status(400).json({ message: "Champs manquants" });
@@ -952,36 +914,25 @@ app.post(
       });
 
       const pairs = [];
-
       for (const pdf of pdfFiles) {
         const base = path.parse(pdf.originalname).name.toLowerCase();
         const xml = xmlMap[base];
-
-        if (!xml) {
-          return res.status(400).json({
-            message: `XML manquant pour ${pdf.originalname}`,
-          });
-        }
+        if (!xml) return res.status(400).json({ message: `XML manquant pour ${pdf.originalname}` });
 
         pairs.push({
           filename: base,
-          pdfBuffer: pdf.buffer,
-          xmlBuffer: xml.buffer,
+          pdfB64: pdf.buffer.toString("base64"),
+          xmlB64: xml.buffer.toString("base64"),
         });
       }
 
       const [txRes] = await db.promise().query(
         `
-        INSERT INTO transactions
-        (facture_number, signataire_email, client_email, user_id, statut)
-        VALUES (?, ?, ?, ?, 'créé')
+          INSERT INTO transactions
+          (facture_number, signataire_email, client_email, user_id, statut)
+          VALUES (?, ?, ?, ?, 'créé')
         `,
-        [
-          facture_number,
-          signataire_email,
-          client_email,
-          req.apiUser.id,
-        ]
+        [facture_number, signataire_email, client_email, req.apiUser.id]
       );
 
       const transactionId = txRes.insertId;
@@ -989,18 +940,15 @@ app.post(
       for (const p of pairs) {
         await db.promise().query(
           `
-          INSERT INTO transaction_documents
-          (transaction_id, filename, pdf_file, xml_file, statut)
-          VALUES (?, ?, ?, ?, 'créé')
+            INSERT INTO transaction_documents
+            (transaction_id, filename, pdf_file, xml_file, statut)
+            VALUES (?, ?, ?, ?, 'créé')
           `,
-          [transactionId, p.filename, p.pdfBuffer, p.xmlBuffer]
+          [transactionId, p.filename, p.pdfB64, p.xmlB64]
         );
       }
 
-      res.status(201).json({
-        message: "Transaction créée via API",
-        transactionId,
-      });
+      res.status(201).json({ message: "Transaction créée via API", transactionId });
     } catch (e) {
       console.error("EXTERNAL TX ERROR:", e);
       res.status(500).json({ message: "Erreur serveur" });
@@ -1008,55 +956,117 @@ app.post(
   }
 );
 
-/* ===================== EXTERNAL DOWNLOAD ZIP ===================== */
-app.get(
-  "/api/external/transactions/:id/zip",
-  verifyApiToken,
-  async (req, res) => {
-    const { id } = req.params;
+/* ===================== EXTERNAL CREATE TRANSACTION (JSON BASE64) ===================== */
+/*
+POST /api/external/transactions/json
+Headers:
+  x-api-key: <TOKEN>
 
-    const [txRows] = await db
-      .promise()
-      .query(
-        "SELECT id FROM transactions WHERE id = ? AND user_id = ?",
-        [id, req.apiUser.id]
-      );
+Body example:
+{
+  "facture_number":"TRX-1",
+  "signer_email":"profiletestdigigo@yopmail.com",
+  "clientEmail":"contact@ng-sign.com",
+  "invoices":[
+    {
+      "invoiceNumber":"12345",
+      "invoiceTIEF":"<TEIF>...</TEIF>" OR "BASE64....",
+      "invoiceFileB64":"JVBERi0xLjQK..."
+    }
+  ]
+}
+*/
+app.post("/api/external/transactions/json", verifyApiToken, async (req, res) => {
+  try {
+    const { facture_number, signer_email, clientEmail, invoices } = req.body;
 
-    if (!txRows.length) {
-      return res.status(404).json({ message: "Transaction introuvable" });
+    if (!facture_number || !signer_email || !clientEmail) {
+      return res.status(400).json({ message: "Champs manquants" });
     }
 
-    const [docs] = await db.promise().query(
+    if (!Array.isArray(invoices) || !invoices.length) {
+      return res.status(400).json({ message: "invoices[] requis" });
+    }
+
+    // créer transaction
+    const [txRes] = await db.promise().query(
       `
+        INSERT INTO transactions
+        (facture_number, signataire_email, client_email, user_id, statut)
+        VALUES (?, ?, ?, ?, 'créé')
+      `,
+      [facture_number, signer_email, clientEmail, req.apiUser.id]
+    );
+
+    const transactionId = txRes.insertId;
+
+    for (const inv of invoices) {
+      const invoiceNumber = String(inv.invoiceNumber || "").trim();
+      const pdfB64 = String(inv.invoiceFileB64 || "").trim();
+      const xmlB64 = ensureBase64String(inv.invoiceTIEF);
+
+      if (!invoiceNumber || !pdfB64 || !xmlB64) {
+        return res.status(400).json({ message: "invoiceNumber, invoiceFileB64, invoiceTIEF requis par invoice" });
+      }
+
+      // filename = invoiceNumber (ou autre)
+      const filename = invoiceNumber.toLowerCase();
+
+      await db.promise().query(
+        `
+          INSERT INTO transaction_documents
+          (transaction_id, filename, pdf_file, xml_file, statut)
+          VALUES (?, ?, ?, ?, 'créé')
+        `,
+        [transactionId, filename, pdfB64, xmlB64]
+      );
+    }
+
+    res.status(201).json({ message: "Transaction créée (JSON)", transactionId });
+  } catch (e) {
+    console.error("EXTERNAL JSON TX ERROR:", e);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
+/* ===================== EXTERNAL DOWNLOAD ZIP (BASE64) ===================== */
+app.get("/api/external/transactions/:id/zip", verifyApiToken, async (req, res) => {
+  const { id } = req.params;
+
+  const [txRows] = await db.promise().query(
+    "SELECT id FROM transactions WHERE id = ? AND user_id = ?",
+    [id, req.apiUser.id]
+  );
+
+  if (!txRows.length) return res.status(404).json({ message: "Transaction introuvable" });
+
+  const [docs] = await db.promise().query(
+    `
       SELECT filename, pdf_file, xml_file, xml_signed, statut
       FROM transaction_documents
       WHERE transaction_id = ?
-      `,
-      [id]
-    );
+    `,
+    [id]
+  );
 
-    const zip = new JSZip();
+  const zip = new JSZip();
 
-    docs.forEach((d) => {
-      zip.file(`${d.filename}.pdf`, d.pdf_file);
-      const xmlToUse =
-        d.statut === "signée" && d.xml_signed
-          ? d.xml_signed
-          : d.xml_file;
-      zip.file(`${d.filename}.xml`, xmlToUse);
-    });
+  docs.forEach((d) => {
+    const pdfBuf = Buffer.from(d.pdf_file, "base64");
+    const xmlToUse = d.statut === "signée" && d.xml_signed ? d.xml_signed : d.xml_file;
+    const xmlBuf = Buffer.from(xmlToUse, "base64");
 
-    const content = await zip.generateAsync({ type: "nodebuffer" });
+    zip.file(`${d.filename}.pdf`, pdfBuf);
+    zip.file(`${d.filename}.xml`, xmlBuf);
+  });
 
-    res.setHeader("Content-Type", "application/zip");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=transaction_${id}.zip`
-    );
+  const content = await zip.generateAsync({ type: "nodebuffer" });
 
-    res.send(content);
-  }
-);
+  res.setHeader("Content-Type", "application/zip");
+  res.setHeader("Content-Disposition", `attachment; filename=transaction_${id}.zip`);
+  res.send(content);
+});
+
 /* ===================== EXTERNAL LIST FACTURES ===================== */
 app.get("/api/external/factures", verifyApiToken, async (req, res) => {
   try {
@@ -1116,27 +1126,24 @@ app.get("/api/public/docs/:docId/pdf", async (req, res) => {
   const { docId } = req.params;
 
   try {
-    const [rows] = await db
-      .promise()
-      .query(
-        `SELECT pdf_file, filename FROM transaction_documents WHERE id = ?`,
-        [docId],
-      );
+    const [rows] = await db.promise().query(
+      `SELECT pdf_file, filename FROM transaction_documents WHERE id = ?`,
+      [docId]
+    );
 
-    if (!rows.length)
-      return res.status(404).json({ message: "Doc non trouvé" });
+    if (!rows.length) return res.status(404).json({ message: "Doc non trouvé" });
+
+    const pdfBuffer = Buffer.from(rows[0].pdf_file, "base64");
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `inline; filename=${rows[0].filename}.pdf`,
-    );
-    res.send(rows[0].pdf_file);
+    res.setHeader("Content-Disposition", `inline; filename=${rows[0].filename}.pdf`);
+    res.send(pdfBuffer);
   } catch (e) {
     console.error("PUBLIC PDF ERROR:", e);
     res.status(500).json({ message: "Erreur serveur" });
   }
 });
+
 
 app.get("/api/transactions", verifyToken, (req, res) => {
   const { search } = req.query;
@@ -1318,12 +1325,12 @@ app.get("/api/docs/:docId/download", verifyToken, async (req, res) => {
 
   const [rows] = await db.promise().query(
     `
-    SELECT d.*, t.user_id
-    FROM transaction_documents d
-    JOIN transactions t ON t.id = d.transaction_id
-    WHERE d.id = ?
+      SELECT d.*, t.user_id
+      FROM transaction_documents d
+      JOIN transactions t ON t.id = d.transaction_id
+      WHERE d.id = ?
     `,
-    [docId],
+    [docId]
   );
 
   if (!rows.length || rows[0].user_id !== req.user.id) {
@@ -1333,23 +1340,15 @@ app.get("/api/docs/:docId/download", verifyToken, async (req, res) => {
   const doc = rows[0];
 
   if (type === "xml") {
-    const xmlToUse =
-      doc.statut === "signée" && doc.xml_signed ? doc.xml_signed : doc.xml_file;
-
+    const xmlToUse = doc.statut === "signée" && doc.xml_signed ? doc.xml_signed : doc.xml_file;
     res.setHeader("Content-Type", "application/xml");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=${doc.filename}.xml`,
-    );
-    return res.send(xmlToUse);
+    res.setHeader("Content-Disposition", `attachment; filename=${doc.filename}.xml`);
+    return res.send(Buffer.from(xmlToUse, "base64"));
   }
 
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader(
-    "Content-Disposition",
-    `attachment; filename=${doc.filename}.pdf`,
-  );
-  res.send(doc.pdf_file);
+  res.setHeader("Content-Disposition", `attachment; filename=${doc.filename}.pdf`);
+  return res.send(Buffer.from(doc.pdf_file, "base64"));
 });
 
 /* ===================== STATISTIQUES ===================== */
@@ -1708,28 +1707,24 @@ app.post("/api/public/transactions/:id/sign", async (req, res) => {
   const { id } = req.params;
   const { pin } = req.body;
 
-  if (!pin) {
-    return res.status(400).json({ error: "PIN_REQUIRED" });
-  }
+  if (!pin) return res.status(400).json({ error: "PIN_REQUIRED" });
 
   try {
     const [docs] = await db.promise().query(
       `
-      SELECT id, xml_file, statut, transaction_id
-      FROM transaction_documents
-      WHERE transaction_id = ?
+        SELECT id, xml_file, statut, transaction_id
+        FROM transaction_documents
+        WHERE transaction_id = ?
       `,
       [id]
     );
 
-    if (!docs.length) {
-      return res.status(404).json({ error: "NOT_FOUND" });
-    }
+    if (!docs.length) return res.status(404).json({ error: "NOT_FOUND" });
 
     const remaining = docs.filter((d) => d.statut !== "signée");
 
     for (const doc of remaining) {
-      const xmlBase64 = doc.xml_file.toString("base64");
+      const xmlBase64 = doc.xml_file; // ✅ déjà base64
 
       const javaRes = await axios.post(
         "http://127.0.0.1:9000/sign/xml",
@@ -1737,37 +1732,32 @@ app.post("/api/public/transactions/:id/sign", async (req, res) => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      const signedXml = Buffer.from(
-        javaRes.data.signedXmlBase64,
-        "base64"
-      );
+      const signedXmlB64 = javaRes.data.signedXmlBase64; // ✅ on garde base64
 
       await db.promise().query(
         `
-        UPDATE transaction_documents
-        SET statut = 'signée',
-            xml_signed = ?,
-            signed_at = NOW()
-        WHERE id = ?
+          UPDATE transaction_documents
+          SET statut='signée',
+              xml_signed=?,
+              signed_at=NOW()
+          WHERE id=?
         `,
-        [signedXml, doc.id]
+        [signedXmlB64, doc.id]
       );
     }
 
-    // 🔥 Transaction signée
     await db.promise().query(
-      `UPDATE transactions SET statut = 'signée', signed_at = NOW() WHERE id = ?`,
+      `UPDATE transactions SET statut='signée', signed_at=NOW() WHERE id=?`,
       [id]
     );
 
-    // 🔥 Mettre factures liées en signée
     await db.promise().query(
       `
-      UPDATE factures f
-      JOIN transaction_documents td 
-        ON LOWER(td.filename) = LOWER(SUBSTRING_INDEX(f.file_name,'.',1))
-      SET f.statut = 'signée'
-      WHERE td.transaction_id = ?
+        UPDATE factures f
+        JOIN transaction_documents td 
+          ON LOWER(td.filename)=LOWER(SUBSTRING_INDEX(f.file_name,'.',1))
+        SET f.statut='signée'
+        WHERE td.transaction_id=?
       `,
       [id]
     );
@@ -1778,6 +1768,7 @@ app.post("/api/public/transactions/:id/sign", async (req, res) => {
     res.status(500).json({ error: "SIGN_FAILED" });
   }
 });
+
 
 
 app.get("/api/transactions/:id/xml", verifyToken, async (req, res) => {
@@ -2136,6 +2127,33 @@ app.put(
     }
   },
 );
+
+/* ===================== JETON - TOTAL UTILISATEUR ===================== */
+app.get("/api/jeton/total", verifyToken, (req, res) => {
+  const sql = `
+    SELECT
+      COALESCE(SUM(j.tokens), 0) AS total_jetons
+    FROM jeton j
+    WHERE j.user_id = ?
+      AND LOWER(TRIM(j.status)) IN (
+        'approved',
+        'confirmee',
+        'confirmée',
+        'approuvee',
+        'approuvée'
+      )
+  `;
+
+  db.query(sql, [req.user.id], (err, results) => {
+    if (err) {
+      console.error("JETON TOTAL USER ERROR:", err);
+      return res.status(500).json({ message: "Erreur serveur" });
+    }
+
+    const total = Number(results?.[0]?.total_jetons || 0);
+    res.json({ total_jetons: total });
+  });
+});
 
 /* ===================== JETON - LISTE UTILISATEUR ===================== */
 app.get("/api/jeton/mine", verifyToken, (req, res) => {

@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import {
   NavLink,
   Outlet,
@@ -39,12 +40,41 @@ const Dashboard = () => {
   const location = useLocation();
 
   const [collapsed, setCollapsed] = useState(false);
+  const isAdmin = user?.role === "ADMIN";
+  const isUser = user?.role === "USER";
+  const userId = user?.id || null;
+  const [totalJetons, setTotalJetons] = useState(0);
+
+  useEffect(() => {
+    if (!userId || !isUser) {
+      setTotalJetons(0);
+      return;
+    }
+
+    let isActive = true;
+    const fetchJetonTotal = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/jeton/total", {
+          withCredentials: true,
+        });
+        if (isActive) {
+          setTotalJetons(Number(res.data?.total_jetons || 0));
+        }
+      } catch (e) {
+        if (isActive) {
+          setTotalJetons(0);
+        }
+      }
+    };
+
+    fetchJetonTotal();
+    return () => {
+      isActive = false;
+    };
+  }, [isUser, location.pathname, userId]);
 
   if (loading) return <p className="loading">Chargement...</p>;
   if (!user) return <Navigate to="/login" replace />;
-
-  const isAdmin = user.role === "ADMIN";
-  const isUser = user.role === "USER";
 
   const isDashboardHome =
     location.pathname === "/dashboard" ||
@@ -137,18 +167,17 @@ const Dashboard = () => {
               >
                 Statistiques
               </MenuItem>
-              <MenuItem
-                icon={<FaChartBar />}
-                component={<NavLink to="GestionDemandesJetons" />}
-              >
-                Gestion des demandes de jetons
-              </MenuItem>
-              <MenuItem
-                icon={<FaChartBar />}
-                component={<NavLink to="GestionConfirmationFinaleJetons" />}
-              >
-                Confirmation finale jetons
-              </MenuItem>
+              <SubMenu icon={<FaFileInvoice />} label="Demande jetons">
+                <MenuItem component={<NavLink to="GestionDemandesJetons" />}>
+                  Gestion des demandes
+                </MenuItem>
+
+                <MenuItem
+                  component={<NavLink to="GestionConfirmationFinaleJetons" />}
+                >
+                  Confirmation finale jetons
+                </MenuItem>
+              </SubMenu>
             </>
           )}
 
@@ -234,6 +263,9 @@ const Dashboard = () => {
           <div className="top-actions">
             <button className="chip">Aide</button>
             <button className="chip">FAQ</button>
+            {isUser && (
+              <span className="jeton-balance-chip">Jetons: {totalJetons}</span>
+            )}
 
             <button className="icon-btn notif">
               <FaBell />

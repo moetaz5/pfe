@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { FaFileInvoice } from "react-icons/fa";
+import { FaExclamationTriangle, FaFileInvoice, FaInfoCircle, FaTimes } from "react-icons/fa";
 import { Input, Modal, notification } from "antd";
 import "../style/gestionUtilisateur.css";
 import "../style/gestionDemandesJetons.css";
@@ -121,13 +121,28 @@ const GestionConfirmationFinaleJetons = () => {
       new Promise((resolve) => {
         let note = defaultNote || "";
 
+        const modalTitle = (
+          <div className="token-decision-title-wrap">
+            <span className={`token-decision-title-icon ${danger ? "danger" : "info"}`}>
+              {danger ? <FaExclamationTriangle /> : <FaInfoCircle />}
+            </span>
+            <span>{title}</span>
+          </div>
+        );
+
         Modal.confirm({
           className: "token-decision-modal",
           centered: true,
           width: 560,
           icon: null,
+          closable: true,
+          closeIcon: (
+            <span className="token-decision-close-icon" aria-label="Fermer">
+              <FaTimes />
+            </span>
+          ),
           maskClosable: true,
-          title,
+          title: modalTitle,
           okText,
           cancelText: "Annuler",
           okButtonProps: danger ? { danger: true } : {},

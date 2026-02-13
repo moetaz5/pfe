@@ -260,6 +260,18 @@ body{
 }
 .chip:hover{ background: #f8fafc; transform: translateY(-1px); }
 
+.jeton-balance-chip{
+  border: 1px solid #bfdbfe;
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+  color: #1d4ed8;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 13px;
+  box-shadow: 0 6px 16px rgba(37,99,235,.12);
+  white-space: nowrap;
+}
+
 .notif{ position: relative; }
 .badge{
   position:absolute;
