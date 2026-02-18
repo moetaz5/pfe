@@ -1,0 +1,210 @@
+/* PAGE */
+.signature-page{
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* LAYOUT */
+.signature-layout{
+  display: flex;
+  gap: 18px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* LEFT (PDF) */
+.signature-left{
+  flex: 1;
+  min-width: 0;
+  height: calc(100vh - 120px);
+}
+
+/* PDF IFRAME — SANS CADRE */
+.signature-pdf-iframe{
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* RIGHT (ACTIONS) */
+.signature-right{
+  width: 360px;
+  flex-shrink: 0;
+}
+
+/* CARD */
+.signature-card{
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  padding: 20px;
+}
+
+/* HEADER */
+.signature-header{
+  text-align: center;
+  margin-bottom: 18px;
+}
+.signature-header h2{
+  margin: 0;
+  font-size: 20px;
+}
+.signature-header p{
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* FORM */
+.signature-form{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.signature-form input{
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+
+/* ERROR */
+.error{
+  color: var(--danger);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ================= SUCCESS ================= */
+.signature-success-page{
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.success-icon{
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: white;
+  font-size: 42px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  animation: pop 0.5s ease;
+  box-shadow: 0 10px 25px rgba(37,99,235,.35);
+}
+
+.signature-success-page h2{
+  margin: 0;
+}
+.signature-success-page p{
+  margin-top: 10px;
+  color: var(--muted);
+  max-width: 420px;
+}
+
+/* HOME ICON BUTTON */
+.home-btn{
+  margin-top: 22px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  box-shadow: 0 10px 25px rgba(37,99,235,.35);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.home-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(37,99,235,.45);
+}
+.home-btn:active{
+  transform: scale(0.95);
+}
+
+@keyframes pop{
+  0%{ transform: scale(0.6); opacity: 0; }
+  100%{ transform: scale(1); opacity: 1; }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px){
+  .signature-layout{
+    flex-direction: column;
+  }
+  .signature-right{
+    width: 100%;
+  }
+  .signature-left{
+    height: 420px;
+  }
+}
+/* Removed border from the PDF iframe */
+.signature-pdf-iframe {
+  width: 100%;
+  height: 100%;
+  border: none; /* Removed the border */
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  border-radius: 10px; /* Optional: rounded corners for a cleaner look */
+}
+
+/* Add hover effect for the invoice items */
+.signature-right .signature-card div:hover {
+  background-color: #f1f5f9;
+  cursor: pointer;
+}
+
+/* Style for clickable invoices */
+.signature-right .signature-card div {
+  padding: 10px;
+  border-radius: 8px;
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.signature-right .signature-card div span {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.signature-header h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.signature-form input {
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+}
+
+.signature-form button {
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 8px;
+}

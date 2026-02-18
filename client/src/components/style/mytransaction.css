@@ -1,0 +1,449 @@
+:root {
+  --primary: #0247AA;
+  --secondary: #497BC1;
+  --accent: #A0BADF;
+  --white: #ffffff;
+  --black: #000000;
+
+  --bg: #f5f7fb;
+  --text: #1f2937;
+  --muted: #6b7280;
+
+  --card: #ffffff;
+  --border: #e6eaf2;
+  --shadow: 0 10px 30px rgba(2, 71, 170, 0.08);
+
+  --radius: 16px;
+  --radius-sm: 12px;
+  --transition: 0.2s ease-in-out;
+}
+
+/* =========================
+   GLOBAL PAGE
+========================= */
+.page {
+  padding: 24px;
+  background: var(--bg);
+  min-height: 100vh;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: var(--text);
+}
+
+.full-width-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 18px;
+  color: var(--text);
+}
+
+h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: var(--transition);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: 0 8px 20px rgba(2, 71, 170, 0.2);
+}
+
+.btn-primary:hover {
+  background: #013b8d;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-outline:hover {
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+.btn-icon {
+  width: 42px;
+  height: 42px;
+  justify-content: center;
+  padding: 0;
+  border-radius: 12px;
+  background: var(--white);
+  border: 1px solid var(--border);
+}
+
+.btn-icon:hover {
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+/* =========================
+   HEADER
+========================= */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.page-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* =========================
+   FILTERS
+========================= */
+.filters-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
+}
+
+.filters-title {
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 12px;
+  outline: none;
+  font-size: 14px;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.input:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 4px rgba(73, 123, 193, 0.15);
+}
+
+/* =========================
+   TRANSACTIONS LIST
+========================= */
+.transactions-container {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.transaction-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  transition: var(--transition);
+  position: relative;
+}
+
+.transaction-row:hover {
+  border-color: rgba(73, 123, 193, 0.4);
+  box-shadow: 0 12px 24px rgba(2, 71, 170, 0.08);
+}
+
+.transaction-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 5px;
+  border-radius: 20px;
+  background: var(--accent);
+}
+
+.transaction-row.orange::before {
+  background: #ffb020;
+}
+
+.transaction-row.green::before {
+  background: #16a34a;
+}
+
+.transaction-row.blue::before {
+  background: var(--primary);
+}
+
+.transaction-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 12px;
+}
+
+.transaction-number {
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--text);
+}
+
+.transaction-meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.transaction-status {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.transaction-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+.pagination-wrap {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.page-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  cursor: pointer;
+  font-weight: 800;
+  transition: var(--transition);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-btn:hover {
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+.page-btn.active {
+  background: rgba(2, 71, 170, 0.08);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* =========================
+   DETAILS PAGE
+========================= */
+.transaction-details {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.transaction-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.transaction-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.transaction-info p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  margin-bottom: 12px;
+  font-weight: 900;
+}
+
+.factures-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.facture-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  background: var(--white);
+}
+
+.facture-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.facture-left strong {
+  font-size: 15px;
+}
+
+.facture-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1000px) {
+  .filters-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .transaction-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .transaction-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .transaction-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .facture-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .facture-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+/* =========================
+   SIGNATURE LINK BOX
+========================= */
+.signature-link-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 16px 32px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
+
+.signature-link-box input {
+  flex: 1;
+  padding: 8px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--white);
+}
+
+.signature-link-box button,
+.signature-link-box a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.signature-link-box button:hover,
+.signature-link-box a:hover {
+  border-color: var(--secondary);
+  color: var(--secondary);
+}

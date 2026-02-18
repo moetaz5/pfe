@@ -1,0 +1,279 @@
+.token-request-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.token-request-filter-row label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.empty-token-request {
+  padding: 18px;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.token-request-final {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.token-proof-btn {
+  margin-top: 8px;
+  width: fit-content;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.token-proof-btn:hover {
+  background: #dbeafe;
+}
+
+@keyframes tokenModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.token-decision-modal .ant-modal-mask {
+  background: rgba(15, 23, 42, 0.38);
+  backdrop-filter: blur(6px) saturate(1.08);
+}
+
+.token-decision-modal .ant-modal-content {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid color-mix(in srgb, var(--border) 82%, #ffffff 18%);
+  background:
+    radial-gradient(
+      520px 260px at -15% -35%,
+      color-mix(in srgb, var(--primary) 14%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      460px 260px at 112% 132%,
+      color-mix(in srgb, var(--primary-2) 14%, transparent),
+      transparent 62%
+    ),
+    color-mix(in srgb, var(--panel) 85%, transparent);
+  backdrop-filter: blur(16px) saturate(1.12);
+  box-shadow:
+    0 22px 54px color-mix(in srgb, var(--text) 23%, transparent),
+    0 8px 24px color-mix(in srgb, var(--primary) 14%, transparent);
+  animation: tokenModalIn 0.22s ease-out;
+}
+
+.token-decision-modal .ant-modal-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+}
+
+.token-decision-modal .ant-modal-close {
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  color: var(--muted);
+  border: 1px solid color-mix(in srgb, var(--border) 84%, #ffffff 16%);
+  background: color-mix(in srgb, var(--panel-2) 72%, #ffffff 28%);
+  transition: all 0.2s ease;
+}
+
+.token-decision-modal .ant-modal-close:hover {
+  color: var(--text);
+  border-color: var(--primary-2);
+  transform: translateY(-1px);
+}
+
+.token-decision-close-icon {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 13px;
+}
+
+.token-decision-modal .ant-modal-confirm-body-wrapper {
+  display: grid;
+  gap: 14px;
+}
+
+.token-decision-modal .ant-modal-confirm-body {
+  margin: 0;
+}
+
+.token-decision-modal .ant-modal-confirm-title {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.token-decision-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.token-decision-title-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  font-size: 13px;
+}
+
+.token-decision-title-icon.info {
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--primary) 28%, transparent);
+}
+
+.token-decision-title-icon.danger {
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 12%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--danger) 28%, transparent);
+}
+
+.token-decision-modal .ant-modal-confirm-content {
+  margin: 0;
+}
+
+.token-decision-content {
+  display: grid;
+  gap: 14px;
+}
+
+.token-decision-content p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.token-decision-content .ant-input {
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--border) 84%, #ffffff 16%);
+  background: color-mix(in srgb, var(--panel-2) 78%, #ffffff 22%);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 10px 12px;
+}
+
+.token-decision-content .ant-input::placeholder {
+  color: color-mix(in srgb, var(--muted) 76%, #ffffff 24%);
+}
+
+.token-decision-content .ant-input:focus,
+.token-decision-content .ant-input-focused {
+  border-color: var(--primary);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--primary) 16%, transparent),
+    0 8px 16px color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.token-decision-modal .ant-modal-confirm-btns {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.token-decision-modal .ant-modal-confirm-btns .ant-btn {
+  min-width: 118px;
+  width: auto;
+  flex: 0 0 auto;
+  height: 42px;
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 0 20px;
+  margin: 0;
+  transition: all 0.2s ease;
+}
+
+.token-decision-modal .ant-modal-confirm-btns .ant-btn-default {
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--panel) 88%, var(--panel-2) 12%);
+  color: var(--text);
+}
+
+.token-decision-modal .ant-modal-confirm-btns .ant-btn-default:hover {
+  border-color: var(--primary-2);
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary-2) 10%, #ffffff);
+}
+
+.token-decision-modal .ant-modal-confirm-btns .ant-btn-primary {
+  border: 0;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--primary) 32%, transparent);
+}
+
+.token-decision-modal .ant-modal-confirm-btns .ant-btn-primary:hover {
+  filter: saturate(1.08);
+  transform: translateY(-1px);
+}
+
+.token-decision-modal
+  .ant-modal-confirm-btns
+  .ant-btn-primary.ant-btn-dangerous {
+  background: linear-gradient(
+    135deg,
+    var(--danger),
+    color-mix(in srgb, var(--danger) 68%, #ef4444)
+  );
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--danger) 30%, transparent);
+}
+
+@media (max-width: 640px) {
+  .token-decision-modal .ant-modal-content {
+    border-radius: 16px;
+  }
+
+  .token-decision-modal .ant-modal-confirm-title {
+    font-size: 18px;
+  }
+
+  .token-decision-modal .ant-modal-confirm-btns {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .token-decision-modal .ant-modal-confirm-btns .ant-btn {
+    width: 100%;
+  }
+}
