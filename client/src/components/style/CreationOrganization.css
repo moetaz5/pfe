@@ -1,0 +1,14 @@
+.blocked-message {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.blur-container {
+  filter: blur(3px);
+  pointer-events: none;
+  opacity: 0.6;
+}
