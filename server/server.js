@@ -549,7 +549,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: ["http://51.178.39.67.nip.io", "http://51.178.39.67.nip.io"],
+    origin: true, // Accepte toutes les origines pour le test
     credentials: true,
   }),
 );
