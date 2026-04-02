@@ -79,7 +79,7 @@ const OrganizationDetail = () => {
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/organizations/${id}`,
+        `http://51.178.39.67/api/organizations/${id}`,
         { withCredentials: true },
       );
 
@@ -110,7 +110,7 @@ const OrganizationDetail = () => {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/organizations/${id}`,
+        `http://51.178.39.67/api/organizations/${id}`,
         organization,
         { withCredentials: true },
       );
@@ -126,7 +126,7 @@ const OrganizationDetail = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/organizations/${id}/invite`,
+        `http://51.178.39.67/api/organizations/${id}/invite`,
         { email: newMemberEmail },
         { withCredentials: true },
       );
@@ -146,7 +146,7 @@ const OrganizationDetail = () => {
   const removeMember = async (userId) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/organizations/${id}/member/${userId}`,
+        `http://51.178.39.67/api/organizations/${id}/member/${userId}`,
         { withCredentials: true },
       );
 
@@ -170,7 +170,7 @@ const OrganizationDetail = () => {
 
     try {
       await axios.delete(
-        `http://localhost:5000/api/organizations/${id}`,
+        `http://51.178.39.67/api/organizations/${id}`,
         { withCredentials: true }
       );
 
@@ -198,7 +198,7 @@ const OrganizationDetail = () => {
 
     try {
       await axios.delete(
-        `http://localhost:5000/api/organizations/${id}/leave`,
+        `http://51.178.39.67/api/organizations/${id}/leave`,
         { withCredentials: true }
       );
 

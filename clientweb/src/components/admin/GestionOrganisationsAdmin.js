@@ -47,7 +47,7 @@ const GestionOrganisationsAdmin = () => {
   const fetchOrganizations = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/admin/organizations/all", { withCredentials: true });
+      const res = await axios.get("http://51.178.39.67/api/admin/organizations/all", { withCredentials: true });
       setOrganizations(res.data || []);
     } catch (err) {
       toast.error("Erreur lors du chargement des organisations");
@@ -64,7 +64,7 @@ const GestionOrganisationsAdmin = () => {
     if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette organisation ? Cette action est irréversible.")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/admin/organizations/${id}`, { withCredentials: true });
+      await axios.delete(`http://51.178.39.67/api/admin/organizations/${id}`, { withCredentials: true });
       toast.success("Organisation supprimée");
       fetchOrganizations();
     } catch (err) {
@@ -78,8 +78,8 @@ const GestionOrganisationsAdmin = () => {
     setLoadingDetails(true);
     try {
       const [membersRes, txsRes] = await Promise.all([
-        axios.get(`http://localhost:5000/api/admin/organizations/${org.id}/members`, { withCredentials: true }),
-        axios.get(`http://localhost:5000/api/admin/organizations/${org.id}/transactions`, { withCredentials: true })
+        axios.get(`http://51.178.39.67/api/admin/organizations/${org.id}/members`, { withCredentials: true }),
+        axios.get(`http://51.178.39.67/api/admin/organizations/${org.id}/transactions`, { withCredentials: true })
       ]);
       setOrgMembers(membersRes.data || []);
       setOrgTransactions(txsRes.data || []);

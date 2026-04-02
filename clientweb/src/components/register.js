@@ -38,7 +38,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleGoogleRegister = () => {
-    window.location.href = "http://localhost:5000/api/auth/google";
+    window.location.href = "http://51.178.39.67/api/auth/google";
   };
 
   const validateFullName = (fullName) => {
@@ -79,7 +79,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", {
+      const res = await axios.post("http://51.178.39.67/api/auth/register", {
         name: name.trim(),
         email,
         password,

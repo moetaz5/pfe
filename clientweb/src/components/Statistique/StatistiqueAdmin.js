@@ -42,7 +42,7 @@ const queryClient = new QueryClient();
 
 // --- API Helpers ---
 const fetchAdminStats = async () => {
-  const res = await axios.get("http://localhost:5000/api/statistiqueadmin", {
+  const res = await axios.get("http://51.178.39.67/api/statistiqueadmin", {
     withCredentials: true,
   });
   return res.data;

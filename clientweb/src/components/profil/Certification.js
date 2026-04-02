@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "../style/certification.css";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "http://51.178.39.67";
 
 const Certification = () => {
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import "../style/information.css";
 
-const API_URL = "http://localhost:5000"; // ⬅️ change si ton backend est sur un autre port
+const API_URL = "http://51.178.39.67"; // ⬅️ change si ton backend est sur un autre port
 
 const ProfilEdit = () => {
   const navigate = useNavigate();

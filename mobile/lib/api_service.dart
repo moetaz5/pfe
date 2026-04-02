@@ -7,12 +7,8 @@ import 'main.dart';
 
 class ApiService {
   static String get baseUrl {
-    if (kIsWeb) {
-      return 'http://localhost:5000/api';
-    }
-    // Pour l'émulateur Android, 'localhost' est l'appareil lui-même.
-    // 10.0.2.2 pointe vers la machine hôte.
-    return 'http://10.0.2.2:5000/api';
+    // Le serveur est maintenant hébergé sur le VPS OVH.
+    return 'http://51.178.39.67/api';
   }
 
   static String get googleAuthUrl => '$baseUrl/auth/google';

@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/me", {
+      const res = await axios.get("http://51.178.39.67/api/auth/me", {
         withCredentials: true,
       });
       setUser(res.data || null);
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/logout",
+        "http://51.178.39.67/api/auth/logout",
         {},
         { withCredentials: true }
       );

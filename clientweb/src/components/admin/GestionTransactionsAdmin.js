@@ -44,7 +44,7 @@ const GestionTransactionsAdmin = () => {
   const fetchTransactions = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/admin/transactions/all", { withCredentials: true });
+      const res = await axios.get("http://51.178.39.67/api/admin/transactions/all", { withCredentials: true });
       setTransactions(res.data || []);
     } catch (err) {
       toast.error("Erreur lors du chargement des transactions");
@@ -59,7 +59,7 @@ const GestionTransactionsAdmin = () => {
 
   const handleUpdateStatus = async (id, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/admin/transactions/${id}/status`, 
+      await axios.put(`http://51.178.39.67/api/admin/transactions/${id}/status`, 
         { statut: newStatus }, 
         { withCredentials: true }
       );
@@ -75,7 +75,7 @@ const GestionTransactionsAdmin = () => {
     setShowModal(true);
     setLoadingDocs(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/admin/transactions/${tx.id}/documents`, { withCredentials: true });
+      const res = await axios.get(`http://51.178.39.67/api/admin/transactions/${tx.id}/documents`, { withCredentials: true });
       setTxDocs(res.data || []);
     } catch (err) {
       toast.error("Erreur chargement documents");
@@ -151,7 +151,7 @@ const GestionTransactionsAdmin = () => {
 
   const handleDownloadZip = async (id) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/admin/transactions/${id}/zip`, {
+      const res = await axios.get(`http://51.178.39.67/api/admin/transactions/${id}/zip`, {
         withCredentials: true,
         responseType: "blob",
       });
@@ -169,7 +169,7 @@ const GestionTransactionsAdmin = () => {
   
   const handleResendTTN = async (id) => {
     try {
-      await axios.post(`http://localhost:5000/api/admin/transactions/${id}/resend-ttn`, {}, { withCredentials: true });
+      await axios.post(`http://51.178.39.67/api/admin/transactions/${id}/resend-ttn`, {}, { withCredentials: true });
       toast.success("Renvoi TTN lancé par l'administrateur");
       fetchTransactions();
     } catch (err) {

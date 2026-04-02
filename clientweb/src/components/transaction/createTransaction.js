@@ -365,7 +365,7 @@ const CreateTransaction = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/transactions", {
+      const res = await fetch("http://51.178.39.67/api/transactions", {
         method: "POST",
         credentials: "include",
         body: formData,

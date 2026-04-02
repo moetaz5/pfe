@@ -26,7 +26,7 @@ const SignatureSignataire = () => {
       setLoadingDocs(true);
       try {
         const res = await fetch(
-          `http://localhost:5000/api/public/transactions/${id}/docs`
+          `http://51.178.39.67/api/public/transactions/${id}/docs`
         );
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Erreur chargement docs");
@@ -47,9 +47,9 @@ const SignatureSignataire = () => {
 
   const firstDocId = docs?.[0]?.id;
   const pdfUrlBase = selectedDocId
-    ? `http://localhost:5000/api/public/docs/${selectedDocId}/pdf`
+    ? `http://51.178.39.67/api/public/docs/${selectedDocId}/pdf`
     : firstDocId
-    ? `http://localhost:5000/api/public/docs/${firstDocId}/pdf`
+    ? `http://51.178.39.67/api/public/docs/${firstDocId}/pdf`
     : "";
   
   // Add params to hide toolbar and fit page
@@ -75,7 +75,7 @@ const SignatureSignataire = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/public/transactions/${id}/check-pin`,
+        `http://51.178.39.67/api/public/transactions/${id}/check-pin`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -96,7 +96,7 @@ const SignatureSignataire = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/public/transactions/${id}/sign`,
+        `http://51.178.39.67/api/public/transactions/${id}/sign`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
