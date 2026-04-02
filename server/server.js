@@ -549,13 +549,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.indexOf(origin) !== -1 || /^http:\/\/(localhost|127\.0\.0\.1|10\.0\.2\.2):\d+$/.test(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS policy: origin not allowed"));
-      }
-    },
+    origin: ["http://localhost:3000", "http://51.178.39.67"],
     credentials: true,
   }),
 );
