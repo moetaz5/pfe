@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import "../style/dashboard.css";
 
-const API_URL = "http://51.178.39.67"; // ⬅️ change si nécessaire
+const API_URL = "http://51.178.39.67.nip.io"; // ⬅️ change si nécessaire
 
 const ChangePassword = () => {
   const [form, setForm] = useState({ current: "", next: "", confirm: "" });

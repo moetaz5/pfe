@@ -10,7 +10,7 @@ const TokenAPI = () => {
   // 🔐 Charger ou générer automatiquement
   useEffect(() => {
     const loadToken = async () => {
-      const res = await fetch("http://51.178.39.67/api/my-api-token", {
+      const res = await fetch("http://51.178.39.67.nip.io/api/my-api-token", {
         credentials: "include",
       });
 
@@ -20,7 +20,7 @@ const TokenAPI = () => {
         setToken(data.apiToken);
       } else {
         const gen = await fetch(
-          "http://51.178.39.67/api/generate-api-token",
+          "http://51.178.39.67.nip.io/api/generate-api-token",
           {
             method: "POST",
             credentials: "include",
@@ -66,7 +66,7 @@ const TokenAPI = () => {
     setLoading(true);
 
     const res = await fetch(
-      "http://51.178.39.67/api/regenerate-api-token",
+      "http://51.178.39.67.nip.io/api/regenerate-api-token",
       {
         method: "POST",
         credentials: "include",

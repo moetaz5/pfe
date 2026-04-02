@@ -66,7 +66,7 @@ const GestionConfirmationFinaleJetons = () => {
   const downloadProof = async (requestId, filename, mime) => {
     try {
       const res = await axios.get(
-        `http://51.178.39.67/api/admin/jeton/${requestId}/proof`,
+        `http://51.178.39.67.nip.io/api/admin/jeton/${requestId}/proof`,
         {
           withCredentials: true,
           responseType: "arraybuffer",
@@ -101,7 +101,7 @@ const GestionConfirmationFinaleJetons = () => {
           : "";
 
       const res = await axios.get(
-        `http://51.178.39.67/api/admin/jeton${query}`,
+        `http://51.178.39.67.nip.io/api/admin/jeton${query}`,
         { withCredentials: true },
       );
 
@@ -205,7 +205,7 @@ const GestionConfirmationFinaleJetons = () => {
 
     try {
       await axios.put(
-        `http://51.178.39.67/api/admin/jeton/${id}/decision`,
+        `http://51.178.39.67.nip.io/api/admin/jeton/${id}/decision`,
         {
           decision,
           admin_note: note || null,

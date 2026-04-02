@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import "../style/dashboard.css";
 
-const API_URL = "http://51.178.39.67"; // Changez l'URL si nécessaire
+const API_URL = "http://51.178.39.67.nip.io"; // Changez l'URL si nécessaire
 
 const Signature = () => {
   const [signature, setSignature] = useState(null);

@@ -2493,7 +2493,7 @@ import axios from "axios";
 import "../style/posSignature.css";
 
 const PosSignature = ({ transactionId, onClose }) => {
-  const API_URL = "http://51.178.39.67";
+  const API_URL = "http://51.178.39.67.nip.io";
   const MIN_SIZE = 24;
   const DEFAULT_QR_WIDTH = 120;
   const DEFAULT_QR_HEIGHT = 120;

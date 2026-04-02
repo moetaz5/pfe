@@ -3,7 +3,7 @@ import axios from "axios";
 import { notification } from "antd";
 import "../style/acheterJetons.css";
 
-const API_URL = "http://51.178.39.67";
+const API_URL = "http://51.178.39.67.nip.io";
 const ALLOWED_PROOF_TYPES = ["application/pdf"];
 
 const formatPrice = (value) =>

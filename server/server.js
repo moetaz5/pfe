@@ -549,7 +549,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://51.178.39.67"],
+    origin: ["http://localhost:3000", "http://51.178.39.67.nip.io"],
     credentials: true,
   }),
 );

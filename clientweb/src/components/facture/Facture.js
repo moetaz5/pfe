@@ -37,7 +37,7 @@ const Facture = () => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        "http://51.178.39.67/api/my-transaction-factures",
+        "http://51.178.39.67.nip.io/api/my-transaction-factures",
         { credentials: "include" }
       );
 
@@ -75,7 +75,7 @@ const Facture = () => {
   const handleDownload = async (docId, filename) => {
     try {
       const res = await fetch(
-        `http://51.178.39.67/api/my-transaction-factures/${docId}/pdf`,
+        `http://51.178.39.67.nip.io/api/my-transaction-factures/${docId}/pdf`,
         { credentials: "include" }
       );
 
@@ -99,7 +99,7 @@ const Facture = () => {
   const handleConsult = async (docId) => {
     try {
       const res = await fetch(
-        `http://51.178.39.67/api/my-transaction-factures/${docId}/pdf`,
+        `http://51.178.39.67.nip.io/api/my-transaction-factures/${docId}/pdf`,
         { credentials: "include" }
       );
 

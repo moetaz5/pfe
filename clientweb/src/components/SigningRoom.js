@@ -11,7 +11,7 @@ export default function SigningRoom() {
   const [signed, setSigned] = useState(false);
   const [error, setError] = useState("");
 
-  const pdfUrl = `http://51.178.39.67/api/public/transactions/${id}/pdf`;
+  const pdfUrl = `http://51.178.39.67.nip.io/api/public/transactions/${id}/pdf`;
 
   /* 🔐 vérifier PIN */
   const checkPin = async () => {
@@ -20,7 +20,7 @@ export default function SigningRoom() {
 
     try {
       const res = await fetch(
-        `http://51.178.39.67/api/public/transactions/${id}/check-pin`,
+        `http://51.178.39.67.nip.io/api/public/transactions/${id}/check-pin`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -42,7 +42,7 @@ export default function SigningRoom() {
 
     try {
       const res = await fetch(
-        `http://51.178.39.67/api/public/transactions/${id}/sign`,
+        `http://51.178.39.67.nip.io/api/public/transactions/${id}/sign`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -21,7 +21,7 @@ const VerifyEmail = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://51.178.39.67/api/auth/verify-email", {
+      const res = await axios.post("http://51.178.39.67.nip.io/api/auth/verify-email", {
         email,
         code,
       });

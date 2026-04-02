@@ -24,7 +24,7 @@ const OrganizationInvite = () => {
     const fetchInvite = async () => {
       try {
         const res = await axios.get(
-          `http://51.178.39.67/api/organizations/invite/${token}`,
+          `http://51.178.39.67.nip.io/api/organizations/invite/${token}`,
           { withCredentials: true }
         );
 
@@ -45,7 +45,7 @@ const OrganizationInvite = () => {
     setDecisionLoading(true);
     try {
       await axios.post(
-        `http://51.178.39.67/api/organizations/invite/${token}/accept`,
+        `http://51.178.39.67.nip.io/api/organizations/invite/${token}/accept`,
         {},
         { withCredentials: true }
       );
@@ -63,7 +63,7 @@ const OrganizationInvite = () => {
     setDecisionLoading(true);
     try {
       await axios.post(
-        `http://51.178.39.67/api/organizations/invite/${token}/reject`,
+        `http://51.178.39.67.nip.io/api/organizations/invite/${token}/reject`,
         {},
         { withCredentials: true }
       );

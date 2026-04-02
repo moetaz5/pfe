@@ -33,7 +33,7 @@ const GestionUtilisateur = () => {
     const query = new URLSearchParams(filters).toString();
 
     const res = await axios.get(
-      `http://51.178.39.67/api/admin/users?${query}`,
+      `http://51.178.39.67.nip.io/api/admin/users?${query}`,
       { withCredentials: true }
     );
 
@@ -58,7 +58,7 @@ const GestionUtilisateur = () => {
   // ================= ROLE =================
   const handleRoleChange = async (id, role) => {
     await axios.put(
-      `http://51.178.39.67/api/admin/users/${id}/role`,
+      `http://51.178.39.67.nip.io/api/admin/users/${id}/role`,
       { role },
       { withCredentials: true }
     );
@@ -68,7 +68,7 @@ const GestionUtilisateur = () => {
   // ================= STATUS =================
   const toggleStatus = async (id, currentStatut) => {
     await axios.put(
-      `http://51.178.39.67/api/admin/users/${id}/status`,
+      `http://51.178.39.67.nip.io/api/admin/users/${id}/status`,
       { statut: !currentStatut },
       { withCredentials: true }
     );
@@ -80,7 +80,7 @@ const GestionUtilisateur = () => {
     if (!window.confirm("Supprimer cet utilisateur ?")) return;
 
     await axios.delete(
-      `http://51.178.39.67/api/admin/users/${id}`,
+      `http://51.178.39.67.nip.io/api/admin/users/${id}`,
       { withCredentials: true }
     );
 
@@ -100,7 +100,7 @@ const GestionUtilisateur = () => {
 
   const saveEdit = async (id) => {
     await axios.put(
-      `http://51.178.39.67/api/admin/users/${id}`,
+      `http://51.178.39.67.nip.io/api/admin/users/${id}`,
       form,
       { withCredentials: true }
     );
@@ -123,7 +123,7 @@ const GestionUtilisateur = () => {
     }
 
     await axios.put(
-      `http://51.178.39.67/api/admin/users/${id}/password`,
+      `http://51.178.39.67.nip.io/api/admin/users/${id}/password`,
       { newPassword },
       { withCredentials: true }
     );
