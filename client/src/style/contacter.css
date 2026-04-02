@@ -1,0 +1,143 @@
+/* General Styles */
+.contact-scope {
+  font-family: "Arial", sans-serif;
+  padding: 20px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+
+.page-head {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.page-head h2 {
+  font-size: 2rem;
+  color: #2575fc;
+  margin-bottom: 10px;
+}
+
+.page-head p {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.contact-grid {
+  display: flex;
+  gap: 20px;
+}
+
+.contact-main {
+  flex: 2;
+}
+
+.contact-side {
+  flex: 1;
+}
+
+.contact-card {
+  background: #f4f4f9;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-head {
+  margin-bottom: 20px;
+}
+
+.card-head h3 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.card-head p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  text-align: right;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.btn.primary {
+  background-color: #2575fc;
+  color: #fff;
+  border: none;
+}
+
+.btn.primary:hover {
+  background-color: #6a11cb;
+}
+
+.btn.outline {
+  background-color: transparent;
+  color: #2575fc;
+  border: 2px solid #2575fc;
+}
+
+.btn.outline:hover {
+  background-color: #2575fc;
+  color: #fff;
+}
+
+.muted-note {
+  font-size: 0.9rem;
+  color: #999;
+  margin-top: 10px;
+}

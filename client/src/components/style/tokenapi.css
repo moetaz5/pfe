@@ -1,0 +1,85 @@
+/* =========================
+   TOKEN API - MediCom Design
+========================= */
+
+.token-area {
+  min-height: 120px;
+  resize: none;
+  font-size: 13px;
+  font-family: monospace;
+  background: #f9fbff;
+  word-break: break-all;
+}
+
+.success-box {
+  background: #e6f4ea;
+  color: #1e7f43;
+  border: 1px solid #cce7d6;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 16px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Extra polish */
+.create-card {
+  transition: 0.3s ease;
+}
+
+.create-card:hover {
+  box-shadow: 0 14px 40px rgba(2, 71, 170, 0.12);
+}
+
+.btn svg {
+  font-size: 13px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.token-area {
+  min-height: 120px;
+  resize: none;
+  font-size: 13px;
+  font-family: monospace;
+  background: #f9fbff;
+  word-break: break-all;
+}
+
+.warning-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.warning-box svg {
+  font-size: 14px;
+}
+
+.btn-outline:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
