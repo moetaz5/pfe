@@ -477,7 +477,7 @@ const notifyAdmins = async (title, message, type = "info") => {
 
 /* ===================== EMAIL SIGNATURE ===================== */
 const sendSignatureEmail = async (email, transactionId) => {
-  const link = `http://localhost:3000/signature/${transactionId}`;
+  const link = `http://51.178.39.67.nip.io/signature/${transactionId}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
@@ -538,7 +538,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 
 const allowedOrigins = [
-  "http://localhost:3000",
+  "http://51.178.39.67.nip.io",
   "http://localhost:52001",
   "http://127.0.0.1:52001",
   "http://10.0.2.2:52001",
@@ -549,7 +549,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://51.178.39.67.nip.io"],
+    origin: ["http://51.178.39.67.nip.io", "http://51.178.39.67.nip.io"],
     credentials: true,
   }),
 );
@@ -829,7 +829,7 @@ app.get("/api/my-api-token", verifyToken, async (req, res) => {
 app.get("/api/auth/google", (req, res, next) => {
   const { redirect_to } = req.query;
   console.log("GOOGLE AUTH START - Redirect To:", redirect_to);
-  const state = redirect_to || "http://localhost:3000";
+  const state = redirect_to || "http://51.178.39.67.nip.io";
   passport.authenticate("google", {
     scope: ["profile", "email"],
     state: state,
@@ -839,7 +839,7 @@ app.get("/api/auth/google", (req, res, next) => {
 app.get(
   "/api/auth/google/callback",
   (req, res, next) => {
-    const redirectTo = req.query.state || "http://localhost:3000";
+    const redirectTo = req.query.state || "http://51.178.39.67.nip.io";
     passport.authenticate("google", {
       session: false,
       failureRedirect: `${redirectTo}/login?error=google_failed`,
@@ -847,7 +847,7 @@ app.get(
   },
   async (req, res) => {
     try {
-      const redirectTo = req.query.state || "http://localhost:3000";
+      const redirectTo = req.query.state || "http://51.178.39.67.nip.io";
       console.log("GOOGLE CALLBACK SUCCESS - Redirecting to:", redirectTo);
 
       if (!req.user) {
@@ -893,7 +893,7 @@ app.get(
       return res.redirect(finalDest);
     } catch (error) {
       console.error("GOOGLE CALLBACK ERROR:", error);
-      const redirectTo = req.query.state || "http://localhost:3000";
+      const redirectTo = req.query.state || "http://51.178.39.67.nip.io";
       return res.redirect(`${redirectTo}/login?error=server`);
     }
   },
@@ -4410,7 +4410,7 @@ app.post("/api/organizations/:id/invite", verifyToken, async (req, res) => {
       [id, invitedUserId, email, token, expiresAt],
     );
 
-    const inviteLink = `http://localhost:3000/organization/invite/${token}`;
+    const inviteLink = `http://51.178.39.67.nip.io/organization/invite/${token}`;
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
@@ -4781,7 +4781,7 @@ Tu es un assistant SaaS premium niveau international.
         headers: {
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": "http://localhost:3000",
+          "HTTP-Referer": "http://51.178.39.67.nip.io",
           "X-Title": "Medica-Sign",
         },
       },

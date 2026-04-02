@@ -84,7 +84,7 @@ const TransactionOrganization = () => {
 
   /* ================= OPEN SIGNATURE ================= */
   const openSignatureLink = (transactionId) => {
-    window.open(`http://localhost:3000/signature/${transactionId}`, "_blank");
+    window.open(`http://51.178.39.67.nip.io/signature/${transactionId}`, "_blank");
   };
 
   /* ================= FILTER ================= */

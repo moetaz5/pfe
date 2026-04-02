@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 class CreateTransactionRedirectScreen extends StatelessWidget {
   const CreateTransactionRedirectScreen({super.key});
 
-  final String webUrl = "http://localhost:3000";
+  final String webUrl = "http://51.178.39.67.nip.io";
 
   Future<void> _launchURL() async {
     final Uri url = Uri.parse(webUrl);

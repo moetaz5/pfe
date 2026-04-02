@@ -19,7 +19,7 @@ const crypto = require("crypto");
 const app = express();
 /* ===================== EMAIL SIGNATURE ===================== */
 const sendSignatureEmail = async (email, transactionId) => {
-  const link = `http://localhost:3000/signature/${transactionId}`;
+  const link = `http://51.178.39.67.nip.io/signature/${transactionId}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
@@ -53,7 +53,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://51.178.39.67.nip.io",
     credentials: true,
   }),
 );
@@ -236,12 +236,12 @@ app.get(
   "/api/auth/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: "http://localhost:3000/login?error=google_failed",
+    failureRedirect: "http://51.178.39.67.nip.io/login?error=google_failed",
   }),
   async (req, res) => {
     try {
       if (!req.user) {
-        return res.redirect("http://localhost:3000/login?error=auth_failed");
+        return res.redirect("http://51.178.39.67.nip.io/login?error=auth_failed");
       }
 
       // 🔎 Vérifier le statut réel en base
@@ -252,14 +252,14 @@ app.get(
         ]);
 
       if (!rows.length) {
-        return res.redirect("http://localhost:3000/login?error=user_not_found");
+        return res.redirect("http://51.178.39.67.nip.io/login?error=user_not_found");
       }
 
       const user = rows[0];
 
       // ❌ Compte désactivé
       if (user.statut === 0) {
-        return res.redirect("http://localhost:3000/login?error=disabled");
+        return res.redirect("http://51.178.39.67.nip.io/login?error=disabled");
       }
 
       // 🔐 Génération JWT
@@ -275,10 +275,10 @@ app.get(
         secure: false,
       });
 
-      return res.redirect("http://localhost:3000/dashboard");
+      return res.redirect("http://51.178.39.67.nip.io/dashboard");
     } catch (error) {
       console.error("GOOGLE CALLBACK ERROR:", error);
-      return res.redirect("http://localhost:3000/login?error=server");
+      return res.redirect("http://51.178.39.67.nip.io/login?error=server");
     }
   },
 );

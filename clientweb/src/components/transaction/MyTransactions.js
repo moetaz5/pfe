@@ -176,7 +176,7 @@ const handleDeleteTransaction = async (transactionId) => {
   };
 
   const openSignatureLink = (id) => {
-    window.open(`http://localhost:3000/signature/${id}`, "_blank");
+    window.open(`http://51.178.39.67.nip.io/signature/${id}`, "_blank");
   };
 
   const filteredTransactions = transactions.filter((t) => {
