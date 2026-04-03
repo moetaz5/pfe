@@ -79,7 +79,7 @@ const Login = () => {
     );
 
     const res = await axios.get(
-      "http://51.178.39.67/api/auth/me",
+      "http://51.178.39.67.nip.io/api/auth/me",
       { withCredentials: true }
     );
 
