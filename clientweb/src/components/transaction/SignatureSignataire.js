@@ -68,47 +68,70 @@ const SignatureSignataire = () => {
     if (nextDoc) setSelectedDocId(nextDoc.id);
   };
 
-  /* 🔐 Vérification du PIN */
+  /* 🔐 Vérification du PIN (Directement sur le moteur LOCAL) */
   const checkPin = async () => {
     setError("");
     setPinValid(false);
 
     try {
-      const res = await fetch(
-        `http://51.178.39.67/api/public/transactions/${id}/check-pin`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pin }),
-        }
-      );
-      if (!res.ok) throw new Error();
+      // On appelle DIRECTEMENT le moteur sur le PC de l'utilisateur (127.0.0.1)
+      const res = await fetch("http://127.0.0.1:9000/sign/xml", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pin,
+          checkOnly: true,
+        }),
+      });
+
+      if (!res.ok) throw new Error("PIN Incorrect ou Moteur non prêt");
       setPinValid(true);
-    } catch {
-      setError("Code PIN incorrect");
+    } catch (e) {
+      setError("❌ Erreur Moteur Local : Vérifiez que le fichier JAR est lancé et que le PIN est correct.");
     }
   };
 
-  /* ✍️ Signature (toute la transaction) */
+  /* ✍️ Signature (Flux : VPS -> Moteur Local -> VPS) */
   const handleSign = async () => {
     setLoading(true);
     setError("");
 
     try {
-      const res = await fetch(
-        `http://51.178.39.67/api/public/transactions/${id}/sign`,
-        {
+      // 1. Récupérer les documents XML à signer depuis le VPS
+      const resData = await fetch(`http://51.178.39.67/api/public/transactions/${id}/prepare-signature`);
+      if (!resData.ok) throw new Error("Erreur de préparation des documents sur le serveur.");
+      const { docsToSign } = await resData.json();
+
+      const signedResults = [];
+
+      // 2. Faire signer chaque document par le MOTEUR LOCAL
+      for (const doc of docsToSign) {
+        const signRes = await fetch("http://127.0.0.1:9000/sign/xml", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pin }),
-        }
-      );
+          body: JSON.stringify({
+            pin,
+            xmlBase64: doc.xmlBase64,
+          }),
+        });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || data.message || "Erreur de signature");
+        if (!signRes.ok) throw new Error(`Erreur moteur local sur le fichier : ${doc.filename}`);
+        const signData = await signRes.json();
+        
+        signedResults.push({
+          id: doc.id,
+          xmlSigned: signData.xmlSigned,
+        });
       }
+
+      // 3. Envoyer les signatures au VPS pour finalisation
+      const finalRes = await fetch(`http://51.178.39.67/api/public/transactions/${id}/finalize-signature`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ signedResults }),
+      });
+
+      if (!finalRes.ok) throw new Error("Erreur lors de l'enregistrement des signatures sur le serveur.");
 
       setSigned(true);
     } catch (e) {
