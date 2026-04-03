@@ -1076,13 +1076,6 @@ app.post("/api/auth/login", (req, res) => {
     }
 
     if (results.length === 0) {
-      if (email === "test@medica.tn") {
-        // Auto-création si manquant
-        await db.promise().query(
-          "INSERT INTO users (name, email, password, role, is_verified, statut) VALUES ('Test User', 'test@medica.tn', '', 'USER', 1, 1)"
-        );
-        return res.status(200).json({ message: "Utilisateur créé. Re-cliquez sur Se connecter.", retry: true });
-      }
       return res.status(401).json({
         message: "Email invalide",
       });
@@ -1114,12 +1107,7 @@ app.post("/api/auth/login", (req, res) => {
     }
 
     // 🔐 VERIFICATION PASSWORD
-    let isMatch = false;
-    if (email === "test@medica.tn" && password === "123456") {
-      isMatch = true; // Bypass pour le test
-    } else {
-      isMatch = await bcrypt.compare(password, user.password);
-    }
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(401).json({
@@ -1139,7 +1127,7 @@ app.post("/api/auth/login", (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax", // Changé de strict à lax pour compatibilité cross-domain
+      sameSite: "strict",
       secure: false, // mettre true en production HTTPS
       maxAge: 24 * 60 * 60 * 1000, // 1 jour en millisecondes
     });
