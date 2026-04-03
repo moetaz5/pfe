@@ -18,7 +18,7 @@ const GoogleCallback = () => {
         if (exchangeToken) {
           // Échanger le token temporaire contre un cookie de session sur le bon domaine
           const res = await axios.post(
-            "http://51.178.39.67/api/auth/exchange-google-token",
+            "/api/auth/exchange-google-token",
             { exchange_token: exchangeToken },
             { withCredentials: true }
           );
@@ -26,7 +26,7 @@ const GoogleCallback = () => {
           navigate("/dashboard", { replace: true });
         } else {
           // Fallback: vérifier la session existante
-          const res = await axios.get("http://51.178.39.67/api/auth/me", {
+          const res = await axios.get("/api/auth/me", {
             withCredentials: true,
           });
           setUser(res.data);

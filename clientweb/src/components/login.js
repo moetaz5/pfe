@@ -73,13 +73,13 @@ const Login = () => {
   try {
 
     await axios.post(
-      "http://51.178.39.67/api/auth/login",
+      "/api/auth/login",
       { email, password },
       { withCredentials: true }
     );
 
     const res = await axios.get(
-      "http://51.178.39.67/api/auth/me",
+      "/api/auth/me",
       { withCredentials: true }
     );
 
@@ -96,7 +96,7 @@ const Login = () => {
       try {
         // 🔥 ENVOI AUTOMATIQUE DU CODE
         await axios.post(
-          "http://51.178.39.67/api/auth/resend-verification-code",
+          "/api/auth/resend-verification-code",
           { email: unverifiedEmail }
         );
 

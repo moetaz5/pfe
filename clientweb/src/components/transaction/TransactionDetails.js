@@ -26,7 +26,7 @@ const TransactionDetails = () => {
     const fetchData = async () => {
       try {
         const txRes = await fetch(
-          `http://51.178.39.67/api/transactions/${transactionId}/details`,
+          `/api/transactions/${transactionId}/details`,
           { credentials: "include" }
         );
 
@@ -36,7 +36,7 @@ const TransactionDetails = () => {
         setTransaction(txData);
 
         const docsRes = await fetch(
-          `http://51.178.39.67/api/transactions/${transactionId}/docs`,
+          `/api/transactions/${transactionId}/docs`,
           { credentials: "include" }
         );
 
@@ -57,7 +57,7 @@ const TransactionDetails = () => {
   const handleDownloadAllZip = async () => {
     try {
       const response = await fetch(
-        `http://51.178.39.67/api/transactions/${transactionId}/zip`,
+        `/api/transactions/${transactionId}/zip`,
         { credentials: "include" }
       );
 
@@ -78,7 +78,7 @@ const TransactionDetails = () => {
   const handleDownloadDoc = async (docId, type) => {
     try {
       const response = await fetch(
-        `http://51.178.39.67/api/docs/${docId}/download?type=${type}`,
+        `/api/docs/${docId}/download?type=${type}`,
         { credentials: "include" }
       );
 

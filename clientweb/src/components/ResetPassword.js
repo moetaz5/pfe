@@ -25,7 +25,7 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://51.178.39.67/api/auth/reset-password", {
+      const res = await axios.post("/api/auth/reset-password", {
         email,
         code,
         newPassword,
@@ -53,7 +53,7 @@ const ResetPassword = () => {
     setResendLoading(true);
 
     try {
-      const res = await axios.post("http://51.178.39.67/api/auth/resend-reset-code", {
+      const res = await axios.post("/api/auth/resend-reset-code", {
         email,
       });
 

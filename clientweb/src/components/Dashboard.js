@@ -162,7 +162,7 @@ const Dashboard = () => {
     const fetchOrg = async () => {
       try {
         const res = await axios.get(
-          "http://51.178.39.67/api/organizations/mine",
+          "/api/organizations/mine",
           { withCredentials: true },
         );
         setOrganizationId(res.data.length > 0 ? res.data[0].id : null);
@@ -181,7 +181,7 @@ const Dashboard = () => {
       try {
         if (isAdmin) {
           // Fetch admin global stats
-          const res = await axios.get("http://51.178.39.67/api/statistiqueadmin", {
+          const res = await axios.get("/api/statistiqueadmin", {
             withCredentials: true,
           });
           const data = res.data;
@@ -193,7 +193,7 @@ const Dashboard = () => {
           });
         } else {
           const res = await axios.get(
-            "http://51.178.39.67/api/dashboard/stats",
+            "/api/dashboard/stats",
             { withCredentials: true },
           );
           const data = res.data;
@@ -220,7 +220,7 @@ const Dashboard = () => {
     if (!userId) return;
     const fetchNotifs = async () => {
       try {
-        const res = await axios.get("http://51.178.39.67/api/notifications", {
+        const res = await axios.get("/api/notifications", {
           withCredentials: true,
         });
         setNotifications(res.data || []);
@@ -234,7 +234,7 @@ const Dashboard = () => {
   const markAsRead = async (id) => {
     try {
       await axios.put(
-        `http://51.178.39.67/api/notifications/${id}/read`,
+        `/api/notifications/${id}/read`,
         {},
         { withCredentials: true },
       );
@@ -249,7 +249,7 @@ const Dashboard = () => {
   const markAllAsRead = async () => {
     try {
       await axios.put(
-        "http://51.178.39.67/api/notifications/read-all",
+        "/api/notifications/read-all",
         {},
         { withCredentials: true },
       );
@@ -261,7 +261,7 @@ const Dashboard = () => {
 
   const deleteNotification = async (id) => {
     try {
-      await axios.delete(`http://51.178.39.67/api/notifications/${id}`, {
+      await axios.delete(`/api/notifications/${id}`, {
         withCredentials: true,
       });
       setNotifications((prev) => prev.filter((n) => n.id !== id));

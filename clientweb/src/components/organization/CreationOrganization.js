@@ -79,7 +79,7 @@ const CreationOrganization = () => {
     const checkOrganization = async () => {
       try {
         const res = await axios.get(
-          "http://51.178.39.67/api/organizations/mine",
+          "/api/organizations/mine",
           { withCredentials: true }
         );
 
@@ -131,7 +131,7 @@ const handleSubmit = async (e) => {
   try {
     // 1️⃣ Créer organisation (SANS invitedUsers)
     const orgRes = await axios.post(
-      "http://51.178.39.67/api/organizations",
+      "/api/organizations",
       {
         name: form.name,
         matricule_fiscale: form.matricule_fiscale,
@@ -153,7 +153,7 @@ const handleSubmit = async (e) => {
     for (const email of form.invitedUsers) {
       try {
         await axios.post(
-          `http://51.178.39.67/api/organizations/${organizationId}/invite`,
+          `/api/organizations/${organizationId}/invite`,
           { email },
           { withCredentials: true }
         );

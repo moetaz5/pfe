@@ -26,7 +26,7 @@ const SignatureSignataire = () => {
       setLoadingDocs(true);
       try {
         const res = await fetch(
-          `http://51.178.39.67/api/public/transactions/${id}/docs`
+          `/api/public/transactions/${id}/docs`
         );
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Erreur chargement docs");
@@ -47,9 +47,9 @@ const SignatureSignataire = () => {
 
   const firstDocId = docs?.[0]?.id;
   const pdfUrlBase = selectedDocId
-    ? `http://51.178.39.67/api/public/docs/${selectedDocId}/pdf`
+    ? `/api/public/docs/${selectedDocId}/pdf`
     : firstDocId
-    ? `http://51.178.39.67/api/public/docs/${firstDocId}/pdf`
+    ? `/api/public/docs/${firstDocId}/pdf`
     : "";
   
   // Add params to hide toolbar and fit page
@@ -98,7 +98,7 @@ const SignatureSignataire = () => {
 
     try {
       // 1. Récupérer les documents XML à signer depuis le VPS
-      const resData = await fetch(`http://51.178.39.67/api/public/transactions/${id}/prepare-signature`);
+      const resData = await fetch(`/api/public/transactions/${id}/prepare-signature`);
       if (!resData.ok) throw new Error("Erreur de préparation des documents sur le serveur.");
       const { docsToSign } = await resData.json();
 
@@ -125,7 +125,7 @@ const SignatureSignataire = () => {
       }
 
       // 3. Envoyer les signatures au VPS pour finalisation
-      const finalRes = await fetch(`http://51.178.39.67/api/public/transactions/${id}/finalize-signature`, {
+      const finalRes = await fetch(`/api/public/transactions/${id}/finalize-signature`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ signedResults }),

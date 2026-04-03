@@ -487,8 +487,8 @@ const notifyAdmins = async (title, message, type = "info") => {
 };
 
 /* ===================== EMAIL SIGNATURE ===================== */
-const sendSignatureEmail = async (email, transactionId) => {
-  const link = `http://51.178.39.67/signature/${transactionId}`;
+const sendSignatureEmail = async (email, transactionId, host = "51.178.39.67") => {
+  const link = `http://${host}/signature/${transactionId}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
