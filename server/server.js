@@ -2954,109 +2954,110 @@ app.get("/api/docs/:docId/download", verifyToken, async (req, res) => {
 // ✍️ Signature logique (SSCD - sans signature manuscrite)
 // ✍️ Signature XML (publique)
 // ✍️ Signature XML (publique)
-app.post("/api/public/transactions/:id/sign", async (req, res) => {
+// ✍️ ÉTAPE 1 : Préparer la signature (Vérifier jetons et envoyer les XML au frontend)
+app.get("/api/public/transactions/:id/prepare-signature", async (req, res) => {
   const { id } = req.params;
-  const { pin } = req.body;
-
-  if (!pin) return res.status(400).json({ error: "PIN_REQUIRED" });
 
   try {
-    // 🔎 Récupérer transaction
-    const [txRows] = await db
-      .promise()
-      .query(
-        "SELECT id, user_id, statut, qr_config, ref_config, client_email FROM transactions WHERE id = ?",
-        [id],
-      );
+    const [txRows] = await db.promise().query(
+      "SELECT id, user_id, statut FROM transactions WHERE id = ?",
+      [id]
+    );
 
-    if (!txRows.length) return res.status(404).json({ error: "NOT_FOUND" });
-
+    if (!txRows.length) return res.status(404).json({ message: "Transaction introuvable" });
     const transaction = txRows[0];
 
-    // ❌ Déjà signée
-    if (transaction.statut === "signée_ttn") {
-      return res.status(409).json({
-        error: "ALREADY_SIGNED",
-      });
+    // Vérifier les jetons
+    const [userRows] = await db.promise().query("SELECT total_jetons FROM users WHERE id = ?", [transaction.user_id]);
+    if (!userRows.length || userRows[0].total_jetons <= 0) {
+      return res.status(402).json({ message: "Jetons insuffisants pour signer" });
     }
 
-    // 🔥 DEDUIRE 1 JETON (SECURISE)
+    const [docs] = await db.promise().query(
+      "SELECT id, filename, xml_file FROM transaction_documents WHERE transaction_id = ?",
+      [id]
+    );
+
+    const docsToSign = docs.map(d => ({
+      id: d.id,
+      filename: d.filename,
+      xmlBase64: d.xml_file
+    }));
+
+    res.json({ docsToSign });
+  } catch (err) {
+    console.error("PREPARE SIGNATURE ERROR:", err);
+    res.status(500).json({ message: "Erreur lors de la préparation de la signature" });
+  }
+});
+
+// ✍️ ÉTAPE 2 : Finaliser la signature (Recevoir les XML signés du local et enregistrer)
+app.post("/api/public/transactions/:id/finalize-signature", async (req, res) => {
+  const { id } = req.params;
+  const { signedResults } = req.body; // Array de {id: docId, xmlSigned: base64}
+
+  if (!signedResults || !signedResults.length) {
+    return res.status(400).json({ message: "Données signées manquantes" });
+  }
+
+  try {
+    const [txRows] = await db.promise().query(
+      "SELECT id, user_id, qr_config, ref_config, client_email FROM transactions WHERE id = ?",
+      [id]
+    );
+    const transaction = txRows[0];
+
+    // Déduire 1 jeton
     const [tokenUpdate] = await db.promise().query(
-      `
-      UPDATE users
-      SET total_jetons = total_jetons - 1
-      WHERE id = ? AND total_jetons > 0
-      `,
-      [transaction.user_id],
+      "UPDATE users SET total_jetons = total_jetons - 1 WHERE id = ? AND total_jetons > 0",
+      [transaction.user_id]
     );
 
     if (!tokenUpdate.affectedRows) {
-      return res.status(402).json({
-        error: "JETONS_INSUFFISANTS",
-        message: "Jetons insuffisants pour signer",
-      });
+      return res.status(402).json({ message: "Erreur jeton (insuffisant ou utilisateur non trouvé)" });
     }
 
-    const [docs] = await db
-      .promise()
-      .query(
-        `SELECT id, filename, xml_file, pdf_file FROM transaction_documents WHERE transaction_id = ?`,
-        [id],
-      );
+    const finalDocs = [];
 
-    const signedDocs = [];
+    // Enregistrer chaque document signé
+    for (const result of signedResults) {
+      const [docRows] = await db.promise().query("SELECT filename, pdf_file FROM transaction_documents WHERE id = ?", [result.id]);
+      const doc = docRows[0];
 
-    for (const doc of docs) {
-      // 🔐 SIGNATURE JAVA (TunuTrust / SSCD)
-      const javaRes = await axios.post(
-        "http://127.0.0.1:9000/sign/xml",
-        { pin, xmlBase64: doc.xml_file },
-        { headers: { "Content-Type": "application/json" } },
-      );
-
-      const signedXmlB64 = javaRes.data.signedXmlBase64;
-
-      // 💾 Mise à jour initiale du document -> statut 'signée'
       await db.promise().query(
         "UPDATE transaction_documents SET statut='signée', xml_signed=?, signed_at=NOW() WHERE id=?",
-        [signedXmlB64, doc.id],
+        [result.xmlSigned, result.id]
       );
 
-      signedDocs.push({
-        id: doc.id,
+      finalDocs.push({
+        id: result.id,
         filename: doc.filename,
         pdf_file: doc.pdf_file,
-        xml_signed: signedXmlB64,
+        xml_signed: result.xmlSigned
       });
     }
 
-    // 🔄 Update transaction to 'signée'
-    await db.promise().query(
-      "UPDATE transactions SET statut='signée', signed_at=NOW() WHERE id=?",
-      [id],
-    );
+    // Update statut transaction
+    await db.promise().query("UPDATE transactions SET statut='signée', signed_at=NOW() WHERE id=?", [id]);
 
-    // 📧 Envoi réponse immédiate au client pour redirection
-    res.json({
-      success: true,
-      message: "Signature TunuTrust réussie. Envoi TTN en cours...",
-    });
+    res.json({ success: true, message: "Signature enregistrée avec succès." });
 
-    // 📡 LANCEMENT TTN EN TÂCHE DE FOND
+    // Lancer TTN en arrière-plan
     processTTNSubmission(
       id,
-      signedDocs,
+      finalDocs,
       transaction.user_id,
       transaction.client_email,
       transaction.qr_config,
-      transaction.ref_config,
-    ).catch((err) => {
-      console.error("BACKGROUND TTN START ERROR:", err);
-    });
+      transaction.ref_config
+    ).catch(e => console.error("TTN BACKGROUND ERROR:", e));
+
   } catch (err) {
-    console.error("SIGN ERROR:", err.message);
+    console.error("FINALIZE SIGNATURE ERROR:", err);
+    res.status(500).json({ message: "Erreur serveur lors de la finalisation" });
   }
 });
+
 
 // 🚀 RENVOYER À LA TTN (MANUELLEMENT SI RÉFUSÉ OU OUBLIÉ)
 app.post("/api/transactions/:id/resend-ttn", verifyToken, async (req, res) => {
