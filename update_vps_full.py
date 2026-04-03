@@ -33,13 +33,7 @@ def update_full():
         stdin, stdout, stderr = ssh.exec_command(cmd)
         print(stdout.read().decode())
         
-        print("\n--- 4. Build du client React ---")
-        cmd_build = 'cd /var/www/medica_sign/clientweb && npm install && npm run build'
-        stdin, stdout, stderr = ssh.exec_command(cmd_build)
-        print(stdout.read().decode())
-        print(stderr.read().decode())
-        
-        print("\n--- 5. Redémarrage du serveur Node (PM2) ---")
+        print("\n--- 4. Redémarrage du serveur Node (PM2) ---")
         stdin, stdout, stderr = ssh.exec_command('pm2 restart medica_sign')
         print(stdout.read().decode())
         

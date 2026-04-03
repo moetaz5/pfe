@@ -5,7 +5,7 @@ server/.env
 # Client
 clientweb/node_modules
 clientweb/.env
-clientweb/build
+# clientweb/build (removed to allow direct push of build folder)
 
 # Build Engines
 tuntrust-sign-engine/target/
