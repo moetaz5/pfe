@@ -37,7 +37,7 @@ const Transactions = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await fetch("http://51.178.39.67.nip.io/api/transactions", {
+        const response = await fetch("http://51.178.39.67/api/transactions", {
           method: "GET",
           credentials: "include",
         });
@@ -75,7 +75,7 @@ const handleDeleteTransaction = async (transactionId) => {
 
   try {
     const response = await fetch(
-      `http://51.178.39.67.nip.io/api/transactions/${transactionId}`,
+      `http://51.178.39.67/api/transactions/${transactionId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -116,7 +116,7 @@ const handleDeleteTransaction = async (transactionId) => {
   const handleDownloadZip = async (transactionId) => {
     try {
       const response = await fetch(
-        `http://51.178.39.67.nip.io/api/transactions/${transactionId}/zip`,
+        `http://51.178.39.67/api/transactions/${transactionId}/zip`,
         {
           method: "GET",
           credentials: "include",
@@ -142,7 +142,7 @@ const handleDeleteTransaction = async (transactionId) => {
   const handleResendTTN = async (transactionId) => {
     try {
       const response = await fetch(
-        `http://51.178.39.67.nip.io/api/transactions/${transactionId}/resend-ttn`,
+        `http://51.178.39.67/api/transactions/${transactionId}/resend-ttn`,
         {
           method: "POST",
           credentials: "include",
@@ -176,7 +176,7 @@ const handleDeleteTransaction = async (transactionId) => {
   };
 
   const openSignatureLink = (id) => {
-    window.open(`http://51.178.39.67.nip.io/signature/${id}`, "_blank");
+    window.open(`http://51.178.39.67/signature/${id}`, "_blank");
   };
 
   const filteredTransactions = transactions.filter((t) => {

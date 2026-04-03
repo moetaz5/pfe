@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
         const SizedBox(height: 24),
         OutlinedButton.icon(
           onPressed: () async {
-            String redirectTo = kIsWeb ? "${Uri.base.origin}/#/dashboard" : "http://51.178.39.67.nip.io/dashboard";
+            String redirectTo = kIsWeb ? "${Uri.base.origin}/#/dashboard" : "http://51.178.39.67/dashboard";
             final url = Uri.parse("${ApiService.googleAuthUrl}?redirect_to=${Uri.encodeComponent(redirectTo)}");
             if (await canLaunchUrl(url)) {
               await launchUrl(url, mode: kIsWeb ? LaunchMode.platformDefault : LaunchMode.inAppBrowserView, webOnlyWindowName: '_self');

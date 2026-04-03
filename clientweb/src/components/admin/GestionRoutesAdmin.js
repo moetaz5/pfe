@@ -46,7 +46,7 @@ const GestionRoutesAdmin = () => {
 
   const fetchRoutes = async () => {
     try {
-      const res = await axios.get("http://51.178.39.67.nip.io/api/admin/routes", {
+      const res = await axios.get("http://51.178.39.67/api/admin/routes", {
         withCredentials: true,
       });
       setRoutes(res.data.routes || []);

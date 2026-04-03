@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import "../style/miniAIChat.css";
 
-const API_URL = "http://51.178.39.67.nip.io/api/ai/chat";
+const API_URL = "http://51.178.39.67/api/ai/chat";
 
 const INITIAL_MESSAGE = {
   role: "assistant",

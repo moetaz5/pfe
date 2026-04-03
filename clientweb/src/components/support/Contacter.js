@@ -6,7 +6,7 @@ import { Mail, MessageSquare, Send, Phone, MapPin, Building2, ShieldCheck } from
 import { useOutletContext } from "react-router-dom";
 import "../style/contacter.css";
 
-const API_URL = "http://51.178.39.67.nip.io";
+const API_URL = "http://51.178.39.67";
 
 const Contacter = () => {
   // Remplacé useSnackbar par toast car SnackbarProvider n'est pas présent dans App.js

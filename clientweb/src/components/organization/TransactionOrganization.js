@@ -37,7 +37,7 @@ const TransactionOrganization = () => {
     const fetchTransactions = async () => {
       try {
         const response = await fetch(
-          `http://51.178.39.67.nip.io/api/organizations/${id}/transactions`,
+          `http://51.178.39.67/api/organizations/${id}/transactions`,
           { credentials: "include" }
         );
 
@@ -64,7 +64,7 @@ const TransactionOrganization = () => {
   const handleDownloadZip = async (transactionId) => {
     try {
       const response = await fetch(
-        `http://51.178.39.67.nip.io/api/transactions/${transactionId}/zip`,
+        `http://51.178.39.67/api/transactions/${transactionId}/zip`,
         { credentials: "include" }
       );
 
@@ -84,7 +84,7 @@ const TransactionOrganization = () => {
 
   /* ================= OPEN SIGNATURE ================= */
   const openSignatureLink = (transactionId) => {
-    window.open(`http://51.178.39.67.nip.io/signature/${transactionId}`, "_blank");
+    window.open(`http://51.178.39.67/signature/${transactionId}`, "_blank");
   };
 
   /* ================= FILTER ================= */

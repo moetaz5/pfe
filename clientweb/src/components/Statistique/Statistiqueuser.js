@@ -41,7 +41,7 @@ const queryClient = new QueryClient();
 // --- API Helpers ---
 const fetchStats = async () => {
     try {
-        const res = await axios.get("http://51.178.39.67.nip.io/api/statistiquesUSER", { withCredentials: true });
+        const res = await axios.get("http://51.178.39.67/api/statistiquesUSER", { withCredentials: true });
         return res.data;
     } catch (e) {
         console.error("fetchStats error", e);
@@ -50,17 +50,17 @@ const fetchStats = async () => {
 };
 
 const fetchTransactionsData = async () => {
-  const res = await axios.get("http://51.178.39.67.nip.io/api/transactions", { withCredentials: true });
+  const res = await axios.get("http://51.178.39.67/api/transactions", { withCredentials: true });
   return Array.isArray(res.data) ? res.data : [];
 };
 
 const fetchFacturesData = async () => {
-  const res = await axios.get("http://51.178.39.67.nip.io/api/my-transaction-factures", { withCredentials: true });
+  const res = await axios.get("http://51.178.39.67/api/my-transaction-factures", { withCredentials: true });
   return Array.isArray(res.data) ? res.data : [];
 };
 
 const fetchDashboardStats = async () => {
-  const res = await axios.get("http://51.178.39.67.nip.io/api/dashboard/stats", { withCredentials: true });
+  const res = await axios.get("http://51.178.39.67/api/dashboard/stats", { withCredentials: true });
   return res.data;
 };
 

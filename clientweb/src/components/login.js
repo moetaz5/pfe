@@ -60,7 +60,7 @@ const Login = () => {
 
   /* ================= GOOGLE LOGIN ================= */
   const handleGoogleLogin = () => {
-    window.location.href = "http://51.178.39.67.nip.io/api/auth/google";
+    window.location.href = "http://51.178.39.67/api/auth/google";
   };
 
   /* ================= LOGIN FORM ================= */
@@ -73,13 +73,13 @@ const Login = () => {
   try {
 
     await axios.post(
-      "http://51.178.39.67.nip.io/api/auth/login",
+      "http://51.178.39.67/api/auth/login",
       { email, password },
       { withCredentials: true }
     );
 
     const res = await axios.get(
-      "http://51.178.39.67.nip.io/api/auth/me",
+      "http://51.178.39.67/api/auth/me",
       { withCredentials: true }
     );
 
@@ -96,7 +96,7 @@ const Login = () => {
       try {
         // 🔥 ENVOI AUTOMATIQUE DU CODE
         await axios.post(
-          "http://51.178.39.67.nip.io/api/auth/resend-verification-code",
+          "http://51.178.39.67/api/auth/resend-verification-code",
           { email: unverifiedEmail }
         );
 
