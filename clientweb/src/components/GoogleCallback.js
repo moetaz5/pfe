@@ -8,22 +8,43 @@ const GoogleCallback = () => {
   const { setUser } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const handleCallback = async () => {
       try {
-        const res = await axios.get("http://51.178.39.67/api/auth/me", {
-          withCredentials: true,
-        });
-        setUser(res.data);
-        navigate("/dashboard", { replace: true });
+        // Vérifier si on a un exchange_token dans l'URL
+        // (flux cross-domain OAuth: nip.io → IP directe)
+        const urlParams = new URLSearchParams(window.location.search);
+        const exchangeToken = urlParams.get("exchange_token");
+
+        if (exchangeToken) {
+          // Échanger le token temporaire contre un cookie de session sur le bon domaine
+          const res = await axios.post(
+            "http://51.178.39.67/api/auth/exchange-google-token",
+            { exchange_token: exchangeToken },
+            { withCredentials: true }
+          );
+          setUser(res.data);
+          navigate("/dashboard", { replace: true });
+        } else {
+          // Fallback: vérifier la session existante
+          const res = await axios.get("http://51.178.39.67/api/auth/me", {
+            withCredentials: true,
+          });
+          setUser(res.data);
+          navigate("/dashboard", { replace: true });
+        }
       } catch (err) {
         navigate("/login", { replace: true });
       }
     };
 
-    fetchUser();
+    handleCallback();
   }, [navigate, setUser]);
 
-  return <p style={{ textAlign: "center" }}>Connexion Google...</p>;
+  return (
+    <p style={{ textAlign: "center", marginTop: "2rem", fontSize: "1.1rem" }}>
+      ⏳ Connexion Google en cours...
+    </p>
+  );
 };
 
 export default GoogleCallback;

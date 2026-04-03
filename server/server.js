@@ -17,6 +17,17 @@ const crypto = require("crypto");
 
 const app = express();
 
+// ===================== GOOGLE EXCHANGE TOKENS =====================
+// Store temporaire pour les tokens d'échange OAuth Google (5 minutes)
+const googleExchangeTokens = new Map();
+// Nettoyage automatique toutes les 10 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, val] of googleExchangeTokens.entries()) {
+    if (now > val.expires) googleExchangeTokens.delete(key);
+  }
+}, 10 * 60 * 1000);
+
 // ===================== AUTO-MIGRATION =====================
 // Ajoute la colonne date_suppression si elle n'existe pas encore (compatible toutes versions MySQL)
 db.query(
@@ -847,11 +858,8 @@ app.get(
   },
   async (req, res) => {
     try {
-      const redirectTo = req.query.state || "http://51.178.39.67";
-      console.log("GOOGLE CALLBACK SUCCESS - Redirecting to:", redirectTo);
-
       if (!req.user) {
-        return res.redirect(`${redirectTo}/login?error=auth_failed`);
+        return res.redirect(`http://51.178.39.67/login?error=auth_failed`);
       }
 
       // 🔎 Vérifier le statut réel en base
@@ -862,42 +870,89 @@ app.get(
         ]);
 
       if (!rows.length) {
-        return res.redirect(`${redirectTo}/login?error=user_not_found`);
+        return res.redirect(`http://51.178.39.67/login?error=user_not_found`);
       }
 
       const user = rows[0];
 
       // ❌ Compte désactivé
       if (user.statut === 0) {
-        return res.redirect(`${redirectTo}/login?error=disabled`);
+        return res.redirect(`http://51.178.39.67/login?error=disabled`);
       }
 
-      // 🔐 Génération JWT
-      const token = jwt.sign(
-        { id: user.id, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: "1d" },
-      );
-
-      res.cookie("token", token, {
-        httpOnly: true,
-        sameSite: "Lax", // "Lax" is better for redirects
-        secure: false, // set to true if using HTTPS
+      // 🔐 Génération d'un exchange token (résout le problème cross-domain)
+      // Le cookie ne peut pas être défini ici car le callback vient de nip.io
+      // et le frontend est sur l'IP directe. On utilise un token temporaire.
+      const exchangeToken = crypto.randomBytes(32).toString("hex");
+      googleExchangeTokens.set(exchangeToken, {
+        userId: user.id,
+        role: user.role,
+        expires: Date.now() + 5 * 60 * 1000, // 5 minutes
       });
 
-      // Redirect to dashboard (with # for Flutter Web if needed)
-      const finalDest = redirectTo.includes("#")
-        ? `${redirectTo}`
-        : `${redirectTo}/dashboard`;
+      console.log("GOOGLE CALLBACK SUCCESS - Exchange token generated, redirecting.");
 
-      return res.redirect(finalDest);
+      // Rediriger vers le frontend IP avec le token d'échange
+      return res.redirect(
+        `http://51.178.39.67/google/callback?exchange_token=${exchangeToken}`
+      );
     } catch (error) {
       console.error("GOOGLE CALLBACK ERROR:", error);
-      const redirectTo = req.query.state || "http://51.178.39.67";
-      return res.redirect(`${redirectTo}/login?error=server`);
+      return res.redirect(`http://51.178.39.67/login?error=server`);
     }
   },
 );
+
+/* =================== GOOGLE EXCHANGE TOKEN ENDPOINT =================== */
+// Échange un token temporaire contre un cookie de session valide
+// Résout le problème cross-domain entre nip.io et l'IP directe
+app.post("/api/auth/exchange-google-token", async (req, res) => {
+  try {
+    const { exchange_token } = req.body;
+
+    if (!exchange_token) {
+      return res.status(400).json({ message: "Token d'échange manquant" });
+    }
+
+    const data = googleExchangeTokens.get(exchange_token);
+
+    if (!data || Date.now() > data.expires) {
+      googleExchangeTokens.delete(exchange_token);
+      return res.status(401).json({ message: "Token expiré ou invalide" });
+    }
+
+    // Supprimer le token (usage unique)
+    googleExchangeTokens.delete(exchange_token);
+
+    // Générer le JWT de session
+    const token = jwt.sign(
+      { id: data.userId, role: data.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    // Définir le cookie sur le bon domaine (51.178.39.67)
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "Lax",
+      secure: false,
+    });
+
+    // Récupérer les infos utilisateur
+    const [rows] = await db
+      .promise()
+      .query("SELECT id, name, email, role FROM users WHERE id = ?", [data.userId]);
+
+    if (!rows.length) {
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+    }
+
+    return res.json(rows[0]);
+  } catch (err) {
+    console.error("EXCHANGE TOKEN ERROR:", err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
+});
 
 /* ===================== NOTIFICATIONS ROUTES ===================== */
 app.get("/api/notifications", verifyToken, async (req, res) => {
