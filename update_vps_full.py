@@ -33,7 +33,11 @@ def update_full():
         stdin, stdout, stderr = ssh.exec_command(cmd)
         print(stdout.read().decode())
         
-        print("\n--- 4. Redémarrage du serveur Node (PM2) ---")
+        print("\n--- 4. Mise à jour de la configuration Nginx ---")
+        nginx_cmd = 'sudo cp /var/www/medica_sign/nginx_medica_sign.conf /etc/nginx/sites-available/medica_sign && sudo systemctl reload nginx'
+        stdin, stdout, stderr = ssh.exec_command(nginx_cmd)
+        
+        print("\n--- 5. Redémarrage du serveur Node (PM2) ---")
         stdin, stdout, stderr = ssh.exec_command('pm2 restart medica_sign')
         print(stdout.read().decode())
         
