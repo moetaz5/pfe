@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "../style/certification.css";
 
-const API_URL = "http://medicasign.medicacom.tn";
+const API_URL = "https://medicasign.medicacom.tn";
 
 const Certification = () => {
 

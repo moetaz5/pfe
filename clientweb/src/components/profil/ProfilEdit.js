@@ -4,7 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import "../style/information.css";
 
-const API_URL = "http://medicasign.medicacom.tn"; // ⬅️ change si ton backend est sur un autre port
+const API_URL = "https://medicasign.medicacom.tn"; // ⬅️ change si ton backend est sur un autre port
 
 const ProfilEdit = () => {
   const navigate = useNavigate();

@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 class CreateTransactionRedirectScreen extends StatelessWidget {
   const CreateTransactionRedirectScreen({super.key});
 
-  final String webUrl = "http://medicasign.medicacom.tn";
+  final String webUrl = "https://medicasign.medicacom.tn";
 
   Future<void> _launchURL() async {
     final Uri url = Uri.parse(webUrl);

@@ -6,7 +6,7 @@ import { Mail, MessageSquare, Send, Phone, MapPin, Building2, ShieldCheck } from
 import { useOutletContext } from "react-router-dom";
 import "../style/contacter.css";
 
-const API_URL = "http://medicasign.medicacom.tn";
+const API_URL = "https://medicasign.medicacom.tn";
 
 const Contacter = () => {
   // Remplacé useSnackbar par toast car SnackbarProvider n'est pas présent dans App.js

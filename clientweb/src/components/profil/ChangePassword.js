@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import "../style/dashboard.css";
 
-const API_URL = "http://medicasign.medicacom.tn"; // ⬅️ change si nécessaire
+const API_URL = "https://medicasign.medicacom.tn"; // ⬅️ change si nécessaire
 
 const ChangePassword = () => {
   const [form, setForm] = useState({ current: "", next: "", confirm: "" });
