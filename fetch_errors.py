@@ -1,7 +1,7 @@
 import paramiko
 
 def fetch_errors():
-    hostname = 'medicasign.medicacom.tn'
+    hostname = '51.178.39.67'
     username = 'ubuntu'
     password = 'M3dic0c0M24++'
     ssh = paramiko.SSHClient()

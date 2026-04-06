@@ -1,7 +1,7 @@
 import paramiko
 
 def control_vps(action):
-    hostname = 'medicasign.medicacom.tn'
+    hostname = '51.178.39.67'
     username = 'ubuntu'
     password = 'M3dic0c0M24++'
     
