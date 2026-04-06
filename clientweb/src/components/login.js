@@ -60,7 +60,7 @@ const Login = () => {
 
   /* ================= GOOGLE LOGIN ================= */
   const handleGoogleLogin = () => {
-    window.location.href = "http://medicasign.medicacom.tn/api/auth/google";
+    window.location.href = "https://medicasign.medicacom.tn/api/auth/google";
   };
 
   /* ================= LOGIN FORM ================= */

@@ -8,7 +8,7 @@ import 'main.dart';
 class ApiService {
   static String get baseUrl {
     // Le serveur est maintenant hébergé sur le VPS OVH.
-    return 'http://medicasign.medicacom.tn/api';
+    return 'https://medicasign.medicacom.tn/api';
   }
 
   static String get googleAuthUrl => '$baseUrl/auth/google';

@@ -549,7 +549,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 
 const allowedOrigins = [
-  "http://medicasign.medicacom.tn",
+  "https://medicasign.medicacom.tn",
   "http://localhost:52001",
   "http://127.0.0.1:52001",
   "http://10.0.2.2:52001",

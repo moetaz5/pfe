@@ -46,9 +46,9 @@ Le serveur Node.js est géré par **PM2** pour rester allumé 24h/24, même si v
 
 ## 5. Gestion de Google OAuth
 À cause des règles de sécurité de Google, une adresse IP brute n'est pas autorisée.
-Nous utilisons désormais le domaine officiel : `http://medicasign.medicacom.tn`.
+Nous utilisons désormais le domaine officiel : `https://medicasign.medicacom.tn`.
 
-*   **URL de redirection (Google Console)** : `http://medicasign.medicacom.tn/api/auth/google/callback`
+*   **URL de redirection (Google Console)** : `https://medicasign.medicacom.tn/api/auth/google/callback`
 
 ---
 

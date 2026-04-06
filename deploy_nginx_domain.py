@@ -53,7 +53,7 @@ def deploy():
         stdin, stdout, stderr = ssh.exec_command('sudo systemctl status nginx --no-pager | head -5')
         print(stdout.read().decode())
 
-        print("\n✅ DÉPLOIEMENT TERMINÉ ! Testez : http://medicasign.medicacom.tn")
+        print("\n✅ DÉPLOIEMENT TERMINÉ ! Testez : https://medicasign.medicacom.tn")
 
     except Exception as e:
         print(f"\n❌ Erreur : {e}")
