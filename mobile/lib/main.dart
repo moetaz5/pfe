@@ -13,7 +13,9 @@ const String kGoogleWebClientId =
     '44156546623-r6d6n0afs5jsfehq5j2ojvhv5unm452i.apps.googleusercontent.com';
 
 void main() async {
+  debugPrint('>>> MAIN STARTING <<<');
   WidgetsFlutterBinding.ensureInitialized();
+  debugPrint('>>> BINDING INITIALIZED <<<');
   runApp(const MyApp());
 }
 
