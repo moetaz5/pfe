@@ -10,6 +10,7 @@ clientweb/.env
 # Build Engines
 tuntrust-sign-engine/target/
 tuntrust-sign-engine/app/dist/
+build/
 
 # Logs
 npm-debug.log*

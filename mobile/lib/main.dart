@@ -8,7 +8,12 @@ import 'screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api_service.dart';
 
-void main() {
+// Web OAuth Client ID (Google Cloud Console → Credentials → Web application)
+const String kGoogleWebClientId =
+    '44156546623-r6d6n0afs5jsfehq5j2ojvhv5unm452i.apps.googleusercontent.com';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -32,15 +37,28 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _checkAuth() async {
+    debugPrint('*** APP START: CHECKING AUTH ***');
     try {
       final prefs = await SharedPreferences.getInstance();
       final hasSession = prefs.getBool('has_session') ?? false;
+      
       if (hasSession) {
-        await ApiService().getCurrentUser();
+        debugPrint('Session local found. validating with Server...');
+        // On donne un délai court pour la validation, sinon on laisse passer
+        await ApiService().getCurrentUser().timeout(const Duration(seconds: 3));
+        debugPrint('Session validated.');
         setState(() => _isLoggedIn = true);
-      } else { setState(() => _isLoggedIn = false); }
-    } catch (_) { setState(() => _isLoggedIn = false); }
-    finally { setState(() => _checking = false); }
+      } else {
+        debugPrint('No session found.');
+        setState(() => _isLoggedIn = false);
+      }
+    } catch (e) {
+      debugPrint('Auth check error (normal if offline/unauthorized): $e');
+      setState(() => _isLoggedIn = false); 
+    } finally {
+      debugPrint('Auth check finished.');
+      if (mounted) setState(() => _checking = false);
+    }
   }
 
   @override

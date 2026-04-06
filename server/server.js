@@ -880,9 +880,18 @@ app.get(
         return res.redirect(`http://51.178.39.67/login?error=disabled`);
       }
 
-      // 🔐 Génération d'un exchange token (résout le problème cross-domain)
-      // Le cookie ne peut pas être défini ici car le callback vient de nip.io
-      // et le frontend est sur l'IP directe. On utilise un token temporaire.
+      // 🔐 Gestion de la redirection de retour (Web ou Mobile)
+      if (req.query.state === "from_mobile") {
+        const token = jwt.sign(
+          { id: user.id, role: user.role },
+          process.env.JWT_SECRET,
+          { expiresIn: "10d" } // Token plus long pour le mobile
+        );
+        console.log("GOOGLE CALLBACK SUCCESS (MOBILE) - Redirecting to App Link.");
+        return res.redirect(`medicasign://auth-callback?token=${token}&userId=${user.id}&role=${user.role}&name=${encodeURIComponent(user.name)}`);
+      }
+
+      // 🔐 Génération d'un exchange token (résout le problème cross-domain sur le WEB)
       const exchangeToken = crypto.randomBytes(32).toString("hex");
       googleExchangeTokens.set(exchangeToken, {
         userId: user.id,
@@ -890,7 +899,7 @@ app.get(
         expires: Date.now() + 5 * 60 * 1000, // 5 minutes
       });
 
-      console.log("GOOGLE CALLBACK SUCCESS - Exchange token generated, redirecting.");
+      console.log("GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.");
 
       // Rediriger vers le frontend IP avec le token d'échange
       return res.redirect(
@@ -951,6 +960,70 @@ app.post("/api/auth/exchange-google-token", async (req, res) => {
   } catch (err) {
     console.error("EXCHANGE TOKEN ERROR:", err);
     return res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
+/* =================== GOOGLE MOBILE (Native SDK) ENDPOINT =================== */
+// Vérifie un id_token Google natif (depuis google_sign_in Flutter)
+// et retourne un JWT de session sans passer par le navigateur
+app.post("/api/auth/google-mobile", async (req, res) => {
+  try {
+    const { id_token } = req.body;
+    if (!id_token) {
+      return res.status(400).json({ message: "id_token manquant" });
+    }
+
+    // Vérifier le token auprès de Google
+    const googleRes = await axios.get(
+      `https://oauth2.googleapis.com/tokeninfo?id_token=${id_token}`
+    );
+    const payload = googleRes.data;
+
+    if (!payload.email) {
+      return res.status(401).json({ message: "Token Google invalide" });
+    }
+
+    const email = payload.email;
+    const name = payload.name || email.split("@")[0];
+
+    // Chercher ou créer l'utilisateur
+    const [rows] = await db.promise().query("SELECT * FROM users WHERE email = ?", [email]);
+
+    let user;
+    if (rows.length > 0) {
+      user = rows[0];
+    } else {
+      const [result] = await db.promise().query(
+        "INSERT INTO users (name, email, password, role, is_verified) VALUES (?, ?, ?, ?, ?)",
+        [name, email, "", "user", 1]
+      );
+      const [newRows] = await db.promise().query("SELECT * FROM users WHERE id = ?", [result.insertId]);
+      user = newRows[0];
+    }
+
+    if (user.statut === 0) {
+      return res.status(403).json({ message: "Compte désactivé. Contactez l'administrateur." });
+    }
+
+    // Générer le JWT de session
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.cookie("token", token, { httpOnly: true, sameSite: "Lax", secure: false });
+
+    return res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      token,
+    });
+  } catch (err) {
+    console.error("GOOGLE MOBILE AUTH ERROR:", err?.response?.data || err.message);
+    return res.status(401).json({ message: "Authentification Google échouée" });
   }
 });
 

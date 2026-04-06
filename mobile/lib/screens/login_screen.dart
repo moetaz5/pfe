@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:app_links/app_links.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 import '../api_service.dart';
 import '../ui_utils.dart';
 
@@ -18,6 +21,70 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _loading = false;
   String _error = '';
   final ApiService api = ApiService();
+
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _initDeepLinks();
+  }
+
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _initDeepLinks() {
+    _appLinks = AppLinks();
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      if (uri.scheme == 'medicasign' && uri.host == 'auth-callback') {
+        _handleDeepLink(uri);
+      }
+    });
+  }
+
+  Future<void> _handleDeepLink(Uri uri) async {
+    final token = uri.queryParameters['token'];
+    if (token == null) return;
+
+    setState(() { _loading = true; });
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('session_token', token);
+      await prefs.setBool('has_session', true);
+      
+      // On rafraîchit l'instance API avec le nouveau token
+      ApiService(); 
+      
+      if (!mounted) return;
+      UiUtils.showSuccess(context, 'Connexion Google réussie via Chrome.');
+      Navigator.of(context).pushReplacementNamed('/dashboard');
+    } catch (e) {
+      debugPrint('Deep Link Error: $e');
+      if (mounted) UiUtils.showError(context, 'Erreur lors de la récupération de session.');
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _doGoogleLogin() async {
+    // On utilise l'URL du serveur qui lance le flux Google OAuth
+    final authUrl = Uri.parse('${ApiService.baseUrl}/auth/google?redirect_to=from_mobile');
+    
+    try {
+      if (!await launchUrl(authUrl, mode: LaunchMode.externalApplication)) {
+        throw Exception('Could not launch $authUrl');
+      }
+    } catch (e) {
+      debugPrint('Launch URL Error: $e');
+      if (mounted) UiUtils.showError(context, 'Impossible d\'ouvrir le navigateur.');
+    }
+  }
 
   Future<void> _doLogin() async {
     if (!_formKey.currentState!.validate()) return;
@@ -172,13 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const SizedBox(height: 24),
         OutlinedButton.icon(
-          onPressed: () async {
-            String redirectTo = kIsWeb ? "${Uri.base.origin}/#/dashboard" : "http://51.178.39.67/dashboard";
-            final url = Uri.parse("${ApiService.googleAuthUrl}?redirect_to=${Uri.encodeComponent(redirectTo)}");
-            if (await canLaunchUrl(url)) {
-              await launchUrl(url, mode: kIsWeb ? LaunchMode.platformDefault : LaunchMode.inAppBrowserView, webOnlyWindowName: '_self');
-            }
-          },
+          onPressed: _loading ? null : _doGoogleLogin,
           icon: const Icon(Icons.g_mobiledata_rounded, color: Color(0xFF0F172A), size: 32),
           label: const Text('Compte Google', style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold)),
           style: OutlinedButton.styleFrom(minimumSize: const Size(double.infinity, 56), side: const BorderSide(color: Color(0xFFE2E8F0)), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),

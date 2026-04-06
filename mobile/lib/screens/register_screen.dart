@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:async';
 import '../api_service.dart';
 import '../ui_utils.dart';
+import '../main.dart' show kGoogleWebClientId;
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -19,6 +23,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _loading = false;
   String _error = '';
   final ApiService api = ApiService();
+
+  Future<void> _doGoogleRegister() async {
+    final authUrl = Uri.parse('${ApiService.baseUrl}/auth/google?redirect_to=from_mobile');
+    try {
+      if (!await launchUrl(authUrl, mode: LaunchMode.externalApplication)) {
+        throw Exception('Could not launch $authUrl');
+      }
+    } catch (e) {
+      debugPrint('Launch URL Error: $e');
+      if (mounted) UiUtils.showError(context, 'Impossible d\'ouvrir le navigateur.');
+    }
+  }
 
   bool _isFullName(String fullName) {
     final parts = fullName.trim().split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
@@ -77,6 +93,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               const SizedBox(height: 32),
+              OutlinedButton.icon(
+                onPressed: _loading ? null : _doGoogleRegister,
+                icon: const Icon(Icons.g_mobiledata_rounded, color: Color(0xFF0F172A), size: 32),
+                label: const Text('S\'inscrire avec Google', style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold)),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 56),
+                  side: const BorderSide(color: Color(0xFFE2E8F0)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Expanded(child: Divider(color: Color(0xFFE2E8F0))),
+                  const Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('OU', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF94A3B8), letterSpacing: 1))),
+                  const Expanded(child: Divider(color: Color(0xFFE2E8F0))),
+                ],
+              ),
+              const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

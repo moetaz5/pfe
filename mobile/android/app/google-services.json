@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "44156546623",
+    "project_id": "medica-sign-auth",
+    "storage_bucket": "medica-sign-auth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44156546623:android:dummy",
+        "android_client_info": {
+          "package_name": "com.example.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44156546623-r6d6n0afs5jsfehq5j2ojvhv5unm452i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "dummy_api_key_replace_me_in_console"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44156546623-r6d6n0afs5jsfehq5j2ojvhv5unm452i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

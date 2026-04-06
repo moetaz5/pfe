@@ -91,6 +91,25 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> loginWithGoogle(String idToken) async {
+    try {
+      final response = await _dio.post('/auth/google-mobile', data: {'id_token': idToken});
+      if (response.statusCode == 200) {
+        final prefs = await SharedPreferences.getInstance();
+        final token = response.data['token'];
+        if (token != null) {
+          _token = token;
+          await prefs.setString('session_token', token);
+        }
+        await prefs.setBool('has_session', true);
+        return Map<String, dynamic>.from(response.data);
+      }
+      throw Exception(response.data['message'] ?? 'Erreur Google Sign-In');
+    } on DioException catch (err) {
+      throw Exception(err.response?.data['message'] ?? 'Erreur Google Sign-In');
+    }
+  }
+
   Future<Map<String, dynamic>> register(String name, String email, String password, String phone, String address) async {
     if (name.trim().split(' ').length < 2) {
       throw Exception('Veuillez entrer votre nom complet (Prénom et Nom).');

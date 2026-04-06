@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -41,4 +42,16 @@ android {
 
 flutter {
     source = "../.."
+}
+
+tasks.all {
+    if (name.startsWith("assemble")) {
+        doLast {
+            val sourceDir = File("C:/tmp/medica_sign_build/app/outputs")
+            val targetDir = File(rootProject.projectDir, "../build/app/outputs")
+            if (sourceDir.exists()) {
+                sourceDir.copyRecursively(targetDir, overwrite = true)
+            }
+        }
+    }
 }
