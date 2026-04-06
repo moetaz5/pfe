@@ -13,7 +13,7 @@ def run_local_git_push():
         print(f"⚠️ Erreur ou rien à pousser sur Git : {e}")
 
 def update_server():
-    hostname = '51.178.39.67'
+    hostname = 'medicasign.medicacom.tn'
     username = 'ubuntu'
     password = 'M3dic0c0M24++'
     

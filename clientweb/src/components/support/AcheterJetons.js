@@ -5,7 +5,7 @@ import { CheckCircle2, X } from "lucide-react";
 import { notification } from "antd";
 import "../style/acheterJetons.css";
 
-const API_URL = "http://51.178.39.67";
+const API_URL = "http://medicasign.medicacom.tn";
 
 const PACKS = [
   { id: "pack-10", name: "Pack 10", tokens: 10, price: 9 },

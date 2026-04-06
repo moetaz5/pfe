@@ -9,7 +9,7 @@ Ce document explique comment le projet Medica-Sign est hébergé sur le VPS Ubun
 *   **Frontend (Web)** : Application React servie par **Nginx** via des fichiers statiques.
 *   **Backend (API)** : Serveur Node.js géré par **PM2** (port 5000).
 *   **Base de Données** : MySQL hébergée sur **OVH CloudDB** ( km813502-001.eu.clouddb.ovh.net).
-*   **Domaine** : Accès direct via IP (`51.178.39.67`) + Wildcard DNS `nip.io` uniquement pour Google OAuth.
+*   **Domaine** : `medicasign.medicacom.tn` (Désormais le point d'entrée principal).
 
 ---
 
@@ -27,7 +27,7 @@ Le Frontend est servi par Nginx. Sa configuration se trouve dans :
 `/etc/nginx/sites-available/medica_sign`
 
 **Points clés de la configuration :**
-*   **Server Name** : accepte `51.178.39.67` et `51.178.39.67.nip.io`.
+*   **Server Name** : `medicasign.medicacom.tn`.
 *   **Root** : pointe vers `/var/www/medica_sign/clientweb/build`.
 *   **Proxy Inverse** : Toutes les requêtes vers `/api` sont redirigées vers `localhost:5000` (le backend).
 
@@ -45,10 +45,10 @@ Le serveur Node.js est géré par **PM2** pour rester allumé 24h/24, même si v
 ---
 
 ## 5. Gestion de Google OAuth
-À cause des règles de sécurité de Google, une adresse IP brute n'est pas autorisée pour la redirection.
-Nous utilisons donc le domaine : `http://51.178.39.67.nip.io` uniquement pour l'étape de connexion Google.
+À cause des règles de sécurité de Google, une adresse IP brute n'est pas autorisée.
+Nous utilisons désormais le domaine officiel : `http://medicasign.medicacom.tn`.
 
-*   **URL de redirection (Google Console)** : `http://51.178.39.67.nip.io/api/auth/google/callback`
+*   **URL de redirection (Google Console)** : `http://medicasign.medicacom.tn/api/auth/google/callback`
 
 ---
 

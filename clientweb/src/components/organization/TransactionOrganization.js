@@ -84,7 +84,7 @@ const TransactionOrganization = () => {
 
   /* ================= OPEN SIGNATURE ================= */
   const openSignatureLink = (transactionId) => {
-    window.open(`http://51.178.39.67/signature/${transactionId}`, "_blank");
+    window.open(`http://medicasign.medicacom.tn/signature/${transactionId}`, "_blank");
   };
 
   /* ================= FILTER ================= */

@@ -487,7 +487,7 @@ const notifyAdmins = async (title, message, type = "info") => {
 };
 
 /* ===================== EMAIL SIGNATURE ===================== */
-const sendSignatureEmail = async (email, transactionId, host = "51.178.39.67") => {
+const sendSignatureEmail = async (email, transactionId, host = "medicasign.medicacom.tn") => {
   const link = `http://${host}/signature/${transactionId}`;
 
   await transporter.sendMail({
@@ -549,7 +549,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 
 const allowedOrigins = [
-  "http://51.178.39.67",
+  "http://medicasign.medicacom.tn",
   "http://localhost:52001",
   "http://127.0.0.1:52001",
   "http://10.0.2.2:52001",

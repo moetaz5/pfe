@@ -176,7 +176,7 @@ const handleDeleteTransaction = async (transactionId) => {
   };
 
   const openSignatureLink = (id) => {
-    window.open(`http://51.178.39.67/signature/${id}`, "_blank");
+    window.open(`http://medicasign.medicacom.tn/signature/${id}`, "_blank");
   };
 
   const filteredTransactions = transactions.filter((t) => {

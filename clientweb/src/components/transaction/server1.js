@@ -19,7 +19,7 @@ const crypto = require("crypto");
 const app = express();
 /* ===================== EMAIL SIGNATURE ===================== */
 const sendSignatureEmail = async (email, transactionId) => {
-  const link = `http://51.178.39.67/signature/${transactionId}`;
+  const link = `http://medicasign.medicacom.tn/signature/${transactionId}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
@@ -53,7 +53,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://51.178.39.67",
+    origin: "http://medicasign.medicacom.tn",
     credentials: true,
   }),
 );
@@ -236,12 +236,12 @@ app.get(
   "/api/auth/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: "http://51.178.39.67/login?error=google_failed",
+    failureRedirect: "http://medicasign.medicacom.tn/login?error=google_failed",
   }),
   async (req, res) => {
     try {
       if (!req.user) {
-        return res.redirect("http://51.178.39.67/login?error=auth_failed");
+        return res.redirect("http://medicasign.medicacom.tn/login?error=auth_failed");
       }
 
       // 🔎 Vérifier le statut réel en base
@@ -252,14 +252,14 @@ app.get(
         ]);
 
       if (!rows.length) {
-        return res.redirect("http://51.178.39.67/login?error=user_not_found");
+        return res.redirect("http://medicasign.medicacom.tn/login?error=user_not_found");
       }
 
       const user = rows[0];
 
       // ❌ Compte désactivé
       if (user.statut === 0) {
-        return res.redirect("http://51.178.39.67/login?error=disabled");
+        return res.redirect("http://medicasign.medicacom.tn/login?error=disabled");
       }
 
       // 🔐 Génération JWT
@@ -275,10 +275,10 @@ app.get(
         secure: false,
       });
 
-      return res.redirect("http://51.178.39.67/dashboard");
+      return res.redirect("http://medicasign.medicacom.tn/dashboard");
     } catch (error) {
       console.error("GOOGLE CALLBACK ERROR:", error);
-      return res.redirect("http://51.178.39.67/login?error=server");
+      return res.redirect("http://medicasign.medicacom.tn/login?error=server");
     }
   },
 );
@@ -2493,7 +2493,7 @@ import axios from "axios";
 import "../style/posSignature.css";
 
 const PosSignature = ({ transactionId, onClose }) => {
-  const API_URL = "http://51.178.39.67";
+  const API_URL = "http://medicasign.medicacom.tn";
   const MIN_SIZE = 24;
   const DEFAULT_QR_WIDTH = 120;
   const DEFAULT_QR_HEIGHT = 120;
