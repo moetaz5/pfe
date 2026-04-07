@@ -65,6 +65,13 @@ const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
 
+  // Close sidebar on mobile when route changes
+  useEffect(() => {
+    if (window.innerWidth <= 768 && toggled) {
+      setToggled(false);
+    }
+  }, [location.pathname, toggled]);
+
   // ── Toggle Sidebar Helper ──
   const toggleSidebar = () => {
     if (window.innerWidth <= 768) {
@@ -361,11 +368,7 @@ const Dashboard = () => {
           </button>
         </div>
 
-        <Menu
-          onClick={() => {
-            if (window.innerWidth <= 768) setToggled(false);
-          }}
-        >
+        <Menu>
           <MenuItem
             icon={<FaHome />}
             active={location.pathname === "/dashboard" || location.pathname === "/dashboard/"}
