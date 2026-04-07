@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import "./style/login.css";
 
 const GoogleIcon = () => (
@@ -36,6 +37,13 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, authLoading, navigate]);
 
   const handleGoogleRegister = () => {
     window.location.href = "/api/auth/google";
@@ -87,7 +95,7 @@ const Register = () => {
         address,
       });
 
-      navigate("/verify-email", { state: { email: res.data.email } });
+      navigate("/verify-email", { state: { email: res.data.email }, replace: true });
     } catch (err) {
       setError(err?.response?.data?.message || "Erreur lors de l'inscription");
     } finally {

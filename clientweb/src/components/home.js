@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
 import { 
   ShieldCheck, FileText, CheckCircle, ArrowRight, Github, 
   Twitter, Linkedin, Mail, Phone, MapPin, Play, Zap, Check, Lock
@@ -12,7 +14,14 @@ import { Menu, X } from "lucide-react";
 
 export default function Home() {
   const navigate = useNavigate();
+  const { user, loading } = useContext(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, loading, navigate]);
 
   return (
     <div className="home-page">
