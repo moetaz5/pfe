@@ -65,19 +65,19 @@ const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
 
-  // Close sidebar on mobile when route changes
+  // ── Close sidebar on route change (mobile only) ──
   useEffect(() => {
-    if (window.innerWidth <= 768 && toggled) {
+    if (window.innerWidth <= 768) {
       setToggled(false);
     }
-  }, [location.pathname, toggled]);
+  }, [location.pathname]);
 
   // ── Toggle Sidebar Helper ──
   const toggleSidebar = () => {
     if (window.innerWidth <= 768) {
-      setToggled(!toggled);
+      setToggled((prev) => !prev);
     } else {
-      setCollapsed(!collapsed);
+      setCollapsed((prev) => !prev);
     }
   };
 
