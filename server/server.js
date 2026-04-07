@@ -288,6 +288,10 @@ const processTTNSubmission = async (
         `La transaction #${transactionId} a été refusée par les services TTN`,
         "error",
       );
+      // 📧 ENVOI EMAIL REFUS CLIENT
+      if (clientEmail) {
+        await sendRejectionEmailToClient(clientEmail, transactionId);
+      }
     }
 
   } catch (globalErr) {
@@ -541,6 +545,30 @@ const sendSignedPdfsToClient = async (clientEmail, transactionId, docs) => {
     console.log("📧 PDF envoyés au client:", clientEmail);
   } catch (err) {
     console.error("SEND CLIENT PDF ERROR:", err);
+  }
+};
+/* ===================== EMAIL REFUS CLIENT ===================== */
+const sendRejectionEmailToClient = async (clientEmail, transactionId) => {
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: clientEmail,
+      subject: `Transaction Refusée - #${transactionId}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+          <h2 style="color: #d32f2f;">Transaction Refusée</h2>
+          <p>Bonjour,</p>
+          <p>Nous vous informons que votre transaction <strong>#${transactionId}</strong> a été refusée par les services officiels du réseau TTN.</p>
+          <p>Cela peut être dû à un problème de format de fichier ou à une erreur de validation externe.</p>
+          <p>Veuillez contacter notre support ou vérifier vos documents avant de tenter un nouvel envoi.</p>
+          <br/>
+          <p>Cordialement,<br/>L'équipe Medica-Sign</p>
+        </div>
+      `,
+    });
+    console.log("📧 Email de refus envoyé au client:", clientEmail);
+  } catch (err) {
+    console.error("SEND REJECTION EMAIL ERROR:", err);
   }
 };
 /* ===================== MIDDLEWARES ===================== */

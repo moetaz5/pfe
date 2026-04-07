@@ -12,81 +12,47 @@ import java.security.cert.X509Certificate;
 /**
  * Gestion du token PKCS#11 SafeNet/TunTrust.
  *
- * CORRECTION DU BUG PIN :
- * SunPKCS11 maintient une session native ouverte même si on crée
- * plusieurs instances de KeyStore. La seule vraie solution est
- * d'appeler AuthProvider.logout() avant chaque nouveau login()
- * pour forcer le token à re-vérifier le PIN.
+ * CORRECTION DU BUG "PIN incorrect à la 2ème signature" :
+ * SunPKCS11 maintient un état interne après la 1ère session.
+ * La solution : supprimer et re-créer entièrement le provider
+ * à chaque openSession() pour repartir d'un état propre.
  */
 public class KeyStoreLoader {
 
-    private static AuthProvider authProvider;
-    private static KeyStore keyStore;
-    private static boolean initialized = false;
+    private static final String PKCS11_CONFIG =
+        "--name=SafeNet\n" +
+        "library=C:/Windows/System32/eTPKCS11.dll";
 
     public static void init() {
-        // Démarrage rapide : on valide juste que la DLL existe
-        // La vraie initialisation PKCS11 se fait à la première requête
         System.out.println("✅ Moteur de signature TunTrust démarré — en attente du token SafeNet.");
     }
 
-    private static synchronized void ensureInitialized() {
-        if (initialized) return;
+    /**
+     * Ouvre une nouvelle session sécurisée — entièrement réinitialisée à chaque appel.
+     * Cela garantit que le PIN est toujours re-vérifié, même après plusieurs signatures.
+     */
+    public static synchronized SessionContext openSession(String pin) {
         try {
-            String config = "--name=SafeNet\n" +
-                            "library=C:/Windows/System32/eTPKCS11.dll";
+            // ✅ ÉTAPE 1 : Supprimer l'ancien provider SafeNet s'il existe
+            // Ceci force SunPKCS11 à repartir d'un état propre à chaque requête
+            Provider existing = Security.getProvider("SunPKCS11-SafeNet");
+            if (existing != null) {
+                try {
+                    ((AuthProvider) existing).logout();
+                } catch (Exception ignored) {}
+                Security.removeProvider("SunPKCS11-SafeNet");
+            }
 
-            Provider p = Security.getProvider("SunPKCS11");
-            if (p == null) {
+            // ✅ ÉTAPE 2 : Créer un nouveau provider SunPKCS11 propre
+            Provider base = Security.getProvider("SunPKCS11");
+            if (base == null) {
                 throw new RuntimeException("Le provider SunPKCS11 n'est pas disponible dans ce JDK.");
             }
-
-            p = p.configure(config);
+            Provider p = base.configure(PKCS11_CONFIG);
             Security.addProvider(p);
+            AuthProvider authProvider = (AuthProvider) p;
 
-            authProvider = (AuthProvider) p;
-            keyStore = KeyStore.getInstance("PKCS11", authProvider);
-
-            initialized = true;
-            System.out.println("✅ Moteur de signature SafeNet/TunTrust prêt");
-
-        } catch (Exception e) {
-            String msg = e.getMessage();
-            System.err.println("❌ Erreur d'initialisation PKCS11 : " + msg);
-            if (msg != null && (msg.contains("CKR_DEVICE_REMOVED") || msg.contains("CKR_TOKEN_NOT_PRESENT") || msg.contains("0x8000000a"))) {
-                 throw new SecurityException("TOKEN_NOT_FOUND", e);
-            }
-            throw new SecurityException("INIT_ERROR: " + msg, e);
-        }
-    }
-
-    /**
-     * Ouvre une nouvelle session sécurisée sur le token.
-     *
-     * L'appel logout() + login() est la seule façon garantie de forcer
-     * le token à re-vérifier le PIN à chaque requête, même si une session
-     * était déjà active.
-     *
-     * @param pin Code PIN saisi par l'utilisateur
-     * @return SessionContext avec la clé privée et le certificat
-     * @throws SecurityException si PIN faux ou token absent
-     */
-    public static SessionContext openSession(String pin) {
-        try {
-            // ✅ ÉTAPE 0 : Initialisation paresseuse — charge SunPKCS11 seulement maintenant
-            ensureInitialized();
-
-            // ✅ ÉTAPE 1 : Forcer la déconnexion de la session précédente
-            // Sans ce logout(), SunPKCS11 réutilise la session native ouverte
-            // et n'effectue AUCUNE vérification du nouveau PIN.
-            try {
-                authProvider.logout();
-            } catch (Exception ignored) {
-                // Peut échouer si aucune session n'était ouverte — c'est normal
-            }
-
-            // ✅ ÉTAPE 2 : Login avec le nouveau PIN via PasswordCallback
-            // C'est la manière officielle d'authentifier sur un AuthProvider PKCS#11
+            // ✅ ÉTAPE 3 : Login avec le PIN via PasswordCallback
             authProvider.login(null, callbacks -> {
                 for (Callback cb : callbacks) {
                     if (cb instanceof PasswordCallback) {
@@ -95,34 +61,40 @@ public class KeyStoreLoader {
                 }
             });
 
-            // ✅ ÉTAPE 3 : Charger le KeyStore maintenant que la session est authentifiée
-            // null/null car le login est déjà fait par authProvider.login()
-            keyStore.load(null, null);
+            // ✅ ÉTAPE 4 : Charger le KeyStore (session fraîche = succès garanti)
+            KeyStore ks = KeyStore.getInstance("PKCS11", authProvider);
+            ks.load(null, null);
 
             // Récupération du premier certificat sur le token
-            java.util.Enumeration<String> aliases = keyStore.aliases();
+            java.util.Enumeration<String> aliases = ks.aliases();
             if (!aliases.hasMoreElements()) {
                 throw new RuntimeException("Aucun certificat trouvé sur le token");
             }
             String alias = aliases.nextElement();
             System.out.println("✅ Session authentifiée - Certificat : " + alias);
 
-            PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, null);
-            X509Certificate cert  = (X509Certificate) keyStore.getCertificate(alias);
+            PrivateKey privateKey = (PrivateKey) ks.getKey(alias, null);
+            X509Certificate cert  = (X509Certificate) ks.getCertificate(alias);
 
             return new SessionContext(privateKey, cert);
 
         } catch (SecurityException e) {
             throw e;
         } catch (Exception e) {
-            // LoginException ou toute erreur PKCS#11 = PIN faux ou token absent
-            throw new SecurityException("PIN incorrect ou Token non détecté : " + e.getMessage(), e);
+            String msg = e.getMessage();
+            System.err.println("❌ Erreur session PKCS11 : " + msg);
+            if (msg != null && (
+                msg.contains("CKR_DEVICE_REMOVED") ||
+                msg.contains("CKR_TOKEN_NOT_PRESENT") ||
+                msg.contains("0x8000000a") ||
+                msg.contains("No token present")
+            )) {
+                throw new SecurityException("TOKEN_NOT_FOUND", e);
+            }
+            throw new SecurityException("PIN_INCORRECT", e);
         }
     }
 
-    /**
-     * Transporte la clé privée + certificat d'une session authentifiée.
-     */
     public static class SessionContext {
         private final PrivateKey privateKey;
         private final X509Certificate certificate;
