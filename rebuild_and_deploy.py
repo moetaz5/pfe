@@ -42,11 +42,11 @@ result = subprocess.run(
     cwd=CLIENT_DIR,
     capture_output=True,
     text=True,
-    timeout=300
+    timeout=300,
+    shell=True
 )
 if result.returncode == 0:
     ok("npm run build → SUCCESS")
-    # Vérifier que build/static existe
     build_static = os.path.join(CLIENT_DIR, "build", "static")
     if os.path.exists(build_static):
         files = []
@@ -67,16 +67,16 @@ sep("ÉTAPE 2 : Git push du build")
 # ════════════════════════════════════════════
 info("Git add/commit/push du build...")
 
-subprocess.run(["git", "add", "clientweb/build/"], cwd=LOCAL_WEB_DIR, capture_output=True)
+subprocess.run(["git", "add", "clientweb/build/"], cwd=LOCAL_WEB_DIR, capture_output=True, shell=True)
 commit = subprocess.run(
     ["git", "commit", "-m", "deploy: rebuild React frontend"],
-    cwd=LOCAL_WEB_DIR, capture_output=True, text=True
+    cwd=LOCAL_WEB_DIR, capture_output=True, text=True, shell=True
 )
 print(commit.stdout); print(commit.stderr)
 
 push = subprocess.run(
     ["git", "push", "origin", "main"],
-    cwd=LOCAL_WEB_DIR, capture_output=True, text=True, timeout=120
+    cwd=LOCAL_WEB_DIR, capture_output=True, text=True, timeout=120, shell=True
 )
 if push.returncode == 0:
     ok("Git push réussi")
@@ -88,75 +88,73 @@ else:
 # ════════════════════════════════════════════
 sep("ÉTAPE 3 : Déploiement sur VPS via SSH")
 # ════════════════════════════════════════════
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect(VPS_IP, username=USER, password=PASS, timeout=20)
-ok("SSH connecté")
-
-# Pull depuis GitHub
-info("Git pull sur VPS...")
-ssh_run(ssh, "cd /var/www/medica_sign && git fetch origin main && git reset --hard origin/main")
-
-# Vérifier que le build est bien là
-out, _ = ssh_run(ssh, "ls /var/www/medica_sign/clientweb/build/static/js/ | head -5")
-if "main" in out or ".js" in out:
-    ok("Fichiers JS du build présents sur VPS !")
-else:
-    fail(f"Fichiers JS manquants: {out}")
-    # Fallback: rsync direct si git ne fonctionne pas
-    info("Le build n'est pas dans git (gitignore ?). Envoi SFTP direct...")
-    ssh.close()
-    
-    # Upload via SFTP
-    transport = paramiko.Transport((VPS_IP, 22))
-    transport.connect(username=USER, password=PASS)
-    sftp = paramiko.SFTPClient.from_transport(transport)
-    
-    build_dir = os.path.join(CLIENT_DIR, "build")
-    remote_build = "/var/www/medica_sign/clientweb/build"
-    
-    upload_count = 0
-    for root, dirs, files in os.walk(build_dir):
-        # Calculer chemin distant
-        rel_root = os.path.relpath(root, build_dir)
-        remote_root = remote_build if rel_root == "." else f"{remote_build}/{rel_root.replace(os.sep, '/')}"
-        
-        # Créer dossier distant
-        try: sftp.mkdir(remote_root)
-        except: pass
-        
-        for filename in files:
-            local_path = os.path.join(root, filename)
-            remote_path = f"{remote_root}/{filename}"
-            sftp.put(local_path, remote_path)
-            upload_count += 1
-            if upload_count % 20 == 0:
-                info(f"  {upload_count} fichiers uploadés...")
-    
-    ok(f"SFTP : {upload_count} fichiers uploadés")
-    sftp.close(); transport.close()
-    
-    # Reconnecter SSH
+try:
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(VPS_IP, username=USER, password=PASS, timeout=20)
+    ok("SSH connecté")
 
-# Reload Nginx
-info("Reload Nginx...")
-ssh_run(ssh, "sudo systemctl reload nginx")
-ok("Nginx rechargé")
+    # Pull depuis GitHub
+    info("Git pull sur VPS...")
+    ssh_run(ssh, "cd /var/www/medica_sign && git fetch origin main && git reset --hard origin/main")
 
-# Restart PM2
-info("Restart PM2...")
-ssh_run(ssh, "pm2 restart medica_sign")
+    # Vérifier que le build est bien là
+    out, _ = ssh_run(ssh, "ls /var/www/medica_sign/clientweb/build/static/js/ | head -5")
+    if "main" in out or ".js" in out:
+        ok("Fichiers JS du build présents sur VPS !")
+    else:
+        fail(f"Fichiers JS manquants: {out}")
+        # Fallback: SFTP
+        info("Le build n'est pas dans git (ou pas synchro). Envoi SFTP direct...")
+        ssh.close()
+        
+        # Upload via SFTP
+        transport = paramiko.Transport((VPS_IP, 22))
+        transport.connect(username=USER, password=PASS)
+        sftp = paramiko.SFTPClient.from_transport(transport)
+        
+        build_dir = os.path.join(CLIENT_DIR, "build")
+        remote_build = "/var/www/medica_sign/clientweb/build"
+        
+        upload_count = 0
+        for root, dirs, files in os.walk(build_dir):
+            rel_root = os.path.relpath(root, build_dir)
+            remote_root = remote_build if rel_root == "." else f"{remote_build}/{rel_root.replace(os.sep, '/')}"
+            try: sftp.mkdir(remote_root)
+            except: pass
+            
+            for filename in files:
+                local_path = os.path.join(root, filename)
+                remote_path = f"{remote_root}/{filename}"
+                sftp.put(local_path, remote_path)
+                upload_count += 1
+        
+        ok(f"SFTP : {upload_count} fichiers uploadés")
+        sftp.close(); transport.close()
+        
+        # Reconnecter SSH
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(VPS_IP, username=USER, password=PASS, timeout=20)
 
-# Vérification finale
-sep("VÉRIFICATION FINALE")
-ssh_run(ssh, "ls /var/www/medica_sign/clientweb/build/static/js/ | head -10")
-out,_ = ssh_run(ssh, "systemctl is-active nginx && pm2 list --no-color | grep medica")
-print(out)
+    # Reload Nginx
+    info("Reload Nginx...")
+    ssh_run(ssh, "sudo systemctl reload nginx")
+    ok("Nginx rechargé")
 
-ssh.close()
+    # Restart PM2
+    info("Restart PM2...")
+    ssh_run(ssh, "pm2 restart medica_sign")
+
+    # Vérification finale
+    sep("VÉRIFICATION FINALE")
+    ssh_run(ssh, "ls /var/www/medica_sign/clientweb/build/static/js/ | head -10")
+except Exception as e:
+    fail(f"Erreur VPS : {e}")
+
+finally:
+    try: ssh.close()
+    except: pass
 
 sep("RÉSUMÉ")
 ok(f"Frontend rebuild + déployé sur VPS")

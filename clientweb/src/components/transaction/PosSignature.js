@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Rnd } from "react-rnd";
 import { 
   Maximize, 
-  Move, 
   Check, 
   X, 
-  Info, 
   QrCode, 
   Type, 
   ChevronLeft, 
@@ -18,16 +16,14 @@ import {
 } from "lucide-react";
 
 import "../style/posSignature.css";
-// We don't need AnnotationLayer or TextLayer CSS for simple positioning with canvas
 
-// Fix for pdfjs worker in react-pdf 10.x
+// Fix for pdfjs worker
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const REFERENCE_TEXT_DEFAULT = "Copie de la facture electronique enregistree aupres de TTN sous la reference unique n :";
 
 const PosSignature = ({
   pdfFile = null,
-  embeddedMode = false,
   onSave = null,
   onClose = null,
 }) => {
@@ -38,11 +34,19 @@ const PosSignature = ({
   const [isReady, setIsReady] = useState(false);
 
   // zones positions in PDF POINTS (72 dpi)
-  // We'll calculate display pixels as points * scale
   const [qrZone, setQrZone] = useState({ x: 400, y: 50, width: 100, height: 100 });
   const [refZone, setRefZone] = useState({ x: 50, y: 750, width: 450, height: 40 });
 
-  const [activeZone, setActiveZone] = useState("qr"); // 'qr' or 'ref'
+  const [activeZone, setActiveZone] = useState("qr");
+
+  // Initial responsiveness
+  useEffect(() => {
+    if (window.innerWidth < 1024) {
+      setScale(0.6);
+    } else if (window.innerWidth < 600) {
+      setScale(0.4);
+    }
+  }, []);
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -56,15 +60,11 @@ const PosSignature = ({
 
   const handleSave = () => {
     if (!onSave) return;
-
-    // pdf-lib uses y from BOTTOM, react-pdf renders with y from TOP.
-    // We convert screen y (top-origin) → pdf y (bottom-origin) using pdfPoints.height
-    const pdfH = pdfPoints.height || 842; // fallback A4
+    const pdfH = pdfPoints.height || 842;
 
     const finalQr = {
       configuration: {
         qrPositionX: Math.round(qrZone.x),
-        // Convert: pdfY_bottom = pageHeight - screenY_top - qrHeight
         qrPositionY: Math.round(pdfH - qrZone.y - qrZone.height),
         qrPositionP: pageNumber,
         qrWidth: Math.round(qrZone.width),
@@ -75,7 +75,6 @@ const PosSignature = ({
     const finalRef = {
       configuration: {
         labelPositionX: Math.round(refZone.x),
-        // Convert: pdfY_bottom = pageHeight - screenY_top - refHeight
         labelPositionY: Math.round(pdfH - refZone.y - refZone.height),
         labelPositionP: pageNumber,
         labelWidth: Math.round(refZone.width),
@@ -94,12 +93,11 @@ const PosSignature = ({
 
   return (
     <div className="pos-signature-main">
-      {/* HEADER / TOOLBAR */}
       <div className="pos-toolbar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
           <div className="pos-config-badge">
             <Settings2 size={16} />
-            Configurateur de Signatures
+            <span className="hide-mobile">Éditeur de placement</span>
           </div>
           
           <div className="pos-mode-switcher">
@@ -107,33 +105,32 @@ const PosSignature = ({
               className={`pos-mode-btn qr ${activeZone === "qr" ? "active" : ""}`}
               onClick={() => setActiveZone("qr")}
             >
-              <QrCode size={16} /> Zone QR
+              <QrCode size={16} /> QR
             </button>
             <button 
               className={`pos-mode-btn ref ${activeZone === "ref" ? "active" : ""}`}
               onClick={() => setActiveZone("ref")}
             >
-              <Type size={16} /> Zone Référence
+              <Type size={16} /> Réf
             </button>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div className="pos-controls-group">
             <button className="pos-control-btn" onClick={() => setPageNumber(p => Math.max(1, p - 1))} disabled={pageNumber <= 1}><ChevronLeft size={18} /></button>
-            <span style={{ fontSize: '13px', fontWeight: '700', minWidth: '70px', textAlign: 'center' }}>Page {pageNumber} / {numPages || '?'}</span>
+            <span style={{ fontSize: '12px', fontWeight: '800', minWidth: '60px', textAlign: 'center' }}> {pageNumber} / {numPages || '?'}</span>
             <button className="pos-control-btn" onClick={() => setPageNumber(p => Math.min(numPages || 1, p + 1))} disabled={pageNumber >= numPages}><ChevronRight size={18} /></button>
           </div>
           
           <div className="pos-controls-group">
-            <button className="pos-control-btn" onClick={() => setScale(s => Math.max(0.4, s - 0.1))}><ZoomOut size={18} /></button>
-            <span style={{ fontSize: '13px', fontWeight: '700', minWidth: '50px', textAlign: 'center' }}>{Math.round(scale * 100)}%</span>
+            <button className="pos-control-btn" onClick={() => setScale(s => Math.max(0.3, s - 0.1))}><ZoomOut size={18} /></button>
+            <span style={{ fontSize: '11px', fontWeight: '800', minWidth: '40px', textAlign: 'center' }}>{Math.round(scale * 100)}%</span>
             <button className="pos-control-btn" onClick={() => setScale(s => Math.min(2.0, s + 0.1))}><ZoomIn size={18} /></button>
           </div>
         </div>
       </div>
 
-      {/* VIEWER AREA */}
       <div className="pos-viewer-canvas-wrapper">
         <div className="pos-pdf-surface">
           <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
@@ -146,10 +143,8 @@ const PosSignature = ({
             />
           </Document>
 
-          {/* INTERACTIVE OVERLAY */}
           {isReady && (
             <>
-              {/* QR BLOCK */}
               <Rnd
                 size={{ width: qrZone.width * scale, height: qrZone.height * scale }}
                 position={{ x: qrZone.x * scale, y: qrZone.y * scale }}
@@ -168,17 +163,13 @@ const PosSignature = ({
                 onClick={() => setActiveZone("qr")}
               >
                 <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <QrCode size={Math.min(qrZone.width * scale, qrZone.height * scale) * 0.4} color="var(--ps-primary)" opacity={0.7} />
+                  <QrCode size={Math.min(qrZone.width * scale, qrZone.height * scale) * 0.4} color="var(--ps-primary)" opacity={0.6} />
                   {activeZone === 'qr' && (
-                    <div className="pos-zone-label">
-                      <Maximize size={10} style={{marginRight: 4}} />
-                      Placement QR: {Math.round(qrZone.x)}, {Math.round(qrZone.y)}
-                    </div>
+                    <div className="pos-zone-label">Placement QR</div>
                   )}
                 </div>
               </Rnd>
 
-              {/* REFERENCE BLOCK */}
               <Rnd
                 size={{ width: refZone.width * scale, height: refZone.height * scale }}
                 position={{ x: refZone.x * scale, y: refZone.y * scale }}
@@ -196,15 +187,12 @@ const PosSignature = ({
                 activeClassName="active"
                 onClick={() => setActiveZone("ref")}
               >
-                <div style={{ padding: '8px', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ fontSize: Math.max(7, 8 * scale) + 'px', color: 'var(--ps-secondary)', lineHeight: '1.2', fontWeight: 600 }}>
-                    {REFERENCE_TEXT_DEFAULT} [REF-TTN]
+                <div style={{ padding: '6px', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                  <div style={{ fontSize: Math.max(5, 7 * scale) + 'px', color: 'var(--ps-secondary)', lineHeight: '1.2', fontWeight: 600 }}>
+                    {REFERENCE_TEXT_DEFAULT} [REFERENCE]
                   </div>
                   {activeZone === 'ref' && (
-                    <div className="pos-zone-label ref">
-                      <Maximize size={10} style={{marginRight: 4}} />
-                      Zone Texte TTN
-                    </div>
+                    <div className="pos-zone-label ref">Zone Texte TTN</div>
                   )}
                 </div>
               </Rnd>
@@ -213,24 +201,17 @@ const PosSignature = ({
         </div>
       </div>
 
-      {/* FOOTER */}
       <div className="pos-footer">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--ps-text-muted)', fontSize: '13px' }}>
-          <div style={{ padding: '8px', background: '#f8fafc', borderRadius: '8px' }}>
-            <MousePointer2 size={18} />
-          </div>
-          <p style={{ margin: 0 }}>
-            Utilisez les poignées pour dimensionner. <br/>
-            Les coordonnées sont calculées en <b>points PDF (PostScript)</b> pour une précision maximale.
-          </p>
+        <div className="hide-tablet" style={{ color: 'var(--ps-text-muted)', fontSize: '12px', flex: 1 }}>
+           <p style={{ margin: 0 }}>Faites glisser et redimensionnez les zones. <br/>Précision PostScript préservée.</p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <button className="psig-btn ghost" onClick={onClose}>
+        <div style={{ display: 'flex', gap: '12px', width: window.innerWidth < 1024 ? '100%' : 'auto' }}>
+          <button className="psig-btn ghost" onClick={onClose} style={{ flex: 1 }}>
             Annuler
           </button>
-          <button className="psig-btn primary" onClick={handleSave} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Check size={18} /> Appliquer les positions
+          <button className="psig-btn primary" onClick={handleSave} style={{ flex: 2 }}>
+            <Check size={18} /> Enregistrer positions
           </button>
         </div>
       </div>
