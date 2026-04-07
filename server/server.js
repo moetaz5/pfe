@@ -840,7 +840,7 @@ app.get("/api/my-api-token", verifyToken, async (req, res) => {
 app.get("/api/auth/google", (req, res, next) => {
   const { redirect_to } = req.query;
   console.log("GOOGLE AUTH START - Redirect To:", redirect_to);
-  const state = redirect_to || "http://51.178.39.67";
+  const state = redirect_to || "https://medicasign.medicacom.tn";
   passport.authenticate("google", {
     scope: ["profile", "email"],
     state: state,
@@ -850,7 +850,7 @@ app.get("/api/auth/google", (req, res, next) => {
 app.get(
   "/api/auth/google/callback",
   (req, res, next) => {
-    const redirectTo = req.query.state || "http://51.178.39.67";
+    const redirectTo = req.query.state || "https://medicasign.medicacom.tn";
     passport.authenticate("google", {
       session: false,
       failureRedirect: `${redirectTo}/login?error=google_failed`,
@@ -859,7 +859,7 @@ app.get(
   async (req, res) => {
     try {
       if (!req.user) {
-        return res.redirect(`http://51.178.39.67/login?error=auth_failed`);
+        return res.redirect(`https://medicasign.medicacom.tn/login?error=auth_failed`);
       }
 
       // 🔎 Vérifier le statut réel en base
@@ -870,14 +870,14 @@ app.get(
         ]);
 
       if (!rows.length) {
-        return res.redirect(`http://51.178.39.67/login?error=user_not_found`);
+        return res.redirect(`https://medicasign.medicacom.tn/login?error=user_not_found`);
       }
 
       const user = rows[0];
 
       // ❌ Compte désactivé
       if (user.statut === 0) {
-        return res.redirect(`http://51.178.39.67/login?error=disabled`);
+        return res.redirect(`https://medicasign.medicacom.tn/login?error=disabled`);
       }
 
       // 🔐 Gestion de la redirection de retour (Web ou Mobile)
@@ -903,11 +903,11 @@ app.get(
 
       // Rediriger vers le frontend IP avec le token d'échange
       return res.redirect(
-        `http://51.178.39.67/google/callback?exchange_token=${exchangeToken}`
+        `https://medicasign.medicacom.tn/google/callback?exchange_token=${exchangeToken}`
       );
     } catch (error) {
       console.error("GOOGLE CALLBACK ERROR:", error);
-      return res.redirect(`http://51.178.39.67/login?error=server`);
+      return res.redirect(`https://medicasign.medicacom.tn/login?error=server`);
     }
   },
 );
