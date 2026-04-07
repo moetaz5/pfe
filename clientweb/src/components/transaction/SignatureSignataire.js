@@ -84,10 +84,23 @@ const SignatureSignataire = () => {
         }),
       });
 
-      if (!res.ok) throw new Error("PIN Incorrect ou Moteur non prêt");
+      if (!res.ok) {
+        const data = await res.json();
+        if (data.error === "TOKEN_NOT_FOUND") {
+          throw new Error("il faut insert le cle tuntrust");
+        }
+        if (data.error === "PIN_INCORRECT") {
+          throw new Error("Le code PIN saisi est incorrect");
+        }
+        throw new Error(data.message || "Erreur moteur local");
+      }
       setPinValid(true);
     } catch (e) {
-      setError("❌ Erreur Moteur Local : Vérifiez que le fichier JAR est lancé et que le PIN est correct.");
+      if (e instanceof TypeError) {
+        setError("❌ il faut installe votre mouteur (Vérifiez qu'il est bien lancé)");
+      } else {
+        setError("❌ " + e.message);
+      }
     }
   };
 
@@ -99,29 +112,43 @@ const SignatureSignataire = () => {
     try {
       // 1. Récupérer les documents XML à signer depuis le VPS
       const resData = await fetch(`/api/public/transactions/${id}/prepare-signature`);
-      if (!resData.ok) throw new Error("Erreur de préparation des documents sur le serveur.");
+      if (!resData.ok) {
+        if (resData.status === 402) {
+          throw new Error("votre solde est epuisee il faut acheter des jeten");
+        }
+        throw new Error("Erreur de préparation des documents sur le serveur.");
+      }
       const { docsToSign } = await resData.json();
 
       const signedResults = [];
 
       // 2. Faire signer chaque document par le MOTEUR LOCAL
       for (const doc of docsToSign) {
-        const signRes = await fetch("http://127.0.0.1:9000/sign/xml", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            pin,
-            xmlBase64: doc.xmlBase64,
-          }),
-        });
+        try {
+          const signRes = await fetch("http://127.0.0.1:9000/sign/xml", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              pin,
+              xmlBase64: doc.xmlBase64,
+            }),
+          });
 
-        if (!signRes.ok) throw new Error(`Erreur moteur local sur le fichier : ${doc.filename}`);
-        const signData = await signRes.json();
-        
-        signedResults.push({
-          id: doc.id,
-          xmlSigned: signData.xmlSigned,
-        });
+          if (!signRes.ok) {
+            const errData = await signRes.json();
+            if (errData.error === "TOKEN_NOT_FOUND") throw new Error("il faut insert le cle tuntrust");
+            throw new Error(errData.message || `Erreur moteur local sur : ${doc.filename}`);
+          }
+
+          const signData = await signRes.json();
+          signedResults.push({
+            id: doc.id,
+            xmlSigned: signData.signedXmlBase64, // Correction du champ
+          });
+        } catch (e) {
+             if (e instanceof TypeError) throw new Error("il faut installe votre mouteur");
+             throw e;
+        }
       }
 
       // 3. Envoyer les signatures au VPS pour finalisation
@@ -131,7 +158,12 @@ const SignatureSignataire = () => {
         body: JSON.stringify({ signedResults }),
       });
 
-      if (!finalRes.ok) throw new Error("Erreur lors de l'enregistrement des signatures sur le serveur.");
+      if (!finalRes.ok) {
+        if (finalRes.status === 402) {
+           throw new Error("votre solde est epuisee il faut acheter des jeten");
+        }
+        throw new Error("Erreur lors de l'enregistrement des signatures sur le serveur.");
+      }
 
       setSigned(true);
     } catch (e) {

@@ -30,7 +30,12 @@ public class SignatureHttpServer {
     public static class PingServlet extends HttpServlet {
         @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-            resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+            String origin = req.getHeader("Origin");
+            if (origin != null && (origin.equals("http://localhost:3000") || origin.equals("https://medicasign.medicacom.tn"))) {
+                resp.setHeader("Access-Control-Allow-Origin", origin);
+            } else {
+                resp.setHeader("Access-Control-Allow-Origin", "*");
+            }
             resp.setContentType("application/json");
             resp.getWriter().write("{\"status\":\"ok\"}");
         }
@@ -39,18 +44,26 @@ public class SignatureHttpServer {
     public static class SignServlet extends HttpServlet {
         private final ObjectMapper mapper = new ObjectMapper();
 
+        private void setCorsHeaders(HttpServletRequest req, HttpServletResponse resp) {
+            String origin = req.getHeader("Origin");
+            if (origin != null && (origin.equals("http://localhost:3000") || origin.equals("https://medicasign.medicacom.tn"))) {
+                resp.setHeader("Access-Control-Allow-Origin", origin);
+            } else {
+                resp.setHeader("Access-Control-Allow-Origin", "*");
+            }
+            resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+            resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        }
+
         @Override
         protected void doOptions(HttpServletRequest req, HttpServletResponse resp) {
-            resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-            resp.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-            resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
+            setCorsHeaders(req, resp);
             resp.setStatus(HttpServletResponse.SC_OK);
         }
 
         @Override
         protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-            resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+            setCorsHeaders(req, resp);
             resp.setContentType("application/json");
 
             try {
@@ -93,8 +106,14 @@ public class SignatureHttpServer {
                 resp.getWriter().write("{\"signedXmlBase64\":\"" + signedBase64 + "\"}");
 
             } catch (SecurityException e) {
-                resp.setStatus(401);
-                resp.getWriter().write("{\"error\":\"PIN_INCORRECT\"}");
+                String errorType = e.getMessage();
+                if ("TOKEN_NOT_FOUND".equals(errorType)) {
+                    resp.setStatus(404);
+                    resp.getWriter().write("{\"error\":\"TOKEN_NOT_FOUND\",\"message\":\"il faut insert le cle tuntrust\"}");
+                } else {
+                    resp.setStatus(401);
+                    resp.getWriter().write("{\"error\":\"PIN_INCORRECT\",\"message\":\"Le code PIN saisi est incorrect\"}");
+                }
             } catch (Exception e) {
                 resp.setStatus(500);
                 resp.getWriter().write("{\"error\":\"SIGN_ERROR\",\"message\":\"" + e.getMessage() + "\"}");

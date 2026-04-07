@@ -22,8 +22,16 @@ public class KeyStoreLoader {
 
     private static AuthProvider authProvider;
     private static KeyStore keyStore;
+    private static boolean initialized = false;
 
     public static void init() {
+        // Démarrage rapide : on valide juste que la DLL existe
+        // La vraie initialisation PKCS11 se fait à la première requête
+        System.out.println("✅ Moteur de signature TunTrust démarré — en attente du token SafeNet.");
+    }
+
+    private static synchronized void ensureInitialized() {
+        if (initialized) return;
         try {
             String config = "--name=SafeNet\n" +
                             "library=C:/Windows/System32/eTPKCS11.dll";
@@ -36,18 +44,19 @@ public class KeyStoreLoader {
             p = p.configure(config);
             Security.addProvider(p);
 
-            // SunPKCS11 implémente AuthProvider : login/logout natif
             authProvider = (AuthProvider) p;
-
-            // On crée le KeyStore UNE SEULE FOIS — il sera rechargé à chaque session
             keyStore = KeyStore.getInstance("PKCS11", authProvider);
 
+            initialized = true;
             System.out.println("✅ Moteur de signature SafeNet/TunTrust prêt");
 
         } catch (Exception e) {
-            System.err.println("❌ Erreur d'initialisation PKCS11 : " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("Erreur chargement PKCS11", e);
+            String msg = e.getMessage();
+            System.err.println("❌ Erreur d'initialisation PKCS11 : " + msg);
+            if (msg != null && (msg.contains("CKR_DEVICE_REMOVED") || msg.contains("CKR_TOKEN_NOT_PRESENT") || msg.contains("0x8000000a"))) {
+                 throw new SecurityException("TOKEN_NOT_FOUND", e);
+            }
+            throw new SecurityException("INIT_ERROR: " + msg, e);
         }
     }
 
@@ -64,6 +73,9 @@ public class KeyStoreLoader {
      */
     public static SessionContext openSession(String pin) {
         try {
+            // ✅ ÉTAPE 0 : Initialisation paresseuse — charge SunPKCS11 seulement maintenant
+            ensureInitialized();
+
             // ✅ ÉTAPE 1 : Forcer la déconnexion de la session précédente
             // Sans ce logout(), SunPKCS11 réutilise la session native ouverte
             // et n'effectue AUCUNE vérification du nouveau PIN.

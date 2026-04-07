@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="TunTrust Signature Engine" Language="1033" Version="1.2.0.0" Manufacturer="Medica" UpgradeCode="12345678-bdcf-4545-9270-134123456789">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of TunTrust Signature Engine is already installed." />
+
+        <MediaTemplate EmbedCab="yes" />
+
+        <!-- UI Configuration -->
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+        <UIRef Id="WixUI_InstallDir" />
+
+        <Feature Id="ProductFeature" Title="Main Feature" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+            <ComponentRef Id="ApplicationShortcut" />
+        </Feature>
+    </Product>
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="MedicaFolder" Name="Medica">
+                    <Directory Id="INSTALLFOLDER" Name="TunTrust Signature Engine" />
+                </Directory>
+            </Directory>
+            
+            <Directory Id="ProgramMenuFolder">
+                <Directory Id="ApplicationProgramsFolder" Name="TunTrust SIgnature Engine"/>
+            </Directory>
+            
+            <Directory Id="DesktopFolder" Name="Desktop" />
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+        <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+            <!-- Pack the JAR file -->
+            <Component Id="cmpJarFile" Guid="*">
+                <File Id="fileJar" Source="input\signature-engine-1.2.jar" KeyPath="yes" />
+            </Component>
+            
+            <!-- Pack the run script -->
+            <Component Id="cmpRunScript" Guid="*">
+                <File Id="fileRun" Source="input\run.vbs" KeyPath="yes" />
+            </Component>
+
+            <!-- Auto-start on Login -->
+            <Component Id="cmpAutoStart" Guid="*">
+                <RegistryValue Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Run" Name="TunTrustSignEngine" Type="string" Value="wscript.exe &quot;[INSTALLFOLDER]run.vbs&quot;" KeyPath="yes" />
+            </Component>
+        </ComponentGroup>
+
+        <!-- Start Menu and Desktop Shortcuts -->
+        <DirectoryRef Id="ApplicationProgramsFolder">
+            <Component Id="ApplicationShortcut" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut" 
+                          Name="Start Signature Engine" 
+                          Description="Starts the TunTrust HTTP Signature Engine on port 9000"
+                          Target="[SystemFolder]wscript.exe"
+                          Arguments='"[INSTALLFOLDER]run.vbs"'
+                          WorkingDirectory="INSTALLFOLDER" />
+                          
+                <Shortcut Id="ApplicationDesktopShortcut"
+                          Name="TunTrust Signature Engine"
+                          Description="Starts the TunTrust HTTP Signature Engine"
+                          Target="[SystemFolder]wscript.exe"
+                          Arguments='"[INSTALLFOLDER]run.vbs"'
+                          WorkingDirectory="INSTALLFOLDER"
+                          Directory="DesktopFolder" />
+
+                <RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
+                <RegistryValue Root="HKCU" Key="Software\Medica\TunTrustSignatureEngine" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+</Wix>
