@@ -75,7 +75,7 @@ db.query(
 );
 // ==========================================================
 //**TTN*================ */
-const TTN_URL = "http://192.168.100.13:5000/ElfatouraServices/EfactService";
+const TTN_URL = "http://127.0.0.1:5001/ElfatouraServices/EfactService";
 
 const TTN_LOGIN = "testuser";
 const TTN_PASSWORD = "testpass";
