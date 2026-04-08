@@ -359,7 +359,7 @@ const GestionTransactionsAdmin = () => {
                             title="Détails"
                             onClick={() => viewDetails(tx)}
                           >
-                            <FaEye />
+                            <FaEye /> <span>Détails</span>
                           </button>
                        </div>
                     </div>
