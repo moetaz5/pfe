@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_links/app_links.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import '../api_service.dart';
 import '../ui_utils.dart';
+import '../main.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -59,11 +59,15 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setBool('has_session', true);
       
       // On rafraîchit l'instance API avec le nouveau token
-      ApiService(); 
+      ApiService().setToken(token); 
       
       if (!mounted) return;
-      UiUtils.showSuccess(context, 'Connexion Google réussie via Chrome.');
-      Navigator.of(context).pushReplacementNamed('/dashboard');
+      UiUtils.showSuccess(context, 'Connexion Google réussie !');
+      
+      // On attend un tout petit peu que le clavier ou le navigateur se referme proprement
+      Future.delayed(const Duration(milliseconds: 500), () {
+        MyApp.navigatorKey.currentState?.pushReplacementNamed('/dashboard');
+      });
     } catch (e) {
       debugPrint('Deep Link Error: $e');
       if (mounted) UiUtils.showError(context, 'Erreur lors de la récupération de session.');

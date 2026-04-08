@@ -39,14 +39,20 @@ class ApiService {
         dio.interceptors.add(CookieManager(cookieJar));
       }
 
-      // 🚨 Intercepteur global pour gérer l'expiration de session (401)
+      // Intercepteur pour injecter le token
       dio.interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (_instance?._token != null) {
+            options.headers['Authorization'] = 'Bearer ${_instance!._token}';
+          }
+          return handler.next(options);
+        },
         onError: (DioException e, handler) async {
           if (e.response?.statusCode == 401) {
-            // Supprimer le flag local
             final prefs = await SharedPreferences.getInstance();
             await prefs.remove('has_session');
-            // Rediriger vers Home (Login)
+            await prefs.remove('session_token');
+            _instance?._token = null;
             MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
           }
           return handler.next(e);
@@ -54,12 +60,15 @@ class ApiService {
       ));
 
       _instance = ApiService._(dio, cookieJar);
-      // 🔥 Charger le token si déjà en session
       SharedPreferences.getInstance().then((p) {
         _instance!._token = p.getString('session_token');
       });
     }
     return _instance!;
+  }
+
+  void setToken(String token) {
+    _token = token;
   }
 
 

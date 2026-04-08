@@ -25,6 +25,13 @@
   padding: 40px 24px 60px;
   font-family: 'Inter', system-ui, sans-serif;
   color: var(--sp-text);
+  overflow-x: hidden;
+}
+
+@media (max-width: 600px) {
+  .contact-premium-scope {
+    padding: 20px 16px 40px;
+  }
 }
 
 .contact-page {
@@ -65,6 +72,13 @@
   letter-spacing: -0.02em;
   margin-bottom: 12px;
   color: var(--sp-text);
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .contact-page-header h2 {
+    font-size: 28px;
+  }
 }
 
 .contact-page-header p {
@@ -73,6 +87,13 @@
   line-height: 1.6;
   max-width: 600px;
 }
+
+@media (max-width: 600px) {
+  .contact-page-header p {
+    font-size: 14.5px;
+  }
+}
+
 .contact-page-header strong {
   color: var(--sp-primary);
 }
@@ -328,13 +349,59 @@
 
 /* Responsive */
 @media (max-width: 900px) {
-  .contact-grid-pro { grid-template-columns: 1fr; }
-  .c-form-row { grid-template-columns: 1fr; gap: 16px; }
-  .contact-form-glass { padding: 24px; }
+  .contact-grid-pro { 
+    grid-template-columns: 1fr; 
+    gap: 20px;
+  }
+  .c-form-row { 
+    grid-template-columns: 1fr; 
+    gap: 16px; 
+  }
+  .contact-form-glass { 
+    padding: 24px; 
+  }
 }
 
-@media (max-width: 500px) {
-  .c-form-actions { flex-direction: column; gap: 16px; align-items: flex-start; }
-  .c-btn-primary { width: 100%; justify-content: center; }
-  .contact-page-header h2 { font-size: 28px; }
+@media (max-width: 600px) {
+  .contact-page-header {
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .contact-page-header p {
+    margin: 0 auto;
+  }
+  .c-badge {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .c-form-actions { 
+    flex-direction: column; 
+    gap: 16px; 
+    align-items: center; 
+    text-align: center;
+  }
+  .c-btn-primary { 
+    width: 100%; 
+    justify-content: center; 
+  }
+  .contact-form-glass h3 {
+    font-size: 18px;
+    justify-content: center;
+  }
+  .c-field label {
+    font-size: 12.5px;
+  }
+  .c-side-card {
+    padding: 24px;
+    text-align: center;
+  }
+  .c-side-icon-wrap {
+    margin: 0 auto 20px;
+  }
+  .c-official-list li {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
 }

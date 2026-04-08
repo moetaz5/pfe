@@ -86,14 +86,12 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const cleanBase64 = (value) => String(value || "").replace(/\s+/g, "");
 
 const extractSoapReturn = (xmlText) => {
-  const match = String(xmlText || "").match(/<return>([\s\S]*?)<\/return>/i);
+  const match = String(xmlText || "").match(/<[^>]*return[^>]*>([\s\S]*?)<\/[^>]*return>/i);
   return match ? match[1].trim() : null;
 };
 
 const extractSoapFault = (xmlText) => {
-  const match = String(xmlText || "").match(
-    /<faultstring>([\s\S]*?)<\/faultstring>/i,
-  );
+  const match = String(xmlText || "").match(/<[^>]*faultstring[^>]*>([\s\S]*?)<\/[^>]*faultstring>/i);
   return match ? match[1].trim() : null;
 };
 
@@ -155,10 +153,10 @@ const consultEfactTTN = async (idSaveEfact) => {
 
     const raw = response.data;
 
-    const xmlMatch = raw.match(/<xmlContent>([\s\S]*?)<\/xmlContent>/);
+    const xmlMatch = raw.match(/<[^>]*xmlContent[^>]*>([\s\S]*?)<\/[^>]*xmlContent>/i);
 
     if (xmlMatch) {
-      return xmlMatch[1];
+      return xmlMatch[1].trim();
     }
 
     await sleep(3000);
@@ -189,6 +187,8 @@ const processTTNSubmission = async (
       try {
         // 📡 SAVE TTN
         const saveRes = await saveEfactTTN(doc.xml_signed);
+        console.log(`[TTN] raw saveRes for doc ${doc.id}: HTTP ${saveRes.httpStatus}, RAW: ${saveRes.raw?.substring(0, 300)}...`);
+        console.log(`[TTN] returnText/fault for doc ${doc.id}: returnText: ${saveRes.returnText}, fault: ${saveRes.fault}`);
         
         const idMatch = saveRes.returnText?.match(/idSaveEfact=(\d+)/i);
         const refMatch = saveRes.returnText?.match(/Reference TTN=([A-Z0-9]+)/i);
@@ -197,10 +197,11 @@ const processTTNSubmission = async (
         const referenceTTN = refMatch ? refMatch[1] : null;
 
         if (!idSaveEfact) {
-          throw new Error("TTN_ID_NOT_FOUND");
+          throw new Error(`TTN_ID_NOT_FOUND (returnText was: ${saveRes.returnText})`);
         }
 
         // 🔁 CONSULT TTN
+        console.log(`[TTN] Consultation TTN avec idSaveEfact: ${idSaveEfact}`);
         const xmlSignedTTN = await consultEfactTTN(idSaveEfact);
         const xmlDecoded = decodeXmlB64(xmlSignedTTN);
 
