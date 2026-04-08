@@ -217,45 +217,103 @@
 .status-pill.refusée.par.TTN { background: rgba(239, 68, 68, 0.1); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.2); }
 
 /* =========================
-   ACTIONS
+   ACTIONS AREA STRUCTURE
 ========================= */
 .status-and-actions {
   display: flex;
   align-items: center;
-  padding: 0 24px;
+  justify-content: space-between;
+  padding: 0 30px;
   background: #f8fafc;
-  gap: 20px;
+  gap: 30px;
+  min-width: 450px;
+}
+
+.status-badge-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 140px;
+}
+
+.admin-controls-separator {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent, #e2e8f0, transparent);
+}
+
+.admin-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.status-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.status-select-wrapper label {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
 }
 
 .admin-select-status {
-  padding: 8px 12px;
+  height: 38px;
   border-radius: 10px;
   border: 2px solid #e2e8f0;
   background: white;
-  font-size: 13px;
+  padding: 0 10px;
+  font-size: 12px;
   font-weight: 700;
-  color: #475569;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-select-status:hover {
+  border-color: var(--primary-color);
+}
+
+.action-buttons-grid {
+  display: flex;
+  gap: 10px;
 }
 
 .btn-details-circ {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   border: none;
-  background: white;
-  color: #64748b;
+  background: #f1f5f9;
+  color: #0247AA;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
 }
 
 .btn-details-circ:hover {
   background: var(--primary-color);
   color: white;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(2, 71, 170, 0.2);
+}
+
+.btn-details-circ.primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-details-circ.primary:hover {
+  background: #1e40af;
 }
 
 /* =========================

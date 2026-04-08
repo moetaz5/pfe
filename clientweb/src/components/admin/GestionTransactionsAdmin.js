@@ -310,54 +310,58 @@ const GestionTransactionsAdmin = () => {
                   </div>
 
                   <div className="status-and-actions">
-                    <div className="status-container">
+                    <div className="status-badge-container">
                        <span className={`status-pill pill-large ${tx.statut}`}>
                          {tx.statut.toUpperCase()}
                        </span>
                     </div>
 
+                    <div className="admin-controls-separator"></div>
+
                     <div className="admin-actions-group">
-                       <select 
-                         className="admin-select-status"
-                         value={tx.statut}
-                         onChange={(e) => handleUpdateStatus(tx.id, e.target.value)}
-                       >
-                         <option value="créé">Créé</option>
-                         <option value="envoyé">Envoyé</option>
-                         <option value="signée">Signé</option>
-                         <option value="signée_ttn">Signé TTN</option>
-                         <option value="refusée par TTN">Refusée par TTN</option>
-                         <option value="rejeté">Rejeté</option>
-                       </select>
+                       <div className="status-select-wrapper">
+                          <label>Modifier Statut</label>
+                          <select 
+                            className="admin-select-status"
+                            value={tx.statut}
+                            onChange={(e) => handleUpdateStatus(tx.id, e.target.value)}
+                          >
+                            <option value="créé">Créé</option>
+                            <option value="envoyé">Envoyé</option>
+                            <option value="signée">Signé</option>
+                            <option value="signée_ttn">Signé TTN</option>
+                            <option value="refusée par TTN">Refusée par TTN</option>
+                            <option value="rejeté">Rejeté</option>
+                          </select>
+                       </div>
                        
-                       <button 
-                         className="btn-details-circ" 
-                         title="Télécharger ZIP"
-                         style={{ background: '#f1f5f9', color: '#0247AA' }}
-                         onClick={() => handleDownloadZip(tx.id)}
-                       >
-                         <FaDownload />
-                       </button>
+                       <div className="action-buttons-grid">
+                          <button 
+                            className="btn-details-circ" 
+                            title="Télécharger ZIP"
+                            onClick={() => handleDownloadZip(tx.id)}
+                          >
+                            <FaDownload />
+                          </button>
 
-                       {(tx.statut === "signée" || tx.statut === "refusée par TTN") && (
-                         <button 
-                           className="btn-details-circ" 
-                           title="Renvoyer vers TTN"
-                           style={{ background: '#f1f5f9', color: '#0247AA' }}
-                           onClick={() => handleResendTTN(tx.id)}
-                         >
-                           <FaSync />
-                         </button>
-                       )}
+                          {(tx.statut === "signée" || tx.statut === "refusée par TTN") && (
+                            <button 
+                              className="btn-details-circ" 
+                              title="Renvoyer vers TTN"
+                              onClick={() => handleResendTTN(tx.id)}
+                            >
+                              <FaSync />
+                            </button>
+                          )}
 
-
-                       <button 
-                         className="btn-details-circ" 
-                         title="Détails"
-                         onClick={() => viewDetails(tx)}
-                       >
-                         <FaEye />
-                       </button>
+                          <button 
+                            className="btn-details-circ primary" 
+                            title="Détails"
+                            onClick={() => viewDetails(tx)}
+                          >
+                            <FaEye />
+                          </button>
+                       </div>
                     </div>
                   </div>
                 </div>
