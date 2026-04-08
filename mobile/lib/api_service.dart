@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -42,8 +43,9 @@ class ApiService {
       // Intercepteur pour injecter le token
       dio.interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) {
-          if (_instance?._token != null) {
-            options.headers['Authorization'] = 'Bearer ${_instance!._token}';
+          final token = _instance?._token;
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
           }
           return handler.next(options);
         },
@@ -60,8 +62,12 @@ class ApiService {
       ));
 
       _instance = ApiService._(dio, cookieJar);
+      // On charge le token de manière asynchrone, mais on ne l'écrase que s'il n'a pas été défini entre-temps
       SharedPreferences.getInstance().then((p) {
-        _instance!._token = p.getString('session_token');
+        final savedToken = p.getString('session_token');
+        if (_instance!._token == null && savedToken != null) {
+          _instance!._token = savedToken;
+        }
       });
     }
     return _instance!;
@@ -69,6 +75,14 @@ class ApiService {
 
   void setToken(String token) {
     _token = token;
+    // Injection du token dans le CookieJar pour les flux qui l'exigent (ex: Google Auth)
+    if (_cookieJar != null) {
+      final uri = Uri.parse(baseUrl);
+      // On définit le cookie 'token'
+      _cookieJar!.saveFromResponse(uri, [
+        Cookie('token', token)..path = '/'..httpOnly = true
+      ]);
+    }
   }
 
 
@@ -80,13 +94,15 @@ class ApiService {
       });
 
       if (response.statusCode == 200) {
-        final user = await getCurrentUser();
-        final prefs = await SharedPreferences.getInstance();
         _token = response.data['token'];
+        final prefs = await SharedPreferences.getInstance();
         if (_token != null) {
           await prefs.setString('session_token', _token!);
+          await prefs.setBool('has_session', true);
         }
-        await prefs.setBool('has_session', true);
+
+        // On appelle getCurrentUser APRÈS avoir défini le token pour tester l'intercepteur
+        final user = await getCurrentUser();
         return user;
       }
 

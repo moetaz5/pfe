@@ -5,11 +5,8 @@ import 'screens/dashboard_screen.dart';
 import 'screens/verify_email_screen.dart';
 import 'screens/forgot_password_screen.dart';
 import 'screens/profile_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'api_service.dart';
 
-void main() async {
-  // Nécessaire pour initialiser les plugins comme SharedPreferences
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -17,12 +14,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // Clé globale pour la navigation (utilisée pour les Deep Links Google)
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
-    // Thème Médica-Sign harmonisé
+    // Palette MÉDICA-SIGN
     const Color kPrimaryBlue = Color(0xFF0247AA);
 
     return MaterialApp(
@@ -34,8 +30,9 @@ class MyApp extends StatelessWidget {
         primaryColor: kPrimaryBlue,
         colorScheme: ColorScheme.fromSeed(seedColor: kPrimaryBlue),
         scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // On affiche directement l'écran de Login dès le démarrage
+      // Navigation directe vers le Login
       home: const LoginScreen(),
       routes: {
         '/login': (context) => const LoginScreen(),

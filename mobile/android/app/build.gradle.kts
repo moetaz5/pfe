@@ -3,11 +3,10 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
-    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.example.mobile"
+    namespace = "com.medicasign.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -22,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.mobile"
+        applicationId = "com.medicasign.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -42,16 +41,4 @@ android {
 
 flutter {
     source = "../.."
-}
-
-tasks.all {
-    if (name.startsWith("assemble")) {
-        doLast {
-            val sourceDir = File("C:/tmp/medica_sign_build/app/outputs")
-            val targetDir = File(rootProject.projectDir, "../build/app/outputs")
-            if (sourceDir.exists()) {
-                sourceDir.copyRecursively(targetDir, overwrite = true)
-            }
-        }
-    }
 }

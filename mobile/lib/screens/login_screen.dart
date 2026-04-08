@@ -49,11 +49,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleDeepLink(Uri uri) async {
-    final token = uri.queryParameters['token'];
-    if (token == null) return;
+    final rawToken = uri.queryParameters['token'];
+    if (rawToken == null) return;
 
     setState(() { _loading = true; });
     try {
+      final token = rawToken.trim();
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('session_token', token);
       await prefs.setBool('has_session', true);
@@ -61,16 +62,30 @@ class _LoginScreenState extends State<LoginScreen> {
       // On rafraîchit l'instance API avec le nouveau token
       ApiService().setToken(token); 
       
+      // Validation du token en récupérant les infos utilisateur immédiatement
+      await ApiService().getCurrentUser();
+      
       if (!mounted) return;
       UiUtils.showSuccess(context, 'Connexion Google réussie !');
       
-      // On attend un tout petit peu que le clavier ou le navigateur se referme proprement
-      Future.delayed(const Duration(milliseconds: 500), () {
-        MyApp.navigatorKey.currentState?.pushReplacementNamed('/dashboard');
+      // Petit délai pour laisser l'UI souffler
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
       });
     } catch (e) {
       debugPrint('Deep Link Error: $e');
-      if (mounted) UiUtils.showError(context, 'Erreur lors de la récupération de session.');
+      if (mounted) {
+        // En cas de 401, on tente quand même d'aller au dashboard
+        // car l'injection du cookie pourrait fonctionner lors de l'appel suivant
+        if (e.toString().contains('401')) {
+          UiUtils.showInfo(context, 'Finalisation de la session...');
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
+          });
+        } else {
+          UiUtils.showError(context, 'Erreur de session : ${e.toString()}');
+        }
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }

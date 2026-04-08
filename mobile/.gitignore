@@ -1,43 +1,45 @@
-# Flutter-specific ignore rules
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
 .dart_tool/
-.flutter-plugins
 .flutter-plugins-dependencies
-.packages
 .pub-cache/
 .pub/
-build/
+/build/
+/coverage/
 
-# Android-specific ignore rules
-android/local.properties
-android/gen/
-android/app/src/main/res/values/strings.xml
-android/app/src/main/res/xml/network_security_config.xml
-*.apk
-*.ap_
-*.dex
-*.keystore
+# Symbolication related
+app.*.symbols
 
-# iOS-specific ignore rules
-ios/Flutter/Generated.xcconfig
-ios/Flutter/flutter_export_environment.sh
-ios/Pods/
-ios/Runner/GeneratedPluginRegistrant.h
-ios/Runner/GeneratedPluginRegistrant.m
-DerivedData/
-*.moved-aside
-*.pbxuser
-*.mode1v3
-*.mode2v3
-*.perspectivev3
-!default.mode1v3
-!default.mode2v3
-!default.perspectivev3
-xcuserdata/
-*.xccheckout
-*.xcscmblueprint
-*.xcuserstate
+# Obfuscation related
+app.*.map.json
 
-# Misc
-.DS_Store
-.idea/
-.vscode/
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release

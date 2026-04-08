@@ -1,6 +1,6 @@
 {
-    "name": "mobile",
-    "short_name": "mobile",
+    "name": "appmobile",
+    "short_name": "appmobile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
