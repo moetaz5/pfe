@@ -302,12 +302,12 @@ const StatistiqueContent = () => {
 
           {/* Main Content Area */}
           <div className="stat-main-grid">
-            <div className="stat-glass-card">
+             <div className="stat-glass-card">
                <div className="stat-card-head">
                   <div>
-                    <h3 style={{ fontSize: '20px', letterSpacing: '-0.02em', fontWeight: 800 }}>Évolution du Volume</h3>
-                    <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--muted)' }}>
-                      Documents cumulés sur la période : <strong style={{ color: 'var(--pri)' }}>{formatN(filteredTxs.length + filteredFcts.length)}</strong>
+                    <h3 className="stat-card-title">Évolution du Volume</h3>
+                    <p className="stat-card-subtitle">
+                      Documents cumulés sur la période : <strong className="stat-highlight">{formatN(filteredTxs.length + filteredFcts.length)}</strong>
                     </p>
                   </div>
                   <div className="stat-growth-label">
@@ -315,7 +315,7 @@ const StatistiqueContent = () => {
                     <span>Progression stable</span>
                   </div>
                </div>
-               <div style={{ height: 350, width: '100%', marginTop: '20px' }}>
+               <div className="stat-chart-container">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={processedVolumeData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                       <defs>
@@ -368,7 +368,7 @@ const StatistiqueContent = () => {
 
             <div className="stat-glass-card">
                 <div className="stat-card-head">
-                   <h3 style={{ fontWeight: 800 }}>Répartition & Filtres</h3>
+                   <h3 className="stat-card-title">Répartition & Filtres</h3>
                 </div>
                 <div className="stat-filter-group">
                    <button className={`stat-f-item ${activeFilterKey === 'tx-signed' ? 'active' : ''}`} onClick={() => setActiveFilterKey('tx-signed')}>
@@ -403,15 +403,16 @@ const StatistiqueContent = () => {
             </div>
 
             {/* Explorateur de données */}
-            <div className="stat-glass-card stat-wide-card">
-                <div className="stat-card-head" style={{ flexWrap: 'wrap', gap: '24px' }}>
-                    <h3 style={{ fontWeight: 800 }}>Explorateur de Documents</h3>
-                    <div style={{ display: 'flex', gap: '15px', flex: 1, maxWidth: '500px' }}>
-                        <div className="stat-search-wrap">
-                            <Search size={16} className="search-icon" />
+            <div className="stat-glass-card stat-wide-card stat-table-card">
+                <div className="stat-card-head stat-table-head-padding">
+                    <h3 className="stat-card-title">Explorateur de Documents</h3>
+                    <div className="stat-card-actions-mobile">
+                        <div className="stat-search-container">
+                            <Search size={16} className="stat-search-icon" />
                             <input 
                                 type="text" 
-                                placeholder="Rechercher par ID, nom de fichier ou numéro de facture..." 
+                                className="stat-search-input"
+                                placeholder="Rechercher..." 
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />

@@ -2927,6 +2927,7 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
       docsRowsResult,
       txByMonthResult,
       organizationsCountResult,
+      utilisateursListeResult,
     ] = await Promise.all([
       // Total users
       db.promise().query("SELECT COUNT(*) AS total FROM users"),
@@ -2962,6 +2963,9 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
 
       // Total organizations
       db.promise().query("SELECT COUNT(*) AS total FROM organizations"),
+
+      // Liste des utilisateurs
+      db.promise().query("SELECT id, name, email, role, telephone, created_at FROM users ORDER BY created_at DESC"),
     ]);
 
     const usersCount = usersCountResult[0][0]?.total || 0;
@@ -2969,6 +2973,8 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
     const docsRows = docsRowsResult[0];
     const txByMonth = txByMonthResult[0];
     const organizationsCount = organizationsCountResult[0][0]?.total || 0;
+    const utilisateursListe = utilisateursListeResult[0] || [];
+
 
     let transactionsCreees = 0;
     let transactionsSignees = 0;
@@ -3019,6 +3025,7 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
 
       transactionsListe: txRows,
       facturesListe: docsRows,
+      utilisateursListe: utilisateursListe,
     };
 
     res.json(stats);

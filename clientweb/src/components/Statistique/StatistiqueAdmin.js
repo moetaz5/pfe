@@ -291,7 +291,7 @@ const StatistiqueAdminContent = () => {
           {/* Header */}
           <header className="stat-header">
             <div className="stat-title">
-              <h2>Dashboard Global Admin</h2>
+              <h2>Statistique Global Admin</h2>
               <p>
                 Surveillance complète de l'activité, des utilisateurs et des
                 flux financiers.
@@ -448,39 +448,25 @@ const StatistiqueAdminContent = () => {
           {/* Main Layout Area */}
           <div className="stat-main-grid">
             {/* Chart Area */}
-            <div className="stat-glass-card">
+            <div className="stat-glass-card stat-chart-card">
               <div className="stat-card-head">
                 <div>
-                  <h3 style={{ fontSize: "20px", letterSpacing: "-0.02em" }}>
+                  <h3 className="stat-card-title">
                     Flux de Transactions Global
                   </h3>
-                  <p
-                    style={{
-                      margin: "4px 0 0",
-                      fontSize: "12px",
-                      color: "var(--muted)",
-                    }}
-                  >
+                  <p className="stat-card-subtitle">
                     Volume cumulé (12m):{" "}
-                    <strong style={{ color: "var(--ink)" }}>
+                    <strong>
                       {formatN(cumulatedVolume)}
                     </strong>
                   </p>
                 </div>
-                <div
-                  className="stat-pill"
-                  style={{
-                    background: "var(--pri-soft)",
-                    border: "none",
-                    color: "var(--pri)",
-                    fontWeight: 700,
-                  }}
-                >
+                <div className="stat-pill stat-intense-pill">
                   <TrendingUp size={12} />
                   <span>Activité Intense</span>
                 </div>
               </div>
-              <div style={{ height: 350, width: "100%", marginTop: "20px" }}>
+              <div className="stat-chart-container">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart
                     data={processedVolumeData}
@@ -674,58 +660,30 @@ const StatistiqueAdminContent = () => {
             </div>
 
             {/* Data Explorer Table */}
-            <div
-              className="stat-glass-card stat-wide-card"
-              style={{ padding: "0" }}
-            >
-              <div
-                className="stat-card-head"
-                style={{
-                  padding: "30px 30px 20px",
-                  borderBottom: "1px solid #f1f5f9",
-                }}
-              >
+            <div className="stat-glass-card stat-wide-card stat-table-card">
+              <div className="stat-card-head stat-table-head-padding">
                 <div>
-                  <h3 style={{ fontSize: "20px" }}>
+                  <h3 className="stat-card-title">
                     Explorateur de Données Global
                   </h3>
-                  <p
-                    style={{
-                      margin: "4px 0 0",
-                      fontSize: "12px",
-                      color: "var(--muted)",
-                    }}
-                  >
+                  <p className="stat-card-subtitle">
                     Surveillance de{" "}
-                    <span style={{ color: "var(--pri)", fontWeight: 700 }}>
+                    <span className="stat-highlight">
                       {filteredItems.length}
                     </span>{" "}
                     enregistrements
                   </p>
                 </div>
-                <div style={{ display: "flex", gap: "15px" }}>
-                  <div style={{ position: "relative", width: "300px" }}>
+                <div className="stat-card-actions-mobile">
+                  <div className="stat-search-container">
                     <Search
                       size={14}
-                      style={{
-                        position: "absolute",
-                        left: 12,
-                        top: 12,
-                        color: "#94a3b8",
-                      }}
+                      className="stat-search-icon"
                     />
                     <input
                       type="text"
                       placeholder="Rechercher utilisateur, doc, ID..."
-                      style={{
-                        width: "100%",
-                        padding: "10px 10px 10px 35px",
-                        borderRadius: "12px",
-                        border: "1px solid #e2e8f0",
-                        outline: "none",
-                        fontSize: "13px",
-                        background: "#f8fafc",
-                      }}
+                      className="stat-search-input"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -765,41 +723,25 @@ const StatistiqueAdminContent = () => {
                 ) : (
                   filteredItems.map((item) => (
                     <div key={item.id} className="stat-row">
-                      <div className="stat-col-id">
-                        <span className="id-badge">
-                          #{String(item.id).slice(-6)}
-                        </span>
-                      </div>
-                      <div className="stat-col-doc">
-                        <div className="doc-main-info">
-                          <strong>
-                            {item.invoice_number ||
-                              item.name ||
-                              "SANS RÉFÉRENCE"}
-                          </strong>
-                          <span>
-                            {item.email ||
-                              item.user_email ||
-                              item.filename ||
-                              "Inconnu"}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="stat-col-date">
-                        <div className="date-box">
-                          <Calendar size={12} style={{ opacity: 0.5 }} />
+                      <div className="stat-id-badge">#{String(item.id).slice(-4)}</div>
+                      <div className="stat-row-info">
+                        <strong>
+                          {item.invoice_number || item.name || "SANS RÉFÉRENCE"}
+                        </strong>
+                        <p className="row-date">
                           {new Date(
-                            item.date_creation ||
-                              item.created_at ||
-                              item.date_facture,
+                            item.date_creation || item.created_at || item.date_facture,
                           ).toLocaleDateString("fr-FR", {
                             day: "2-digit",
                             month: "short",
                             year: "numeric",
                           })}
-                        </div>
+                        </p>
                       </div>
-                      <div className="stat-col-status">
+                      <div className="stat-row-type">
+                        {item.email || item.user_email || item.filename || "Inconnu"}
+                      </div>
+                      <div>
                         <span
                           className={`stat-row-status ${
                             String(item.statut || item.role)
@@ -813,10 +755,8 @@ const StatistiqueAdminContent = () => {
                           {item.statut || item.role}
                         </span>
                       </div>
-                      <div className="stat-col-action">
-                        <button className="row-action-btn">
-                          <ChevronRight size={16} />
-                        </button>
+                      <div className="stat-row-action">
+                        <ChevronRight size={20} />
                       </div>
                     </div>
                   ))

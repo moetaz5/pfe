@@ -332,7 +332,7 @@ const Dashboard = () => {
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   return (
-    <div className="dash">
+    <div className={`dash ${toggled ? "is-sidebar-toggled" : ""}`}>
       {/* ═══════════════════ SIDEBAR ═══════════════════ */}
       <Sidebar
         collapsed={collapsed}

@@ -43,13 +43,20 @@
 
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; }
-html, body { height: 100%; }
+html, body { 
+  height: 100%; 
+  overflow-x: hidden;
+  width: 100%;
+}
 body {
   margin: 0;
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* ============================================================
@@ -296,10 +303,13 @@ body {
   margin-left: 260px;
   transition: margin-left .3s var(--ease);
   position: relative;
+  width: calc(100% - 260px);
+  overflow-x: hidden;
 }
 
 .ps-collapsed ~ .main {
   margin-left: 76px;
+  width: calc(100% - 76px);
 }
 
 /* ============================================================
@@ -1090,11 +1100,19 @@ body {
 @media (max-width: 768px) {
   .ps-sidebar-root {
     box-shadow: 10px 0 40px rgba(0,0,0,0.15) !important;
+    position: fixed !important;
   }
 
   /* Main area no longer shifts */
   .main, .ps-collapsed ~ .main {
     margin-left: 0 !important;
+    width: 100% !important;
+    min-width: 100vw;
+  }
+
+  .dash {
+    overflow-x: hidden;
+    width: 100vw;
   }
 
   .mobile-toggle {
@@ -1106,7 +1124,9 @@ body {
   }
 
   .content {
-    padding: 16px;
+    padding: 12px;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   .welcome {
@@ -1123,6 +1143,7 @@ body {
 
   .topbar {
     padding: 0 12px;
+    width: 100%;
   }
 
   .notif-dropdown {
