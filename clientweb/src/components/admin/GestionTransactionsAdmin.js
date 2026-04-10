@@ -264,13 +264,13 @@ const GestionTransactionsAdmin = () => {
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
                 <option value="all">Tous les Statuts</option>
-                <option value="créé">🕒 Créé</option>
-                <option value="envoyé">📤 Envoyé</option>
-                <option value="signée">✍️ Signé</option>
-                <option value="signée_ttn">✅ Signé TTN</option>
-                <option value="refusée par TTN">❌ Refusée par TTN</option>
-                <option value="rejeté">❌ Rejeté</option>
-                <option value="supprimée">🗑️ Supprimé</option>
+                <option value="créé">Créé</option>
+                <option value="envoyé">Envoyé</option>
+                <option value="signée">Signé</option>
+                <option value="signée_ttn">Signé TTN</option>
+                <option value="refusée par TTN">Refusée par TTN</option>
+                <option value="rejeté">Rejeté</option>
+                <option value="supprimée">Supprimé</option>
               </select>
             </div>
           </div>

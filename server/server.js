@@ -54,6 +54,31 @@ db.query(
   },
 );
 
+// Ajoute la colonne last_activity si elle n'existe pas encore
+db.query(
+  `SELECT COUNT(*) AS cnt
+   FROM INFORMATION_SCHEMA.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME   = 'users'
+     AND COLUMN_NAME  = 'last_activity'`,
+  (err, results) => {
+    if (err) {
+      console.warn("⚠️ Migration check error (last_activity):", err.message);
+      return;
+    }
+    if (results[0].cnt === 0) {
+      db.query(
+        `ALTER TABLE users ADD COLUMN last_activity DATETIME DEFAULT NULL`,
+        (err2) => {
+          if (err2)
+            console.warn("⚠️ Migration last_activity:", err2.message);
+          else console.log("✅ Colonne last_activity ajoutée avec succès");
+        },
+      );
+    }
+  },
+);
+
 // Auto-création de la table notifications si elle n'existe pas
 db.query(
   `
@@ -69,8 +94,8 @@ db.query(
   `,
   (err) => {
     if (err)
-      console.warn("⚠️ Table notifications auto-creation error:", err.message);
-    else console.log("✅ Table notifications prête");
+      console.warn("⚠️Table notifications auto-creation error:", err.message);
+    else console.log("Table notifications prête");
   },
 );
 // ==========================================================
@@ -707,6 +732,16 @@ const verifyToken = (req, res, next) => {
     }
 
     req.user = decoded;
+    
+    // 🔥 Mise à jour de la dernière activité (last_activity)
+    db.query(
+      "UPDATE users SET last_activity = NOW() WHERE id = ?",
+      [decoded.id],
+      (err) => {
+        if (err) console.error("⚠️ Error updating last_activity:", err.message);
+      }
+    );
+
     next();
   });
 };
@@ -777,12 +812,12 @@ app.post("/api/generate-api-token", verifyToken, async (req, res) => {
 
     const user = rows[0];
 
-    // ✅ Si token déjà existe -> renvoyer le même
+    // Si token déjà existe -> renvoyer le même
     if (user.api_token) {
       return res.json({ apiToken: user.api_token });
     }
 
-    // ✅ Générer JWT API TOKEN
+    // Générer JWT API TOKEN
     const apiToken = jwt.sign(
       {
         id: req.user.id,
@@ -2258,7 +2293,7 @@ app.get(
 
       if (d.statut === "signée_ttn" && d.xml_signed_ttn) {
         xmlToUse = d.xml_signed_ttn;
-        console.log("✅ XML TTN utilisé:", d.filename);
+        console.log("XML TTN utilisé:", d.filename);
       } else if ((d.statut === "signée" || d.statut === "refusée par TTN") && d.xml_signed) {
         xmlToUse = d.xml_signed;
       } else {
@@ -2517,7 +2552,7 @@ app.get("/api/transactions/:id/zip", verifyToken, async (req, res) => {
         xmlToUse = d.xml_signed;
       else xmlToUse = d.xml_file;
 
-      // ✅ ON PREND LE PDF TEL QUEL (déjà stampé à la signature)
+      // ON PREND LE PDF TEL QUEL (déjà stampé à la signature)
       zip.file(`${d.filename}.pdf`, Buffer.from(d.pdf_file, "base64"));
       zip.file(`${d.filename}.xml`, Buffer.from(xmlToUse, "base64"));
     }
@@ -2953,8 +2988,15 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
       else if (status.includes("sign")) facturesSignees++;
     });
 
+    // Online Users (active in the last 5 minutes)
+    const [onlineUsersResult] = await db.promise().query(
+      "SELECT COUNT(*) AS total FROM users WHERE last_activity >= NOW() - INTERVAL 5 MINUTE"
+    );
+    const onlineUsersCount = onlineUsersResult[0]?.total || 0;
+
     const stats = {
       utilisateurs: usersCount,
+      onlineUsers: onlineUsersCount,
       totalOrganizations: organizationsCount,
 
       totalTransactions: txRows.length,
@@ -4500,7 +4542,7 @@ app.post("/api/organizations/:id/add-member", verifyToken, async (req, res) => {
     );
 
     res.json({
-      message: `✅ ${email} ajouté avec succès`,
+      message: `${email} ajouté avec succès`,
     });
   } catch (err) {
     console.error("ADD MEMBER ERROR:", err);

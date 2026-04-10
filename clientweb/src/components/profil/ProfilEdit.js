@@ -49,13 +49,13 @@ const ProfilEdit = () => {
       );
 
       // backend renvoie: { message, user }
-      setMsg(res.data?.message || "✅ Profil mis à jour.");
+      setMsg(res.data?.message || "Profil mis à jour.");
 
       if (res.data?.user && setUser) {
-        setUser(res.data.user); // ✅ met à jour le context
+        setUser(res.data.user); // met à jour le context
       }
     } catch (e2) {
-      setErr(e2?.response?.data?.message || "❌ Erreur lors de la mise à jour.");
+      setErr(e2?.response?.data?.message || "Erreur lors de la mise à jour.");
     } finally {
       setLoading(false);
     }

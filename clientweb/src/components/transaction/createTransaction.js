@@ -135,7 +135,7 @@ const ChoiceCard = ({ active, title, desc, icon, onClick }) => {
         </div>
       </div>
 
-      <div style={{ fontWeight: 900, fontSize: 14 }}>{active ? "✅" : "⬜"}</div>
+      <div style={{ fontWeight: 900, fontSize: 14 }}>{active ? "" : "⬜"}</div>
     </div>
   );
 };
@@ -375,7 +375,7 @@ const CreateTransaction = () => {
 
       if (res.ok) {
         setSuccess(true);
-        notify.success("✅ Transaction créée avec succès. Redirection...");
+        notify.success("Transaction créée avec succès. Redirection...");
 
         await delay(1200);
         navigate("/dashboard/MyTransactions", { replace: true });
@@ -425,7 +425,7 @@ const CreateTransaction = () => {
 
           {success && (
             <div className="success-box">
-              ✅ Transaction créée avec succès.
+              Transaction créée avec succès.
               <br />
               Redirection automatique...
             </div>
@@ -592,9 +592,9 @@ const CreateTransaction = () => {
                       }}
                     >
                       <span>QR:</span>
-                      <strong>{qrConfig ? "✅ défini" : "—"}</strong>
+                      <strong>{qrConfig ? " défini" : "—"}</strong>
                       <span style={{ marginLeft: 10 }}>Référence:</span>
-                      <strong>{refConfig ? "✅ définie" : "—"}</strong>
+                      <strong>{refConfig ? " définie" : "—"}</strong>
                     </div>
 
                     {!qrConfig || !refConfig ? (
@@ -711,7 +711,7 @@ const CreateTransaction = () => {
                       // payload = { qr_config, ref_config }
                       setQrConfig(payload?.qr_config || null);
                       setRefConfig(payload?.ref_config || null);
-                      notify.success("✅ Positions enregistrées pour cette transaction.");
+                      notify.success("Positions enregistrées pour cette transaction.");
                     }}
                     onClose={() => setShowPositionModal(false)}
                   />

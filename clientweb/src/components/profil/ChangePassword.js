@@ -39,10 +39,10 @@ const ChangePassword = () => {
         { withCredentials: true }
       );
 
-      setMsg(res.data?.message || "✅ Mot de passe changé.");
+      setMsg(res.data?.message || "Mot de passe changé.");
       setForm({ current: "", next: "", confirm: "" });
     } catch (e2) {
-      setErr(e2?.response?.data?.message || "❌ Erreur lors du changement du mot de passe.");
+      setErr(e2?.response?.data?.message || "Erreur lors du changement du mot de passe.");
     } finally {
       setLoading(false);
     }

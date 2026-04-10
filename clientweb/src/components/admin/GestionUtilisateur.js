@@ -128,7 +128,7 @@ const GestionUtilisateur = () => {
       { withCredentials: true }
     );
 
-    alert("Mot de passe modifié ✅");
+    alert("Mot de passe modifié ");
     setPwdId(null);
     setNewPassword("");
   };

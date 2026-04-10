@@ -384,14 +384,27 @@ const StatistiqueAdminContent = () => {
                 </div>
                 <div className="stat-trend-tag up">Global</div>
               </div>
-              <h4>Clients Actifs</h4>
-              <div className="value">{formatN(userFiltered.length)}</div>
+              <h4>Clients Inscrits</h4>
+              <div className="value">{formatN(stats?.utilisateurs || 0)}</div>
+            </div>
+
+            <div className="stat-kpi-item">
+              <div className="stat-kpi-icon-row">
+                <div className="stat-icon-box stat-p-box" style={{ background: '#ecfdf5', color: '#10b981' }}>
+                  <Activity size={20} />
+                </div>
+                <div className="stat-trend-tag up" style={{ background: '#ecfdf5', color: '#10b981', border: '1px solid #10b981' }}>
+                  <span className="live-dot"></span> Live
+                </div>
+              </div>
+              <h4>Clients en Ligne</h4>
+              <div className="value">{formatN(stats?.onlineUsers || 0)}</div>
             </div>
 
             <div className="stat-kpi-item">
               <div className="stat-kpi-icon-row">
                 <div className="stat-icon-box stat-s-box">
-                  <Activity size={20} />
+                  <TrendingUp size={20} />
                 </div>
                 <div
                   className={`stat-trend-tag ${parseFloat(growth) >= 0 ? "up" : "down"}`}
