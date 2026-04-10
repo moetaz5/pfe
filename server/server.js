@@ -2964,8 +2964,8 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
       // Total organizations
       db.promise().query("SELECT COUNT(*) AS total FROM organizations"),
 
-      // Liste des utilisateurs
-      db.promise().query("SELECT id, name, email, role, telephone, created_at FROM users ORDER BY created_at DESC"),
+      // Liste des utilisateurs (colonnes sûres uniquement)
+      db.promise().query("SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC"),
     ]);
 
     const usersCount = usersCountResult[0][0]?.total || 0;
@@ -2994,11 +2994,16 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
       else if (status.includes("sign")) facturesSignees++;
     });
 
-    // Online Users (active in the last 5 minutes)
-    const [onlineUsersResult] = await db.promise().query(
-      "SELECT COUNT(*) AS total FROM users WHERE last_activity >= NOW() - INTERVAL 5 MINUTE"
-    );
-    const onlineUsersCount = onlineUsersResult[0]?.total || 0;
+    // Online Users (active in the last 5 minutes) — safe fallback if column missing
+    let onlineUsersCount = 0;
+    try {
+      const [onlineUsersResult] = await db.promise().query(
+        "SELECT COUNT(*) AS total FROM users WHERE last_activity >= NOW() - INTERVAL 5 MINUTE"
+      );
+      onlineUsersCount = onlineUsersResult[0]?.total || 0;
+    } catch (e) {
+      console.warn("⚠️ last_activity column not available:", e.message);
+    }
 
     const stats = {
       utilisateurs: usersCount,
