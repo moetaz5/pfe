@@ -133,12 +133,10 @@ class _LoginScreenState extends State<LoginScreen> {
     for (int i = 0; i < maxAttempts; i++) {
       try {
         // Call exchange endpoint
-        final response = await ApiService().dio.get(
-          '${ApiService.baseUrl}/api/auth/google/exchange?session_id=$sessionId',
-        );
+        final result = await ApiService().getGoogleExchangeToken(sessionId);
         
-        if (response.statusCode == 200 && response.data['token'] != null) {
-          final token = response.data['token'];
+        if (result != null && result['token'] != null) {
+          final token = result['token'];
           
           // ✅ Save session
           final prefs = await SharedPreferences.getInstance();

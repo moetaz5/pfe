@@ -1009,9 +1009,9 @@ app.get(
           sessionId,
         );
 
-        // Redirect to a simple success page
+        // ✅ FIX: Rediriger vers l'application mobile via Deep Link pour retour automatique
         return res.redirect(
-          `https://medicasign.medicacom.tn/auth-success?session_id=${sessionId}`,
+          `medicasign://auth-callback?token=${token}&session_id=${sessionId}`,
         );
       }
 

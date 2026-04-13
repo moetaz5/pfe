@@ -428,6 +428,27 @@ class ApiService {
     await _dio.put('/admin/users/$userId', data: data);
   }
 
+  /* --- GOOGLE AUTH EXCHANGE --- */
+  /// Get JWT token after Google OAuth callback (mobile polling)
+  Future<Map<String, dynamic>?> getGoogleExchangeToken(String sessionId) async {
+    try {
+      final response = await _dio.get('/auth/google/exchange', queryParameters: {
+        'session_id': sessionId,
+      });
+      
+      if (response.statusCode == 200 && response.data['token'] != null) {
+        return {'token': response.data['token']};
+      }
+      return null;
+    } on DioException catch (e) {
+      // 202 means still waiting, not an error
+      if (e.response?.statusCode == 202) {
+        return null;
+      }
+      rethrow;
+    }
+  }
+
   Future<void> adminChangeUserPassword(int userId, String newPassword) async {
     await _dio.put('/admin/users/$userId/password', data: {'newPassword': newPassword});
   }
