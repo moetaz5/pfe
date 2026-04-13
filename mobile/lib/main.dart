@@ -53,8 +53,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     
     // ✅ NEW: Initialiser le service de notifications background
-    NotificationService.initialize();
-    NotificationService._startBackgroundListener();
+    NotificationService.initialize();  // This calls _startBackgroundListener() internally
     
     // Demande permissions notifications après le premier rendu
     WidgetsBinding.instance.addPostFrameCallback((_) {
