@@ -93,25 +93,78 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _doGoogleLogin() async {
-    // ✅ FIX: Use custom user agent to avoid Google's "Use secure browsers" policy
+    // ✅ FIX: Use session_id polling instead of deep links to bypass Google OAuth blocking
+    final sessionId = '${DateTime.now().millisecondsSinceEpoch}_${(_emailController.text.hashCode).toString()}';
+    
     final authUrl = Uri.parse(
-      '${ApiService.baseUrl}/auth/google?redirect_to=from_mobile&mobile_client=true'
+      '${ApiService.baseUrl}/auth/google?session_id=$sessionId'
     );
     
+    setState(() { _loading = true; });
+    
     try {
-      // 🔐 Launch with Safari/Chrome (not WebView) to bypass Google restrictions
+      // 🔐 Launch with Safari/Chrome (external browser)
       if (!await launchUrl(
         authUrl,
-        mode: LaunchMode.externalApplication,  // Opens in system browser, not WebView
+        mode: LaunchMode.externalApplication,  // Opens in system browser
       )) {
         throw Exception('Could not launch $authUrl');
       }
+      
+      // ✅ NEW: Poll for token instead of waiting for deep link
+      await _pollForGoogleToken(sessionId);
+      
     } catch (e) {
-      debugPrint('Launch URL Error: $e');
+      debugPrint('Google Login Error: $e');
       if (mounted) {
         UiUtils.showError(context, 
-          'Impossible d\'ouvrir le navigateur. Assurez-vous que Chrome ou Safari est installé.');
+          'Erreur Google. Assurez-vous que Chrome ou Safari est installé.');
       }
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  /// Poll for the Google auth token from server
+  Future<void> _pollForGoogleToken(String sessionId) async {
+    const maxAttempts = 60; // 60 attempts × 500ms = 30 seconds
+    const pollInterval = Duration(milliseconds: 500);
+    
+    for (int i = 0; i < maxAttempts; i++) {
+      try {
+        // Call exchange endpoint
+        final response = await ApiService().dio.get(
+          '${ApiService.baseUrl}/api/auth/google/exchange?session_id=$sessionId',
+        );
+        
+        if (response.statusCode == 200 && response.data['token'] != null) {
+          final token = response.data['token'];
+          
+          // ✅ Save session
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('session_token', token);
+          await prefs.setBool('has_session', true);
+          ApiService().setToken(token);
+          
+          if (!mounted) return;
+          UiUtils.showSuccess(context, 'Connexion Google réussie !');
+          
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
+          });
+          return;
+        }
+      } catch (e) {
+        // Token not ready yet, continue polling
+        debugPrint('Polling attempt ${i + 1}/$maxAttempts...');
+      }
+      
+      await Future.delayed(pollInterval);
+    }
+    
+    // Timeout after 30 seconds
+    if (mounted) {
+      UiUtils.showError(context, 'Délai dépassé. Veuillez réessayer.');
     }
   }
 

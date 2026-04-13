@@ -932,12 +932,17 @@ app.get("/api/my-api-token", verifyToken, async (req, res) => {
 
 /* ===================== GOOGLE AUTH ===================== */
 app.get("/api/auth/google", (req, res, next) => {
-  const { redirect_to } = req.query;
-  console.log("GOOGLE AUTH START - Redirect To:", redirect_to);
-  const state = redirect_to || "https://medicasign.medicacom.tn";
+  const { session_id } = req.query;
+  console.log("GOOGLE AUTH START - Session ID:", session_id);
+
+  // ✅ FIX: Store session_id to avoid deep link issues
+  const state = session_id || "web_client";
+
   passport.authenticate("google", {
     scope: ["profile", "email"],
     state: state,
+    accessType: "offline",
+    prompt: "consent",
   })(req, res, next);
 });
 
@@ -948,6 +953,8 @@ app.get(
     passport.authenticate("google", {
       session: false,
       failureRedirect: `${redirectTo}/login?error=google_failed`,
+      accessType: "offline", // ✅ Maintain consistency
+      prompt: "consent", // ✅ Maintain consistency
     })(req, res, next);
   },
   async (req, res) => {
@@ -980,22 +987,35 @@ app.get(
         );
       }
 
-      // 🔐 Gestion de la redirection de retour (Web ou Mobile)
-      if (req.query.state === "from_mobile") {
-        const token = jwt.sign(
-          { id: user.id, role: user.role },
-          process.env.JWT_SECRET,
-          { expiresIn: "10d" }, // Token plus long pour le mobile
-        );
+      // 🔐 Génération d'un JWT de session
+      const token = jwt.sign(
+        { id: user.id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "10d" },
+      );
+
+      // ✅ NEW: Store token with session_id for mobile polling
+      const sessionId = req.query.state;
+      if (sessionId && sessionId !== "web_client") {
+        // Mobile app is waiting - store token for it to retrieve
+        googleExchangeTokens.set(sessionId, {
+          token: token,
+          userId: user.id,
+          role: user.role,
+          expires: Date.now() + 5 * 60 * 1000, // 5 minutes
+        });
         console.log(
-          "GOOGLE CALLBACK SUCCESS (MOBILE) - Redirecting to App Link.",
+          "✅ GOOGLE AUTH SUCCESS (MOBILE) - Token stored for session:",
+          sessionId,
         );
+
+        // Redirect to a simple success page
         return res.redirect(
-          `medicasign://auth-callback?token=${token}&userId=${user.id}&role=${user.role}&name=${encodeURIComponent(user.name)}`,
+          `https://medicasign.medicacom.tn/auth-success?session_id=${sessionId}`,
         );
       }
 
-      // 🔐 Génération d'un exchange token (résout le problème cross-domain sur le WEB)
+      // 🔐 Web client - use exchange token
       const exchangeToken = crypto.randomBytes(32).toString("hex");
       googleExchangeTokens.set(exchangeToken, {
         userId: user.id,
@@ -1067,6 +1087,44 @@ app.post("/api/auth/exchange-google-token", async (req, res) => {
     return res.json(rows[0]);
   } catch (err) {
     console.error("EXCHANGE TOKEN ERROR:", err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
+/* =================== GOOGLE AUTH EXCHANGE (Session-based) =================== */
+// ✅ NEW: Get token for mobile app using session_id polling
+app.get("/api/auth/google/exchange", async (req, res) => {
+  try {
+    const { session_id } = req.query;
+
+    if (!session_id) {
+      return res.status(400).json({ message: "Session ID manquant" });
+    }
+
+    const data = googleExchangeTokens.get(session_id);
+
+    if (!data || Date.now() > data.expires) {
+      return res.status(202).json({ message: "En attente d'authentification" });
+    }
+
+    // Delete token after retrieval (one-time use)
+    googleExchangeTokens.delete(session_id);
+
+    // If token already exists, return it
+    if (data.token) {
+      return res.json({ token: data.token });
+    }
+
+    // Otherwise, we need to generate the JWT from user info
+    const token = jwt.sign(
+      { id: data.userId, role: data.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "10d" },
+    );
+
+    return res.json({ token });
+  } catch (err) {
+    console.error("GOOGLE EXCHANGE ERROR:", err);
     return res.status(500).json({ message: "Erreur serveur" });
   }
 });
@@ -2742,12 +2800,10 @@ const handleResendTTNCore = async (req, res) => {
       );
 
     if (!docs.length) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "La transaction n'est pas dans un état permettant le renvoi (doit être Signée ou Refusée par TTN)",
-        });
+      return res.status(400).json({
+        message:
+          "La transaction n'est pas dans un état permettant le renvoi (doit être Signée ou Refusée par TTN)",
+      });
     }
 
     // Réinitialiser le statut de la transaction
@@ -3280,11 +3336,9 @@ app.post(
         );
 
       if (!tokenUpdate.affectedRows) {
-        return res
-          .status(402)
-          .json({
-            message: "Erreur jeton (insuffisant ou utilisateur non trouvé)",
-          });
+        return res.status(402).json({
+          message: "Erreur jeton (insuffisant ou utilisateur non trouvé)",
+        });
       }
 
       const finalDocs = [];
@@ -3365,11 +3419,9 @@ app.post("/api/transactions/:id/resend-ttn", verifyToken, async (req, res) => {
     // Ne renvoyer que si c'est 'signée' ou 'refusée par TTN'
     const allowed = ["signée", "refusée par TTN"];
     if (!allowed.includes(transaction.statut)) {
-      return res
-        .status(400)
-        .json({
-          message: `Le statut '${transaction.statut}' ne permet pas le renvoi TTN.`,
-        });
+      return res.status(400).json({
+        message: `Le statut '${transaction.statut}' ne permet pas le renvoi TTN.`,
+      });
     }
 
     const [docs] = await db
@@ -3504,11 +3556,9 @@ app.post(
 
       const allowed = ["signée", "refusée par TTN"];
       if (!allowed.includes(transaction.statut)) {
-        return res
-          .status(400)
-          .json({
-            message: `Le statut '${transaction.statut}' ne permet pas le renvoi TTN.`,
-          });
+        return res.status(400).json({
+          message: `Le statut '${transaction.statut}' ne permet pas le renvoi TTN.`,
+        });
       }
 
       const [docs] = await db
