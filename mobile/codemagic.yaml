@@ -1,0 +1,43 @@
+# Configuration Codemagic pour Medica Sign
+# Ce fichier remplace le "Workflow Editor" pour plus de contrôle
+
+workflows:
+  ios-android-build:
+    name: Build Medica Sign (Android & iOS)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      vars:
+        PACKAGE_NAME: "com.medicasign.app"
+    scripts:
+      - name: Configuration de l'environnement
+        script: | 
+          flutter pub get
+      
+      - name: Build Android (APK Release)
+        script: | 
+          flutter build apk --release
+      
+      - name: Build iOS Simulator (pour Appetize)
+        script: | 
+          # Cette commande crée le build pour l'émulateur
+          flutter build ios --simulator --debug --no-codesign
+      
+      - name: Build iOS IPA (pour iPhone physique)
+        script: | 
+          # Note: Sans certificat configuré dans l'UI Codemagic, ceci peut échouer.
+          # On utilise --no-codesign pour essayer de générer l'archive quand même.
+          flutter build ipa --debug --no-codesign
+
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+      - build/ios/iphonesimulator/*.app
+      - build/ios/ipa/*.ipa
+    
+    publishing:
+      email:
+        recipients:
+          - moeztazkobbi@gmail.com
