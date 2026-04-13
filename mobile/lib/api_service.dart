@@ -474,4 +474,42 @@ class ApiService {
   String getTokenProofUrl(int requestId) {
     return '$baseUrl/admin/jeton/$requestId/proof${_token != null ? "?token=$_token" : ""}';
   }
+
+  /* --- FCM / PUSH NOTIFICATIONS --- */
+  /// Enregistre le token FCM de l'utilisateur auprès du serveur
+  Future<void> registerFCMToken(String fcmToken) async {
+    try {
+      final response = await _dio.post('/notifications/register-fcm', data: {
+        'fcm_token': fcmToken,
+        'device_name': 'mobile_app',
+      });
+      if (response.statusCode == 200) {
+        debugPrint('✅ Token FCM enregistré avec succès');
+      }
+    } catch (e) {
+      debugPrint('⚠️ Erreur lors de l\'enregistrement du token FCM: $e');
+    }
+  }
+
+  /// Envoie une notification de test
+  Future<void> sendTestNotification() async {
+    try {
+      final response = await _dio.post('/notifications/test');
+      if (response.statusCode == 200) {
+        debugPrint('✅ Notification de test envoyée');
+      }
+    } catch (e) {
+      throw Exception('Erreur lors de l\'envoi de notification de test: $e');
+    }
+  }
+
+  /// Met à jour les préférences de notification
+  Future<void> updateNotificationPreferences(Map<String, bool> preferences) async {
+    try {
+      await _dio.put('/notifications/preferences', data: preferences);
+      debugPrint('✅ Préférences de notification mises à jour');
+    } catch (e) {
+      debugPrint('⚠️ Erreur mise à jour préférences: $e');
+    }
+  }
 }

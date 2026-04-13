@@ -1,0 +1,141 @@
+﻿Resolving dependencies...
+Downloading packages...
+  app_links 6.4.1 (7.0.0 available)
+  characters 1.4.0 (1.4.1 available)
+  file_picker 8.3.7 (11.0.2 available)
+  fl_chart 0.71.0 (1.2.0 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  intl 0.19.0 (0.20.2 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.17 (0.12.19 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.18.2 available)
+  path_provider_android 2.3.0 (2.3.1 available)
+  path_provider_foundation 2.5.1 (2.6.0 available)
+  test_api 0.7.6 (0.7.11 available)
+  url_launcher_ios 6.3.6 (6.4.1 available)
+  url_launcher_web 2.4.1 (2.4.2 available)
+  vector_math 2.2.0 (2.3.0 available)
+  win32 5.15.0 (6.0.1 available)
+Got dependencies!
+18 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing mobile...                                             
+
+   info - The import of 'dart:io' is unnecessary because all of the used elements are also provided by the import of 'package:cookie_jar/cookie_jar.dart' - lib\api_service.dart:1:8 - unnecessary_import
+  error - The getter 'navigatorKey' isn't defined for the type 'MyApp' - lib\api_service.dart:58:19 - undefined_getter
+warning - The '!' will have no effect because the receiver can't be null - lib\api_service.dart:82:17 - unnecessary_non_null_assertion
+warning - The '!' will have no effect because the receiver can't be null - lib\api_service.dart:178:25 - unnecessary_non_null_assertion
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\notification_service.dart:35:48 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\admin_api_management_screen.dart:52:69 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_api_management_screen.dart:79:189 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_api_management_screen.dart:142:42 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\admin_organization_list_screen.dart:116:77 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_organization_list_screen.dart:147:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_organization_list_screen.dart:164:189 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_organization_list_screen.dart:194:119 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_organization_list_screen.dart:231:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_payment_confirmations_screen.dart:86:160 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\admin_payment_confirmations_screen.dart:92:85 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_payment_confirmations_screen.dart:121:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_payment_confirmations_screen.dart:169:119 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_payment_confirmations_screen.dart:229:42 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\admin_token_requests_screen.dart:84:85 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_token_requests_screen.dart:113:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_token_requests_screen.dart:163:119 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_token_requests_screen.dart:224:42 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\admin_transaction_list_screen.dart:84:82 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_transaction_list_screen.dart:115:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_transaction_list_screen.dart:132:189 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_transaction_list_screen.dart:169:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_transaction_list_screen.dart:212:42 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\admin_user_management_screen.dart:79:75 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_user_management_screen.dart:110:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_user_management_screen.dart:135:90 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin_user_management_screen.dart:187:101 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\buy_tokens_screen.dart:149:44 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\buy_tokens_screen.dart:197:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\buy_tokens_screen.dart:237:115 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\screens\contact_screen.dart:36:28 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\contact_screen.dart:110:189 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\screens\contact_screen.dart:116:13 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\create_transaction_redirect_screen.dart:27:141 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\create_transaction_redirect_screen.dart:57:74 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\create_transaction_redirect_screen.dart:57:184 - deprecated_member_use
+   info - Unnecessary 'const' keyword - lib\screens\create_transaction_redirect_screen.dart:61:21 - unnecessary_const
+warning - The value of the field '_error' isn't used - lib\screens\dashboard_home.dart:16:11 - unused_field
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_home.dart:117:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_home.dart:206:51 - deprecated_member_use
+warning - Unused import: 'token_requests_screen.dart' - lib\screens\dashboard_screen.dart:12:8 - unused_import
+warning - Unused import: 'token_api_screen.dart' - lib\screens\dashboard_screen.dart:14:8 - unused_import
+warning - Unused import: 'admin_api_management_screen.dart' - lib\screens\dashboard_screen.dart:18:8 - unused_import
+warning - The value of the field '_error' isn't used - lib\screens\dashboard_screen.dart:34:11 - unused_field
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:99:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:101:69 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:143:104 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:207:208 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:213:73 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:304:55 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\facture_screen.dart:70:81 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\facture_screen.dart:164:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\facture_screen.dart:184:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\facture_screen.dart:239:42 - deprecated_member_use
+warning - The value of the field '_error' isn't used - lib\screens\forgot_password_screen.dart:21:11 - unused_field
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\forgot_password_screen.dart:156:131 - deprecated_member_use
+warning - Unused import: '../main.dart' - lib\screens\login_screen.dart:8:8 - unused_import
+warning - The value of the field '_error' isn't used - lib\screens\login_screen.dart:22:10 - unused_field
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\login_screen.dart:177:66 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\notifications_screen.dart:92:78 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\notifications_screen.dart:125:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\notifications_screen.dart:127:70 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\notifications_screen.dart:137:156 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\onboarding_screen.dart:202:50 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block - lib\screens\organization_screen.dart:52:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\screens\organization_screen.dart:53:48 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\screens\organization_screen.dart:59:28 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\screens\organization_screen.dart:60:25 - curly_braces_in_flow_control_structures
+   info - Statements in a for should be enclosed in a block - lib\screens\organization_screen.dart:125:42 - curly_braces_in_flow_control_structures
+   info - Unnecessary use of 'toList' in a spread - lib\screens\organization_screen.dart:230:49 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\organization_screen.dart:267:149 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\organization_screen.dart:288:193 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\organization_screen.dart:304:61 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\profile_screen.dart:283:161 - deprecated_member_use
+warning - Unused import: 'package:shared_preferences/shared_preferences.dart' - lib\screens\register_screen.dart:2:8 - unused_import
+warning - Unused import: '../main.dart' - lib\screens\register_screen.dart:7:8 - unused_import
+warning - The library 'package:appmobile/main.dart' doesn't export a member with the shown name 'kGoogleWebClientId' - lib\screens\register_screen.dart:7:28 - undefined_shown_name
+warning - The value of the field '_error' isn't used - lib\screens\register_screen.dart:24:10 - unused_field
+warning - Unused import: 'transaction_detail_screen.dart' - lib\screens\statistics_screen.dart:6:8 - unused_import
+   info - The private field _searchQuery could be 'final' - lib\screens\statistics_screen.dart:27:10 - prefer_final_fields
+warning - The value of the local variable 'filteredUsers' isn't used - lib\screens\statistics_screen.dart:99:11 - unused_local_variable
+   info - Statements in a for should be enclosed in a block - lib\screens\statistics_screen.dart:102:32 - curly_braces_in_flow_control_structures
+   info - Statements in a for should be enclosed in a block - lib\screens\statistics_screen.dart:103:33 - curly_braces_in_flow_control_structures
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\statistics_screen.dart:145:68 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\statistics_screen.dart:177:180 - deprecated_member_use
+   info - Use interpolation to compose strings and values - lib\screens\statistics_screen.dart:195:36 - prefer_interpolation_to_compose_strings
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\statistics_screen.dart:258:121 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\statistics_screen.dart:258:163 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\statistics_screen.dart:288:51 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\token_api_screen.dart:123:159 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\token_api_screen.dart:135:59 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\token_api_screen.dart:135:158 - deprecated_member_use
+warning - Unused import: 'package:universal_io/io.dart' - lib\screens\token_requests_screen.dart:9:8 - unused_import
+   info - Unnecessary use of 'toList' in a spread - lib\screens\token_requests_screen.dart:81:81 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\token_requests_screen.dart:121:101 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\token_requests_screen.dart:183:42 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\token_requests_screen.dart:280:39 - use_build_context_synchronously
+   info - Unnecessary use of 'toList' in a spread - lib\screens\transaction_detail_screen.dart:92:66 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transaction_detail_screen.dart:198:95 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transaction_detail_screen.dart:214:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transaction_detail_screen.dart:226:42 - deprecated_member_use
+warning - The declaration '_deleteTransaction' isn't referenced - lib\screens\transactions_screen.dart:37:16 - unused_element
+   info - Unnecessary use of 'toList' in a spread - lib\screens\transactions_screen.dart:104:80 - unnecessary_to_list_in_spreads
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transactions_screen.dart:143:189 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transactions_screen.dart:206:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transactions_screen.dart:219:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transactions_screen.dart:268:42 - deprecated_member_use
+warning - The value of the field '_error' isn't used - lib\screens\verify_email_screen.dart:16:10 - unused_field
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verify_email_screen.dart:64:141 - deprecated_member_use
+   info - 'dart:html' is deprecated and shouldn't be used. Use package:web and dart:js_interop instead - lib\web_view_registry_web.dart:1:1 - deprecated_member_use
+   info - Don't use web-only libraries outside Flutter web plugins - lib\web_view_registry_web.dart:1:1 - avoid_web_libraries_in_flutter
+

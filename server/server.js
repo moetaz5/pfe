@@ -21,12 +21,15 @@ const app = express();
 // Store temporaire pour les tokens d'échange OAuth Google (5 minutes)
 const googleExchangeTokens = new Map();
 // Nettoyage automatique toutes les 10 minutes
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, val] of googleExchangeTokens.entries()) {
-    if (now > val.expires) googleExchangeTokens.delete(key);
-  }
-}, 10 * 60 * 1000);
+setInterval(
+  () => {
+    const now = Date.now();
+    for (const [key, val] of googleExchangeTokens.entries()) {
+      if (now > val.expires) googleExchangeTokens.delete(key);
+    }
+  },
+  10 * 60 * 1000,
+);
 
 // ===================== AUTO-MIGRATION =====================
 // Ajoute la colonne date_suppression si elle n'existe pas encore (compatible toutes versions MySQL)
@@ -70,8 +73,7 @@ db.query(
       db.query(
         `ALTER TABLE users ADD COLUMN last_activity DATETIME DEFAULT NULL`,
         (err2) => {
-          if (err2)
-            console.warn("⚠️ Migration last_activity:", err2.message);
+          if (err2) console.warn("⚠️ Migration last_activity:", err2.message);
           else console.log("✅ Colonne last_activity ajoutée avec succès");
         },
       );
@@ -111,12 +113,16 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const cleanBase64 = (value) => String(value || "").replace(/\s+/g, "");
 
 const extractSoapReturn = (xmlText) => {
-  const match = String(xmlText || "").match(/<[^>]*return[^>]*>([\s\S]*?)<\/[^>]*return>/i);
+  const match = String(xmlText || "").match(
+    /<[^>]*return[^>]*>([\s\S]*?)<\/[^>]*return>/i,
+  );
   return match ? match[1].trim() : null;
 };
 
 const extractSoapFault = (xmlText) => {
-  const match = String(xmlText || "").match(/<[^>]*faultstring[^>]*>([\s\S]*?)<\/[^>]*faultstring>/i);
+  const match = String(xmlText || "").match(
+    /<[^>]*faultstring[^>]*>([\s\S]*?)<\/[^>]*faultstring>/i,
+  );
   return match ? match[1].trim() : null;
 };
 
@@ -178,7 +184,9 @@ const consultEfactTTN = async (idSaveEfact) => {
 
     const raw = response.data;
 
-    const xmlMatch = raw.match(/<[^>]*xmlContent[^>]*>([\s\S]*?)<\/[^>]*xmlContent>/i);
+    const xmlMatch = raw.match(
+      /<[^>]*xmlContent[^>]*>([\s\S]*?)<\/[^>]*xmlContent>/i,
+    );
 
     if (xmlMatch) {
       return xmlMatch[1].trim();
@@ -199,30 +207,40 @@ const processTTNSubmission = async (
   userId,
   clientEmail,
   originalQrConfig,
-  originalRefConfig
+  originalRefConfig,
 ) => {
-  console.log(`[TTN] Début de traitement en tâche de fond pour TX #${transactionId}`);
+  console.log(
+    `[TTN] Début de traitement en tâche de fond pour TX #${transactionId}`,
+  );
   const qrConfig = resolveConfig(originalQrConfig);
   const refConfig = resolveConfig(originalRefConfig);
 
   try {
     for (const doc of signedDocs) {
       console.log(`[TTN] Traitement doc ${doc.id} (${doc.filename})`);
-      
+
       try {
         // 📡 SAVE TTN
         const saveRes = await saveEfactTTN(doc.xml_signed);
-        console.log(`[TTN] raw saveRes for doc ${doc.id}: HTTP ${saveRes.httpStatus}, RAW: ${saveRes.raw?.substring(0, 300)}...`);
-        console.log(`[TTN] returnText/fault for doc ${doc.id}: returnText: ${saveRes.returnText}, fault: ${saveRes.fault}`);
-        
+        console.log(
+          `[TTN] raw saveRes for doc ${doc.id}: HTTP ${saveRes.httpStatus}, RAW: ${saveRes.raw?.substring(0, 300)}...`,
+        );
+        console.log(
+          `[TTN] returnText/fault for doc ${doc.id}: returnText: ${saveRes.returnText}, fault: ${saveRes.fault}`,
+        );
+
         const idMatch = saveRes.returnText?.match(/idSaveEfact=(\d+)/i);
-        const refMatch = saveRes.returnText?.match(/Reference TTN=([A-Z0-9]+)/i);
+        const refMatch = saveRes.returnText?.match(
+          /Reference TTN=([A-Z0-9]+)/i,
+        );
 
         const idSaveEfact = idMatch ? idMatch[1] : null;
         const referenceTTN = refMatch ? refMatch[1] : null;
 
         if (!idSaveEfact) {
-          throw new Error(`TTN_ID_NOT_FOUND (returnText was: ${saveRes.returnText})`);
+          throw new Error(
+            `TTN_ID_NOT_FOUND (returnText was: ${saveRes.returnText})`,
+          );
         }
 
         // 🔁 CONSULT TTN
@@ -255,60 +273,67 @@ const processTTNSubmission = async (
               signed_ttn_at=NOW()
           WHERE id=?
           `,
-          [
-            xmlSignedTTN,
-            referenceTTN,
-            idSaveEfact,
-            pdfStampedB64,
-            doc.id,
-          ],
+          [xmlSignedTTN, referenceTTN, idSaveEfact, pdfStampedB64, doc.id],
         );
-        console.log(`[TTN] Document ${doc.id} terminé avec succès (signée_ttn)`);
-
+        console.log(
+          `[TTN] Document ${doc.id} terminé avec succès (signée_ttn)`,
+        );
       } catch (ttnErr) {
         console.error(`[TTN] Document ${doc.id} ÉCHEC:`, ttnErr.message);
         // 💾 UPDATE DOCUMENT to 'refusée par TTN'
-        await db.promise().query(
-          "UPDATE transaction_documents SET statut='refusée par TTN' WHERE id=?",
-          [doc.id]
-        );
+        await db
+          .promise()
+          .query(
+            "UPDATE transaction_documents SET statut='refusée par TTN' WHERE id=?",
+            [doc.id],
+          );
       }
     }
 
     // 🔄 UPDATE TRANSACTION status based on documents
-    const [finalDocs] = await db.promise().query(
-      "SELECT statut FROM transaction_documents WHERE transaction_id = ?",
-      [transactionId]
-    );
+    const [finalDocs] = await db
+      .promise()
+      .query(
+        "SELECT statut FROM transaction_documents WHERE transaction_id = ?",
+        [transactionId],
+      );
 
     let finalTxStatut = "signée_ttn";
-    if (finalDocs.some(d => d.statut === "refusée par TTN")) {
+    if (finalDocs.some((d) => d.statut === "refusée par TTN")) {
       finalTxStatut = "refusée par TTN";
     }
 
-    await db.promise().query(
-      "UPDATE transactions SET statut=? WHERE id=?",
-      [finalTxStatut, transactionId]
-    );
+    await db
+      .promise()
+      .query("UPDATE transactions SET statut=? WHERE id=?", [
+        finalTxStatut,
+        transactionId,
+      ]);
 
     // Notifications
     if (finalTxStatut === "signée_ttn") {
-       await createNotification(
+      await createNotification(
         userId,
         "Transaction signée TTN",
         `La transaction #${transactionId} a été signée avec succès par TTN`,
         "success",
       );
       // 📧 ENVOI EMAIL CLIENT
-      const [signedDocsForEmail] = await db.promise().query(
-        "SELECT filename, pdf_file FROM transaction_documents WHERE transaction_id = ? AND statut = 'signée_ttn'",
-        [transactionId]
-      );
+      const [signedDocsForEmail] = await db
+        .promise()
+        .query(
+          "SELECT filename, pdf_file FROM transaction_documents WHERE transaction_id = ? AND statut = 'signée_ttn'",
+          [transactionId],
+        );
       if (clientEmail && signedDocsForEmail.length) {
-        await sendSignedPdfsToClient(clientEmail, transactionId, signedDocsForEmail);
+        await sendSignedPdfsToClient(
+          clientEmail,
+          transactionId,
+          signedDocsForEmail,
+        );
       }
     } else {
-       await createNotification(
+      await createNotification(
         userId,
         "Transaction refusée par TTN",
         `La transaction #${transactionId} a été refusée par les services TTN`,
@@ -319,9 +344,11 @@ const processTTNSubmission = async (
         await sendRejectionEmailToClient(clientEmail, transactionId);
       }
     }
-
   } catch (globalErr) {
-    console.error(`[TTN] Global background error for TX #${transactionId}:`, globalErr);
+    console.error(
+      `[TTN] Global background error for TX #${transactionId}:`,
+      globalErr,
+    );
   }
 };
 
@@ -517,7 +544,11 @@ const notifyAdmins = async (title, message, type = "info") => {
 };
 
 /* ===================== EMAIL SIGNATURE ===================== */
-const sendSignatureEmail = async (email, transactionId, host = "medicasign.medicacom.tn") => {
+const sendSignatureEmail = async (
+  email,
+  transactionId,
+  host = "medicasign.medicacom.tn",
+) => {
   const link = `http://${host}/signature/${transactionId}`;
 
   await transporter.sendMail({
@@ -610,7 +641,6 @@ const allowedOrigins = [
   "http://localhost:52622",
   "http://127.0.0.1:52622",
 ];
-
 
 app.use(
   cors({
@@ -732,14 +762,14 @@ const verifyToken = (req, res, next) => {
     }
 
     req.user = decoded;
-    
+
     // 🔥 Mise à jour de la dernière activité (last_activity)
     db.query(
       "UPDATE users SET last_activity = NOW() WHERE id = ?",
       [decoded.id],
       (err) => {
         if (err) console.error("⚠️ Error updating last_activity:", err.message);
-      }
+      },
     );
 
     next();
@@ -923,7 +953,9 @@ app.get(
   async (req, res) => {
     try {
       if (!req.user) {
-        return res.redirect(`https://medicasign.medicacom.tn/login?error=auth_failed`);
+        return res.redirect(
+          `https://medicasign.medicacom.tn/login?error=auth_failed`,
+        );
       }
 
       // 🔎 Vérifier le statut réel en base
@@ -934,14 +966,18 @@ app.get(
         ]);
 
       if (!rows.length) {
-        return res.redirect(`https://medicasign.medicacom.tn/login?error=user_not_found`);
+        return res.redirect(
+          `https://medicasign.medicacom.tn/login?error=user_not_found`,
+        );
       }
 
       const user = rows[0];
 
       // ❌ Compte désactivé
       if (user.statut === 0) {
-        return res.redirect(`https://medicasign.medicacom.tn/login?error=disabled`);
+        return res.redirect(
+          `https://medicasign.medicacom.tn/login?error=disabled`,
+        );
       }
 
       // 🔐 Gestion de la redirection de retour (Web ou Mobile)
@@ -949,10 +985,14 @@ app.get(
         const token = jwt.sign(
           { id: user.id, role: user.role },
           process.env.JWT_SECRET,
-          { expiresIn: "10d" } // Token plus long pour le mobile
+          { expiresIn: "10d" }, // Token plus long pour le mobile
         );
-        console.log("GOOGLE CALLBACK SUCCESS (MOBILE) - Redirecting to App Link.");
-        return res.redirect(`medicasign://auth-callback?token=${token}&userId=${user.id}&role=${user.role}&name=${encodeURIComponent(user.name)}`);
+        console.log(
+          "GOOGLE CALLBACK SUCCESS (MOBILE) - Redirecting to App Link.",
+        );
+        return res.redirect(
+          `medicasign://auth-callback?token=${token}&userId=${user.id}&role=${user.role}&name=${encodeURIComponent(user.name)}`,
+        );
       }
 
       // 🔐 Génération d'un exchange token (résout le problème cross-domain sur le WEB)
@@ -963,11 +1003,13 @@ app.get(
         expires: Date.now() + 5 * 60 * 1000, // 5 minutes
       });
 
-      console.log("GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.");
+      console.log(
+        "GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.",
+      );
 
       // Rediriger vers le frontend IP avec le token d'échange
       return res.redirect(
-        `https://medicasign.medicacom.tn/google/callback?exchange_token=${exchangeToken}`
+        `https://medicasign.medicacom.tn/google/callback?exchange_token=${exchangeToken}`,
       );
     } catch (error) {
       console.error("GOOGLE CALLBACK ERROR:", error);
@@ -1001,7 +1043,7 @@ app.post("/api/auth/exchange-google-token", async (req, res) => {
     const token = jwt.sign(
       { id: data.userId, role: data.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "1d" },
     );
 
     // Définir le cookie sur le bon domaine (51.178.39.67)
@@ -1014,7 +1056,9 @@ app.post("/api/auth/exchange-google-token", async (req, res) => {
     // Récupérer les infos utilisateur
     const [rows] = await db
       .promise()
-      .query("SELECT id, name, email, role FROM users WHERE id = ?", [data.userId]);
+      .query("SELECT id, name, email, role FROM users WHERE id = ?", [
+        data.userId,
+      ]);
 
     if (!rows.length) {
       return res.status(404).json({ message: "Utilisateur introuvable" });
@@ -1039,7 +1083,7 @@ app.post("/api/auth/google-mobile", async (req, res) => {
 
     // Vérifier le token auprès de Google
     const googleRes = await axios.get(
-      `https://oauth2.googleapis.com/tokeninfo?id_token=${id_token}`
+      `https://oauth2.googleapis.com/tokeninfo?id_token=${id_token}`,
     );
     const payload = googleRes.data;
 
@@ -1051,32 +1095,44 @@ app.post("/api/auth/google-mobile", async (req, res) => {
     const name = payload.name || email.split("@")[0];
 
     // Chercher ou créer l'utilisateur
-    const [rows] = await db.promise().query("SELECT * FROM users WHERE email = ?", [email]);
+    const [rows] = await db
+      .promise()
+      .query("SELECT * FROM users WHERE email = ?", [email]);
 
     let user;
     if (rows.length > 0) {
       user = rows[0];
     } else {
-      const [result] = await db.promise().query(
-        "INSERT INTO users (name, email, password, role, is_verified) VALUES (?, ?, ?, ?, ?)",
-        [name, email, "", "user", 1]
-      );
-      const [newRows] = await db.promise().query("SELECT * FROM users WHERE id = ?", [result.insertId]);
+      const [result] = await db
+        .promise()
+        .query(
+          "INSERT INTO users (name, email, password, role, is_verified) VALUES (?, ?, ?, ?, ?)",
+          [name, email, "", "user", 1],
+        );
+      const [newRows] = await db
+        .promise()
+        .query("SELECT * FROM users WHERE id = ?", [result.insertId]);
       user = newRows[0];
     }
 
     if (user.statut === 0) {
-      return res.status(403).json({ message: "Compte désactivé. Contactez l'administrateur." });
+      return res
+        .status(403)
+        .json({ message: "Compte désactivé. Contactez l'administrateur." });
     }
 
     // Générer le JWT de session
     const token = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "1d" },
     );
 
-    res.cookie("token", token, { httpOnly: true, sameSite: "Lax", secure: false });
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "Lax",
+      secure: false,
+    });
 
     return res.json({
       id: user.id,
@@ -1086,7 +1142,10 @@ app.post("/api/auth/google-mobile", async (req, res) => {
       token,
     });
   } catch (err) {
-    console.error("GOOGLE MOBILE AUTH ERROR:", err?.response?.data || err.message);
+    console.error(
+      "GOOGLE MOBILE AUTH ERROR:",
+      err?.response?.data || err.message,
+    );
     return res.status(401).json({ message: "Authentification Google échouée" });
   }
 });
@@ -1094,10 +1153,12 @@ app.post("/api/auth/google-mobile", async (req, res) => {
 /* ===================== NOTIFICATIONS ROUTES ===================== */
 app.get("/api/notifications", verifyToken, async (req, res) => {
   try {
-    const [rows] = await db.promise().query(
-      "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 50",
-      [req.user.id]
-    );
+    const [rows] = await db
+      .promise()
+      .query(
+        "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 50",
+        [req.user.id],
+      );
     res.json(rows);
   } catch (err) {
     console.error("GET NOTIFS ERROR:", err);
@@ -1107,10 +1168,12 @@ app.get("/api/notifications", verifyToken, async (req, res) => {
 
 app.put("/api/notifications/:id/read", verifyToken, async (req, res) => {
   try {
-    await db.promise().query(
-      "UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?",
-      [req.params.id, req.user.id]
-    );
+    await db
+      .promise()
+      .query(
+        "UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?",
+        [req.params.id, req.user.id],
+      );
     res.json({ message: "Succès" });
   } catch (err) {
     res.status(500).json({ message: "Erreur serveur" });
@@ -1119,10 +1182,11 @@ app.put("/api/notifications/:id/read", verifyToken, async (req, res) => {
 
 app.put("/api/notifications/read-all", verifyToken, async (req, res) => {
   try {
-    await db.promise().query(
-      "UPDATE notifications SET is_read = 1 WHERE user_id = ?",
-      [req.user.id]
-    );
+    await db
+      .promise()
+      .query("UPDATE notifications SET is_read = 1 WHERE user_id = ?", [
+        req.user.id,
+      ]);
     res.json({ message: "Succès" });
   } catch (err) {
     res.status(500).json({ message: "Erreur serveur" });
@@ -1131,10 +1195,12 @@ app.put("/api/notifications/read-all", verifyToken, async (req, res) => {
 
 app.delete("/api/notifications/:id", verifyToken, async (req, res) => {
   try {
-    await db.promise().query(
-      "DELETE FROM notifications WHERE id = ? AND user_id = ?",
-      [req.params.id, req.user.id]
-    );
+    await db
+      .promise()
+      .query("DELETE FROM notifications WHERE id = ? AND user_id = ?", [
+        req.params.id,
+        req.user.id,
+      ]);
     res.json({ message: "Succès" });
   } catch (err) {
     res.status(500).json({ message: "Erreur serveur" });
@@ -2294,7 +2360,10 @@ app.get(
       if (d.statut === "signée_ttn" && d.xml_signed_ttn) {
         xmlToUse = d.xml_signed_ttn;
         console.log("XML TTN utilisé:", d.filename);
-      } else if ((d.statut === "signée" || d.statut === "refusée par TTN") && d.xml_signed) {
+      } else if (
+        (d.statut === "signée" || d.statut === "refusée par TTN") &&
+        d.xml_signed
+      ) {
         xmlToUse = d.xml_signed;
       } else {
         xmlToUse = d.xml_file;
@@ -2502,7 +2571,10 @@ app.get("/api/transactions/:id/download", verifyToken, async (req, res) => {
     if (fileType === "xml") {
       if (doc.statut === "signée_ttn" && doc.xml_signed_ttn)
         fileBuffer = doc.xml_signed_ttn;
-      else if ((doc.statut === "signée" || doc.statut === "refusée par TTN") && doc.xml_signed)
+      else if (
+        (doc.statut === "signée" || doc.statut === "refusée par TTN") &&
+        doc.xml_signed
+      )
         fileBuffer = doc.xml_signed;
       else fileBuffer = doc.xml_file;
 
@@ -2548,7 +2620,10 @@ app.get("/api/transactions/:id/zip", verifyToken, async (req, res) => {
 
       if (d.statut === "signée_ttn" && d.xml_signed_ttn)
         xmlToUse = d.xml_signed_ttn;
-      else if ((d.statut === "signée" || d.statut === "refusée par TTN") && d.xml_signed)
+      else if (
+        (d.statut === "signée" || d.statut === "refusée par TTN") &&
+        d.xml_signed
+      )
         xmlToUse = d.xml_signed;
       else xmlToUse = d.xml_file;
 
@@ -2599,7 +2674,10 @@ app.get(
         let xmlToUse = d.xml_file;
         if (d.statut === "signée_ttn" && d.xml_signed_ttn)
           xmlToUse = d.xml_signed_ttn;
-        else if ((d.statut === "signée" || d.statut === "refusée par TTN") && d.xml_signed)
+        else if (
+          (d.statut === "signée" || d.statut === "refusée par TTN") &&
+          d.xml_signed
+        )
           xmlToUse = d.xml_signed;
 
         zip.file(`${d.filename}.pdf`, Buffer.from(d.pdf_file, "base64"));
@@ -2626,13 +2704,13 @@ app.get(
 /* ===================== STATISTIQUES ===================== */
 /* ===================== STATISTIQUE USER ===================== */
 /* ===================== RESEND TO TTN (Universal Route) ===================== */
-// Supports: 
+// Supports:
 // POST /api/resend-ttn (body: {transaction_id})
 // POST /api/transactions/:id/resend-ttn
 // POST /api/admin/transactions/:id/resend-ttn
 const handleResendTTNCore = async (req, res) => {
   const transaction_id = req.params.id || req.body.transaction_id;
-  
+
   if (!transaction_id)
     return res.status(400).json({ message: "ID transaction requis" });
 
@@ -2651,7 +2729,7 @@ const handleResendTTNCore = async (req, res) => {
 
     // Vérifier si l'utilisateur est propriétaire ou admin
     if (req.user.role !== "ADMIN" && tx.user_id !== req.user.id) {
-       return res.status(403).json({ message: "Accès refusé" });
+      return res.status(403).json({ message: "Accès refusé" });
     }
 
     // Récupérer les documents refusés OU signés (si on veut tout renvoyer)
@@ -2666,7 +2744,10 @@ const handleResendTTNCore = async (req, res) => {
     if (!docs.length) {
       return res
         .status(400)
-        .json({ message: "La transaction n'est pas dans un état permettant le renvoi (doit être Signée ou Refusée par TTN)" });
+        .json({
+          message:
+            "La transaction n'est pas dans un état permettant le renvoi (doit être Signée ou Refusée par TTN)",
+        });
     }
 
     // Réinitialiser le statut de la transaction
@@ -2675,13 +2756,14 @@ const handleResendTTNCore = async (req, res) => {
       .query("UPDATE transactions SET statut = 'en attente TTN' WHERE id = ?", [
         transaction_id,
       ]);
-    
+
     // Réinitialiser le statut des documents pour qu'ils soient retraités
     await db
       .promise()
-      .query("UPDATE transaction_documents SET statut = 'signée' WHERE transaction_id = ? AND (statut = 'refusée par TTN' OR statut = 'signée')", [
-        transaction_id,
-      ]);
+      .query(
+        "UPDATE transaction_documents SET statut = 'signée' WHERE transaction_id = ? AND (statut = 'refusée par TTN' OR statut = 'signée')",
+        [transaction_id],
+      );
 
     // Lancer le traitement en tâche de fond
     processTTNSubmission(
@@ -2702,7 +2784,11 @@ const handleResendTTNCore = async (req, res) => {
 
 app.post("/api/resend-ttn", verifyToken, handleResendTTNCore);
 app.post("/api/transactions/:id/resend-ttn", verifyToken, handleResendTTNCore);
-app.post("/api/admin/transactions/:id/resend-ttn", verifyToken, handleResendTTNCore);
+app.post(
+  "/api/admin/transactions/:id/resend-ttn",
+  verifyToken,
+  handleResendTTNCore,
+);
 
 /* ===================== DASHBOARD STATS ===================== */
 app.get("/api/dashboard/stats", verifyToken, async (req, res) => {
@@ -2741,7 +2827,7 @@ app.get("/api/dashboard/stats", verifyToken, async (req, res) => {
         signatures: userResult[0][0].total_users || 0, // Dans le grid admin on affiche users
         factures: txResult[0][0].signed || 0, // Dans le grid admin on affiche signées
         totalJetons: userResult[0][0].total_jetons || 0,
-        organizations: orgResult[0][0].total || 0, 
+        organizations: orgResult[0][0].total || 0,
       });
     }
 
@@ -2965,7 +3051,11 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
       db.promise().query("SELECT COUNT(*) AS total FROM organizations"),
 
       // Liste des utilisateurs (colonnes sûres uniquement)
-      db.promise().query("SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC"),
+      db
+        .promise()
+        .query(
+          "SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC",
+        ),
     ]);
 
     const usersCount = usersCountResult[0][0]?.total || 0;
@@ -2974,7 +3064,6 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
     const txByMonth = txByMonthResult[0];
     const organizationsCount = organizationsCountResult[0][0]?.total || 0;
     const utilisateursListe = utilisateursListeResult[0] || [];
-
 
     let transactionsCreees = 0;
     let transactionsSignees = 0;
@@ -2997,9 +3086,11 @@ app.get("/api/statistiqueadmin", verifyToken, async (req, res) => {
     // Online Users (active in the last 5 minutes) — safe fallback if column missing
     let onlineUsersCount = 0;
     try {
-      const [onlineUsersResult] = await db.promise().query(
-        "SELECT COUNT(*) AS total FROM users WHERE last_activity >= NOW() - INTERVAL 5 MINUTE"
-      );
+      const [onlineUsersResult] = await db
+        .promise()
+        .query(
+          "SELECT COUNT(*) AS total FROM users WHERE last_activity >= NOW() - INTERVAL 5 MINUTE",
+        );
       onlineUsersCount = onlineUsersResult[0]?.total || 0;
     } catch (e) {
       console.warn("⚠️ last_activity column not available:", e.message);
@@ -3086,7 +3177,10 @@ app.get("/api/docs/:docId/download", verifyToken, async (req, res) => {
     if (fileType === "xml") {
       if (doc.statut === "signée_ttn" && doc.xml_signed_ttn)
         fileBuffer = doc.xml_signed_ttn;
-      else if ((doc.statut === "signée" || doc.statut === "refusée par TTN") && doc.xml_signed)
+      else if (
+        (doc.statut === "signée" || doc.statut === "refusée par TTN") &&
+        doc.xml_signed
+      )
         fileBuffer = doc.xml_signed;
       else fileBuffer = doc.xml_file;
 
@@ -3115,143 +3209,194 @@ app.get("/api/public/transactions/:id/prepare-signature", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [txRows] = await db.promise().query(
-      "SELECT id, user_id, statut FROM transactions WHERE id = ?",
-      [id]
-    );
+    const [txRows] = await db
+      .promise()
+      .query("SELECT id, user_id, statut FROM transactions WHERE id = ?", [id]);
 
-    if (!txRows.length) return res.status(404).json({ message: "Transaction introuvable" });
+    if (!txRows.length)
+      return res.status(404).json({ message: "Transaction introuvable" });
     const transaction = txRows[0];
 
     // Vérifier les jetons
-    const [userRows] = await db.promise().query("SELECT total_jetons FROM users WHERE id = ?", [transaction.user_id]);
+    const [userRows] = await db
+      .promise()
+      .query("SELECT total_jetons FROM users WHERE id = ?", [
+        transaction.user_id,
+      ]);
     if (!userRows.length || userRows[0].total_jetons <= 0) {
-      return res.status(402).json({ message: "Jetons insuffisants pour signer" });
+      return res
+        .status(402)
+        .json({ message: "Jetons insuffisants pour signer" });
     }
 
-    const [docs] = await db.promise().query(
-      "SELECT id, filename, xml_file FROM transaction_documents WHERE transaction_id = ?",
-      [id]
-    );
+    const [docs] = await db
+      .promise()
+      .query(
+        "SELECT id, filename, xml_file FROM transaction_documents WHERE transaction_id = ?",
+        [id],
+      );
 
-    const docsToSign = docs.map(d => ({
+    const docsToSign = docs.map((d) => ({
       id: d.id,
       filename: d.filename,
-      xmlBase64: d.xml_file
+      xmlBase64: d.xml_file,
     }));
 
     res.json({ docsToSign });
   } catch (err) {
     console.error("PREPARE SIGNATURE ERROR:", err);
-    res.status(500).json({ message: "Erreur lors de la préparation de la signature" });
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la préparation de la signature" });
   }
 });
 
 // ✍️ ÉTAPE 2 : Finaliser la signature (Recevoir les XML signés du local et enregistrer)
-app.post("/api/public/transactions/:id/finalize-signature", async (req, res) => {
-  const { id } = req.params;
-  const { signedResults } = req.body; // Array de {id: docId, xmlSigned: base64}
+app.post(
+  "/api/public/transactions/:id/finalize-signature",
+  async (req, res) => {
+    const { id } = req.params;
+    const { signedResults } = req.body; // Array de {id: docId, xmlSigned: base64}
 
-  if (!signedResults || !signedResults.length) {
-    return res.status(400).json({ message: "Données signées manquantes" });
-  }
-
-  try {
-    const [txRows] = await db.promise().query(
-      "SELECT id, user_id, qr_config, ref_config, client_email FROM transactions WHERE id = ?",
-      [id]
-    );
-    const transaction = txRows[0];
-
-    // Déduire 1 jeton
-    const [tokenUpdate] = await db.promise().query(
-      "UPDATE users SET total_jetons = total_jetons - 1 WHERE id = ? AND total_jetons > 0",
-      [transaction.user_id]
-    );
-
-    if (!tokenUpdate.affectedRows) {
-      return res.status(402).json({ message: "Erreur jeton (insuffisant ou utilisateur non trouvé)" });
+    if (!signedResults || !signedResults.length) {
+      return res.status(400).json({ message: "Données signées manquantes" });
     }
 
-    const finalDocs = [];
+    try {
+      const [txRows] = await db
+        .promise()
+        .query(
+          "SELECT id, user_id, qr_config, ref_config, client_email FROM transactions WHERE id = ?",
+          [id],
+        );
+      const transaction = txRows[0];
 
-    // Enregistrer chaque document signé
-    for (const result of signedResults) {
-      const [docRows] = await db.promise().query("SELECT filename, pdf_file FROM transaction_documents WHERE id = ?", [result.id]);
-      const doc = docRows[0];
+      // Déduire 1 jeton
+      const [tokenUpdate] = await db
+        .promise()
+        .query(
+          "UPDATE users SET total_jetons = total_jetons - 1 WHERE id = ? AND total_jetons > 0",
+          [transaction.user_id],
+        );
 
-      await db.promise().query(
-        "UPDATE transaction_documents SET statut='signée', xml_signed=?, signed_at=NOW() WHERE id=?",
-        [result.xmlSigned, result.id]
-      );
+      if (!tokenUpdate.affectedRows) {
+        return res
+          .status(402)
+          .json({
+            message: "Erreur jeton (insuffisant ou utilisateur non trouvé)",
+          });
+      }
 
-      finalDocs.push({
-        id: result.id,
-        filename: doc.filename,
-        pdf_file: doc.pdf_file,
-        xml_signed: result.xmlSigned
+      const finalDocs = [];
+
+      // Enregistrer chaque document signé
+      for (const result of signedResults) {
+        const [docRows] = await db
+          .promise()
+          .query(
+            "SELECT filename, pdf_file FROM transaction_documents WHERE id = ?",
+            [result.id],
+          );
+        const doc = docRows[0];
+
+        await db
+          .promise()
+          .query(
+            "UPDATE transaction_documents SET statut='signée', xml_signed=?, signed_at=NOW() WHERE id=?",
+            [result.xmlSigned, result.id],
+          );
+
+        finalDocs.push({
+          id: result.id,
+          filename: doc.filename,
+          pdf_file: doc.pdf_file,
+          xml_signed: result.xmlSigned,
+        });
+      }
+
+      // Update statut transaction
+      await db
+        .promise()
+        .query(
+          "UPDATE transactions SET statut='signée', signed_at=NOW() WHERE id=?",
+          [id],
+        );
+
+      res.json({
+        success: true,
+        message: "Signature enregistrée avec succès.",
       });
+
+      // Lancer TTN en arrière-plan
+      processTTNSubmission(
+        id,
+        finalDocs,
+        transaction.user_id,
+        transaction.client_email,
+        transaction.qr_config,
+        transaction.ref_config,
+      ).catch((e) => console.error("TTN BACKGROUND ERROR:", e));
+    } catch (err) {
+      console.error("FINALIZE SIGNATURE ERROR:", err);
+      res
+        .status(500)
+        .json({ message: "Erreur serveur lors de la finalisation" });
     }
-
-    // Update statut transaction
-    await db.promise().query("UPDATE transactions SET statut='signée', signed_at=NOW() WHERE id=?", [id]);
-
-    res.json({ success: true, message: "Signature enregistrée avec succès." });
-
-    // Lancer TTN en arrière-plan
-    processTTNSubmission(
-      id,
-      finalDocs,
-      transaction.user_id,
-      transaction.client_email,
-      transaction.qr_config,
-      transaction.ref_config
-    ).catch(e => console.error("TTN BACKGROUND ERROR:", e));
-
-  } catch (err) {
-    console.error("FINALIZE SIGNATURE ERROR:", err);
-    res.status(500).json({ message: "Erreur serveur lors de la finalisation" });
-  }
-});
-
+  },
+);
 
 // 🚀 RENVOYER À LA TTN (MANUELLEMENT SI RÉFUSÉ OU OUBLIÉ)
 app.post("/api/transactions/:id/resend-ttn", verifyToken, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [txRows] = await db.promise().query(
-      "SELECT id, user_id, statut, client_email, qr_config, ref_config FROM transactions WHERE id = ? AND user_id = ?",
-      [id, req.user.id]
-    );
+    const [txRows] = await db
+      .promise()
+      .query(
+        "SELECT id, user_id, statut, client_email, qr_config, ref_config FROM transactions WHERE id = ? AND user_id = ?",
+        [id, req.user.id],
+      );
 
-    if (!txRows.length) return res.status(404).json({ message: "Transaction introuvable" });
+    if (!txRows.length)
+      return res.status(404).json({ message: "Transaction introuvable" });
 
     const transaction = txRows[0];
 
     // Ne renvoyer que si c'est 'signée' ou 'refusée par TTN'
     const allowed = ["signée", "refusée par TTN"];
     if (!allowed.includes(transaction.statut)) {
-      return res.status(400).json({ message: `Le statut '${transaction.statut}' ne permet pas le renvoi TTN.` });
+      return res
+        .status(400)
+        .json({
+          message: `Le statut '${transaction.statut}' ne permet pas le renvoi TTN.`,
+        });
     }
 
-    const [docs] = await db.promise().query(
-      "SELECT id, filename, xml_file, pdf_file, xml_signed FROM transaction_documents WHERE transaction_id = ?",
-      [id]
-    );
+    const [docs] = await db
+      .promise()
+      .query(
+        "SELECT id, filename, xml_file, pdf_file, xml_signed FROM transaction_documents WHERE transaction_id = ?",
+        [id],
+      );
 
-    if (!docs.length) return res.status(404).json({ message: "Documents introuvables" });
+    if (!docs.length)
+      return res.status(404).json({ message: "Documents introuvables" });
 
     // On prépare les docs "signés" pour la fonction de fond
-    const signedDocs = docs.map(d => ({
+    const signedDocs = docs.map((d) => ({
       id: d.id,
       filename: d.filename,
       pdf_file: d.pdf_file,
-      xml_signed: d.xml_signed
+      xml_signed: d.xml_signed,
     }));
 
     // On change le statut pour indiquer l'action
-    await db.promise().query("UPDATE transactions SET statut='Renvoi TTN en cours...' WHERE id=?", [id]);
+    await db
+      .promise()
+      .query(
+        "UPDATE transactions SET statut='Renvoi TTN en cours...' WHERE id=?",
+        [id],
+      );
 
     res.json({ message: "Processus de renvoi TTN lancé avec succès." });
 
@@ -3262,16 +3407,13 @@ app.post("/api/transactions/:id/resend-ttn", verifyToken, async (req, res) => {
       req.user.id,
       transaction.client_email,
       transaction.qr_config,
-      transaction.ref_config
-    ).catch(e => console.error("RESEND TTN BG ERROR:", e));
-
+      transaction.ref_config,
+    ).catch((e) => console.error("RESEND TTN BG ERROR:", e));
   } catch (err) {
     console.error("RESEND TTN ERROR:", err);
     res.status(500).json({ message: "Erreur serveur lors du renvoi TTN" });
   }
 });
-
-
 
 app.get("/api/transactions/:id/xml", verifyToken, async (req, res) => {
   const { id } = req.params;
@@ -3296,7 +3438,10 @@ app.get("/api/transactions/:id/xml", verifyToken, async (req, res) => {
 
     if (doc.statut === "signée_ttn" && doc.xml_signed_ttn)
       xml = doc.xml_signed_ttn;
-    else if ((doc.statut === "signée" || doc.statut === "refusée par TTN") && doc.xml_signed)
+    else if (
+      (doc.statut === "signée" || doc.statut === "refusée par TTN") &&
+      doc.xml_signed
+    )
       xml = doc.xml_signed;
     else xml = doc.xml_file;
 
@@ -3337,56 +3482,79 @@ app.post("/api/public/transactions/:id/check-pin", async (req, res) => {
 /////////////////////////////////////////////////////////////ADMINNNN/////////////////////////////////////µ
 
 // 🚀 ADMIN - RENVOYER À LA TTN
-app.post("/api/admin/transactions/:id/resend-ttn", verifyToken, verifyRole(["ADMIN"]), async (req, res) => {
-  const { id } = req.params;
+app.post(
+  "/api/admin/transactions/:id/resend-ttn",
+  verifyToken,
+  verifyRole(["ADMIN"]),
+  async (req, res) => {
+    const { id } = req.params;
 
-  try {
-    const [txRows] = await db.promise().query(
-      "SELECT id, user_id, statut, client_email, qr_config, ref_config FROM transactions WHERE id = ?",
-      [id]
-    );
+    try {
+      const [txRows] = await db
+        .promise()
+        .query(
+          "SELECT id, user_id, statut, client_email, qr_config, ref_config FROM transactions WHERE id = ?",
+          [id],
+        );
 
-    if (!txRows.length) return res.status(404).json({ message: "Transaction introuvable" });
+      if (!txRows.length)
+        return res.status(404).json({ message: "Transaction introuvable" });
 
-    const transaction = txRows[0];
+      const transaction = txRows[0];
 
-    const allowed = ["signée", "refusée par TTN"];
-    if (!allowed.includes(transaction.statut)) {
-      return res.status(400).json({ message: `Le statut '${transaction.statut}' ne permet pas le renvoi TTN.` });
+      const allowed = ["signée", "refusée par TTN"];
+      if (!allowed.includes(transaction.statut)) {
+        return res
+          .status(400)
+          .json({
+            message: `Le statut '${transaction.statut}' ne permet pas le renvoi TTN.`,
+          });
+      }
+
+      const [docs] = await db
+        .promise()
+        .query(
+          "SELECT id, filename, xml_file, pdf_file, xml_signed FROM transaction_documents WHERE transaction_id = ?",
+          [id],
+        );
+
+      if (!docs.length)
+        return res.status(404).json({ message: "Documents introuvables" });
+
+      const signedDocs = docs.map((d) => ({
+        id: d.id,
+        filename: d.filename,
+        pdf_file: d.pdf_file,
+        xml_signed: d.xml_signed,
+      }));
+
+      await db
+        .promise()
+        .query(
+          "UPDATE transactions SET statut='Renvoi TTN en cours...' WHERE id=?",
+          [id],
+        );
+
+      res.json({
+        message: "Processus de renvoi TTN lancé par l'administrateur.",
+      });
+
+      processTTNSubmission(
+        id,
+        signedDocs,
+        transaction.user_id,
+        transaction.client_email,
+        transaction.qr_config,
+        transaction.ref_config,
+      ).catch((e) => console.error("ADMIN RESEND TTN BG ERROR:", e));
+    } catch (err) {
+      console.error("ADMIN RESEND TTN ERROR:", err);
+      res
+        .status(500)
+        .json({ message: "Erreur serveur lors du renvoi TTN Admin" });
     }
-
-    const [docs] = await db.promise().query(
-      "SELECT id, filename, xml_file, pdf_file, xml_signed FROM transaction_documents WHERE transaction_id = ?",
-      [id]
-    );
-
-    if (!docs.length) return res.status(404).json({ message: "Documents introuvables" });
-
-    const signedDocs = docs.map(d => ({
-      id: d.id,
-      filename: d.filename,
-      pdf_file: d.pdf_file,
-      xml_signed: d.xml_signed
-    }));
-
-    await db.promise().query("UPDATE transactions SET statut='Renvoi TTN en cours...' WHERE id=?", [id]);
-
-    res.json({ message: "Processus de renvoi TTN lancé par l'administrateur." });
-
-    processTTNSubmission(
-      id,
-      signedDocs,
-      transaction.user_id,
-      transaction.client_email,
-      transaction.qr_config,
-      transaction.ref_config
-    ).catch(e => console.error("ADMIN RESEND TTN BG ERROR:", e));
-
-  } catch (err) {
-    console.error("ADMIN RESEND TTN ERROR:", err);
-    res.status(500).json({ message: "Erreur serveur lors du renvoi TTN Admin" });
-  }
-});
+  },
+);
 
 /* ===================== ADMIN - LIST USERS (filters) ===================== */
 app.get("/api/admin/users", verifyToken, verifyRole(["ADMIN"]), (req, res) => {
@@ -5367,7 +5535,10 @@ app.get(
       let xml = doc.xml_file;
       if (doc.statut === "signée_ttn" && doc.xml_signed_ttn)
         xml = doc.xml_signed_ttn;
-      else if ((doc.statut === "signée" || doc.statut === "refusée par TTN") && doc.xml_signed)
+      else if (
+        (doc.statut === "signée" || doc.statut === "refusée par TTN") &&
+        doc.xml_signed
+      )
         xml = doc.xml_signed;
 
       res.status(200).json({
@@ -5404,6 +5575,109 @@ app.get("/api/admin/routes", verifyToken, verifyRole(["ADMIN"]), (req, res) => {
 
     res.status(200).json({ routes });
   });
+});
+
+/* ===================== FCM / PUSH NOTIFICATIONS ===================== */
+
+/// Enregistre le token FCM mobile auprès du serveur
+app.post("/api/notifications/register-fcm", verifyToken, async (req, res) => {
+  try {
+    const { fcm_token, device_name } = req.body;
+
+    if (!fcm_token) {
+      return res.status(400).json({ message: "Token FCM requis" });
+    }
+
+    // Ajouter colonne fcm_token à la table users si elle n'existe pas
+    db.query(
+      `ALTER TABLE users ADD COLUMN IF NOT EXISTS fcm_token VARCHAR(500)`,
+      (err) => {
+        if (err && !err.message.includes("exists")) {
+          console.error("FCM Column error:", err);
+        }
+      },
+    );
+
+    // Sauvegarder le token FCM
+    await db
+      .promise()
+      .query(`UPDATE users SET fcm_token = ? WHERE id = ?`, [
+        fcm_token,
+        req.user.id,
+      ]);
+
+    debugPrint(`✅ Token FCM enregistré pour utilisateur ${req.user.id}`);
+
+    return res.json({
+      message: "Token FCM enregistré avec succès",
+      device_name,
+    });
+  } catch (err) {
+    console.error("REGISTER FCM ERROR:", err);
+    return res.status(500).json({ message: "Erreur serveur FCM" });
+  }
+});
+
+/// Envoie une notification de test
+app.post("/api/notifications/test", verifyToken, async (req, res) => {
+  try {
+    const testNotification = {
+      title: "Notification de test",
+      message: "🎉 Les notifications fonctionnent correctement !",
+      type: "success",
+    };
+
+    // Créer une notification test
+    await createNotification(
+      req.user.id,
+      testNotification.title,
+      testNotification.message,
+      testNotification.type,
+    );
+
+    return res.json({
+      message: "Notification de test envoyée",
+      notification: testNotification,
+    });
+  } catch (err) {
+    console.error("TEST NOTIFICATION ERROR:", err);
+    return res
+      .status(500)
+      .json({ message: "Erreur lors de l'envoi de notification" });
+  }
+});
+
+/// Met à jour les préférences de notifications
+app.put("/api/notifications/preferences", verifyToken, async (req, res) => {
+  try {
+    const preferences = req.body; // { email: true, push: true, sms: false }
+
+    // Ajouter colonne notification_preferences si elle n'existe pas
+    db.query(
+      `ALTER TABLE users ADD COLUMN IF NOT EXISTS notification_preferences JSON`,
+      (err) => {
+        if (err && !err.message.includes("exists")) {
+          console.error("Prefs Column error:", err);
+        }
+      },
+    );
+
+    // Sauvegarder les préférences
+    await db
+      .promise()
+      .query(`UPDATE users SET notification_preferences = ? WHERE id = ?`, [
+        JSON.stringify(preferences),
+        req.user.id,
+      ]);
+
+    return res.json({
+      message: "Préférences de notification mises à jour",
+      preferences,
+    });
+  } catch (err) {
+    console.error("UPDATE PREFERENCES ERROR:", err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
 });
 
 /* ===================== SERVER ===================== */
