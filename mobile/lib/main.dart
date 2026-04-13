@@ -12,16 +12,33 @@ import 'screens/onboarding_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Vérifie si l'onboarding a déjà été vu
+  // ✅ NEW: Vérifie si l'utilisateur a déjà une session active
   final prefs = await SharedPreferences.getInstance();
+  final hasSession = prefs.getBool('has_session') ?? false;
+  final sessionToken = prefs.getString('session_token');
+  
+  // Vérifie aussi l'onboarding
   final onboardingDone = prefs.getBool('onboarding_done') ?? false;
 
-  runApp(MyApp(showOnboarding: !onboardingDone));
+  // 🔑 Détermine l'écran initial
+  // 1. Si pas d'onboarding: show onboarding
+  // 2. Si session active + onboarding done: show dashboard
+  // 3. Sinon: show login
+  late String initialRoute;
+  if (!onboardingDone) {
+    initialRoute = '/onboarding';
+  } else if (hasSession && sessionToken != null && sessionToken.isNotEmpty) {
+    initialRoute = '/dashboard';
+  } else {
+    initialRoute = '/login';
+  }
+
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
 class MyApp extends StatefulWidget {
-  final bool showOnboarding;
-  const MyApp({super.key, required this.showOnboarding});
+  final String initialRoute;
+  const MyApp({super.key, required this.initialRoute});
 
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -34,6 +51,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    
+    // ✅ NEW: Initialiser le service de notifications background
+    NotificationService.initialize();
+    NotificationService._startBackgroundListener();
+    
     // Demande permissions notifications après le premier rendu
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final ctx = MyApp.navigatorKey.currentContext;
@@ -58,10 +80,8 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: const Color(0xFFF8FAFC),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // 🔑 Premier lancement → Onboarding, sinon → Login
-      home: widget.showOnboarding
-          ? const OnboardingScreen()
-          : const LoginScreen(),
+      // 🔑 Utilise initialRoute pour navigation intelligente
+      initialRoute: widget.initialRoute,
       routes: {
         '/onboarding': (context) => const OnboardingScreen(),
         '/login': (context) => const LoginScreen(),

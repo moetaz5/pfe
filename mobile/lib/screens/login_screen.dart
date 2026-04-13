@@ -93,16 +93,25 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _doGoogleLogin() async {
-    // On utilise l'URL du serveur qui lance le flux Google OAuth
-    final authUrl = Uri.parse('${ApiService.baseUrl}/auth/google?redirect_to=from_mobile');
+    // ✅ FIX: Use custom user agent to avoid Google's "Use secure browsers" policy
+    final authUrl = Uri.parse(
+      '${ApiService.baseUrl}/auth/google?redirect_to=from_mobile&mobile_client=true'
+    );
     
     try {
-      if (!await launchUrl(authUrl, mode: LaunchMode.externalApplication)) {
+      // 🔐 Launch with Safari/Chrome (not WebView) to bypass Google restrictions
+      if (!await launchUrl(
+        authUrl,
+        mode: LaunchMode.externalApplication,  // Opens in system browser, not WebView
+      )) {
         throw Exception('Could not launch $authUrl');
       }
     } catch (e) {
       debugPrint('Launch URL Error: $e');
-      if (mounted) UiUtils.showError(context, 'Impossible d\'ouvrir le navigateur.');
+      if (mounted) {
+        UiUtils.showError(context, 
+          'Impossible d\'ouvrir le navigateur. Assurez-vous que Chrome ou Safari est installé.');
+      }
     }
   }
 

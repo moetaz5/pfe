@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
+import 'dart:async';
 import 'api_service.dart';
 
 /// Service pour gérer les notifications externes (Push Notifications avec Firebase Cloud Messaging)
 /// Gère les permissions, l'enregistrement du token FCM et la réception des notifications
+/// ✅ Remains active in background to detect notifications quickly
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
   factory NotificationService() => _instance;
@@ -13,13 +15,40 @@ class NotificationService {
   static const String _permKey = 'notif_permission_asked';
   static const String _fcmTokenKey = 'fcm_token';
   
-  // Stream pour écouter les notifications reçues
-  static late bool _isInitialized;
+  // ✅ NEW: Background listener timer
+  static Timer? _backgroundListener;
+  static bool _isListening = false;
 
   /// Initialise le service de notifications au démarrage
   static Future<void> initialize() async {
-    _isInitialized = true;
     debugPrint('🔔 NotificationService initialisé');
+    _startBackgroundListener();
+  }
+
+  /// ✅ NEW: Démarre un listener persistant en arrière-plan
+  static void _startBackgroundListener() {
+    if (_isListening) return;
+    _isListening = true;
+    
+    // Poll pour les notifications toutes les 10 secondes
+    _backgroundListener = Timer.periodic(const Duration(seconds: 10), (_) async {
+      try {
+        // Récupérer les notifications depuis le serveur
+        final notifList = await ApiService().getNotifications();
+        debugPrint('✅ Notifications vérifiées: ${notifList.length} trouvées');
+      } catch (e) {
+        debugPrint('⚠️ Erreur background listener: $e');
+      }
+    });
+    
+    debugPrint('🔄 Background notification listener démarré (10s polling)');
+  }
+
+  /// ✅ NEW: Arrête le listener persistant
+  static void stopBackgroundListener() {
+    _backgroundListener?.cancel();
+    _isListening = false;
+    debugPrint('⛔ Background listener arrêté');
   }
 
   /// Demande la permission à l'utilisateur (une seule fois au démarrage)

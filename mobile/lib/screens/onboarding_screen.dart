@@ -72,7 +72,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _finish() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboarding_done', true);
-    if (mounted) Navigator.pushReplacementNamed(context, '/login');
+    // ✅ FIX: Ne pas naviguer vers login, juste fermer l'onboarding
+    // L'app principal va vérifier la session et naviguer correctement
+    if (mounted) Navigator.of(context).pop();
   }
 
   @override
