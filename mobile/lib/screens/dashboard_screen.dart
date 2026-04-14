@@ -310,8 +310,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       const Icon(Icons.notifications_active_rounded, color: Color(0xFF0247AA), size: 18),
                       const SizedBox(width: 12),
-                      const Text('NOTIFICATIONS', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 1, color: Color(0xFF0247AA))),
-                      const Spacer(),
+                      const Expanded(
+                        child: Text(
+                          'NOTIFICATIONS', 
+                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 1, color: Color(0xFF0247AA)),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                       TextButton(onPressed: () => Navigator.pop(c), child: const Text('FERMER', style: TextStyle(fontSize: 10))),
                     ],
                   ),
