@@ -74,7 +74,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await prefs.setBool('onboarding_done', true);
     // ✅ FIX: Ne pas naviguer vers login, juste fermer l'onboarding
     // L'app principal va vérifier la session et naviguer correctement
-    if (mounted) Navigator.of(context).pop();
+    if (mounted) Navigator.of(context).pushReplacementNamed('/login');
   }
 
   @override

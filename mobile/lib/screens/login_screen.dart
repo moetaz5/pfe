@@ -103,10 +103,11 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() { _loading = true; });
     
     try {
-      // 🔐 Launch with Safari/Chrome (external browser)
+      // 🔐 Launch with In-App Browser (Chrome Custom Tab / Safari View Controller)
+      // This provides an integrated feel and closes more reliably on redirection
       if (!await launchUrl(
         authUrl,
-        mode: LaunchMode.externalApplication,  // Opens in system browser
+        mode: LaunchMode.inAppBrowserView, // Integrated browser
       )) {
         throw Exception('Could not launch $authUrl');
       }
