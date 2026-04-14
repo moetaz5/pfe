@@ -5,18 +5,12 @@ allprojects {
     }
 }
 
-/*
-val newBuildDir: Directory =
-    rootProject.layout.buildDirectory
-        .dir("../../build")
-        .get()
-rootProject.layout.buildDirectory.value(newBuildDir)
+// Redirection du build vers un chemin sans espaces (C:/flutter_build)
+rootProject.layout.buildDirectory.set(file("C:/flutter_build/medica_sign"))
 
 subprojects {
-    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
-    project.layout.buildDirectory.value(newSubprojectBuildDir)
+    project.layout.buildDirectory.set(rootProject.layout.buildDirectory.dir(project.name))
 }
-*/
 subprojects {
     project.evaluationDependsOn(":app")
 }

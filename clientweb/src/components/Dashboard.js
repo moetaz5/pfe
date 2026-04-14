@@ -659,7 +659,7 @@ const Dashboard = () => {
               <div className="welcome">
                 <div className="welcome-content">
                   <h2>
-                    {getGreeting()}, {user.name} 👋
+                    {getGreeting()}, {user.name} 
                     {isAdmin && <span className="admin-badge">ADMIN</span>}
                   </h2>
                   <p>Créez, signez et gérez vos documents en toute sécurité.</p>

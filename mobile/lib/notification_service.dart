@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:async';
 import 'api_service.dart';
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 /// Service pour gérer les notifications système réelles
 class NotificationService {
@@ -13,9 +13,11 @@ class NotificationService {
 
   static final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
   
+  static final ValueNotifier<int> unreadCount = ValueNotifier<int>(0);
+  
   static Timer? _backgroundListener;
   static bool _isListening = false;
-  static List<int> _processedNotifIds = [];
+  static final List<int> _processedNotifIds = [];
 
   /// Initialise le service de notifications au démarrage
   static Future<void> initialize() async {
@@ -72,7 +74,8 @@ class NotificationService {
     if (_isListening) return;
     _isListening = true;
     
-    _backgroundListener = Timer.periodic(const Duration(seconds: 10), (_) async {
+    // Fréquence réduite à 60s pour économiser la batterie
+    _backgroundListener = Timer.periodic(const Duration(seconds: 60), (_) async {
       try {
         final prefs = await SharedPreferences.getInstance();
         final hasSession = prefs.getBool('has_session') ?? false;
@@ -80,6 +83,12 @@ class NotificationService {
 
         // Récupérer les notifications depuis le serveur
         final notifList = await ApiService().getNotifications();
+        
+        // Mettre à jour le compteur global
+        int newUnread = notifList.where((n) => n['is_read'] == 0).length;
+        if (unreadCount.value != newUnread) {
+          unreadCount.value = newUnread;
+        }
         
         for (var notif in notifList) {
           final id = notif['id'] as int;
@@ -97,6 +106,16 @@ class NotificationService {
         debugPrint('⚠️ Erreur background listener: $e');
       }
     });
+  }
+
+  /// Force le rafraîchissement immédiat des notifications
+  static Future<void> refreshNotifications() async {
+    try {
+      final notifList = await ApiService().getNotifications();
+      unreadCount.value = notifList.where((n) => n['is_read'] == 0).length;
+    } catch (e) {
+      debugPrint('⚠️ Erreur refresh notifs: $e');
+    }
   }
 
   /// Demande la permission réelle du système Android/iOS

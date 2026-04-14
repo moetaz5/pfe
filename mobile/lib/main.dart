@@ -9,8 +9,13 @@ import 'screens/forgot_password_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/onboarding_screen.dart';
 
+import 'api_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialisation du service API de manière synchrone avant de démarrer l'app
+  await ApiService.init();
 
   // ✅ NEW: Vérifie si l'utilisateur a déjà une session active
   final prefs = await SharedPreferences.getInstance();

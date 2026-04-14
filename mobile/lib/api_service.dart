@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -21,7 +21,7 @@ class ApiService {
 
   ApiService._(this._dio, this._cookieJar);
 
-  factory ApiService() {
+  static Future<ApiService> init() async {
     if (_instance == null) {
       final dio = Dio(BaseOptions(
         baseUrl: baseUrl,
@@ -40,6 +40,12 @@ class ApiService {
         dio.interceptors.add(CookieManager(cookieJar));
       }
 
+      final prefs = await SharedPreferences.getInstance();
+      final savedToken = prefs.getString('session_token');
+
+      _instance = ApiService._(dio, cookieJar);
+      _instance!._token = savedToken;
+
       // Intercepteur pour injecter le token
       dio.interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) {
@@ -51,24 +57,22 @@ class ApiService {
         },
         onError: (DioException e, handler) async {
           if (e.response?.statusCode == 401) {
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.remove('has_session');
-            await prefs.remove('session_token');
+            final p = await SharedPreferences.getInstance();
+            await p.remove('has_session');
+            await p.remove('session_token');
             _instance?._token = null;
             MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
           }
           return handler.next(e);
         },
       ));
+    }
+    return _instance!;
+  }
 
-      _instance = ApiService._(dio, cookieJar);
-      // On charge le token de manière asynchrone, mais on ne l'écrase que s'il n'a pas été défini entre-temps
-      SharedPreferences.getInstance().then((p) {
-        final savedToken = p.getString('session_token');
-        if (_instance!._token == null && savedToken != null) {
-          _instance!._token = savedToken;
-        }
-      });
+  factory ApiService() {
+    if (_instance == null) {
+      throw Exception("ApiService must be initialized with ApiService.init() before use");
     }
     return _instance!;
   }

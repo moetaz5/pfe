@@ -20,6 +20,7 @@ import 'admin_token_requests_screen.dart';
 import 'admin_payment_confirmations_screen.dart';
 import 'statistics_screen.dart';
 import 'create_transaction_redirect_screen.dart';
+import '../notification_service.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -36,26 +37,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _hasOrganization = false;
 
   String _currentRoute = 'Tableau de bord';
-  int _unreadCount = 0;
-  Timer? _notifTimer;
 
   @override
   void initState() {
     super.initState();
     _loadUser();
-    _loadUnreadCount();
-    _notifTimer = Timer.periodic(const Duration(seconds: 30), (timer) => _loadUnreadCount());
+    // On peut forcer un rafraîchissement au démarrage du dashboard
+    NotificationService.refreshNotifications();
   }
 
   @override
-  void dispose() { _notifTimer?.cancel(); super.dispose(); }
-
-  Future<void> _loadUnreadCount() async {
-    try {
-      final notifs = await api.getNotifications();
-      if (mounted) setState(() => _unreadCount = notifs.where((n) => n['is_read'] == 0).length);
-    } catch (_) {}
-  }
+  void dispose() { super.dispose(); }
 
   Future<void> _loadUser() async {
     try {
@@ -117,7 +109,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
           const SizedBox(width: 8),
-          _badgeBtn(Icons.notifications_none_rounded, _unreadCount, _showNotificationsOverlay),
+          ValueListenableBuilder<int>(
+            valueListenable: NotificationService.unreadCount,
+            builder: (context, count, _) => _badgeBtn(Icons.notifications_none_rounded, count, _showNotificationsOverlay),
+          ),
           const SizedBox(width: 8),
           _avatarBtn(),
           const SizedBox(width: 16),
