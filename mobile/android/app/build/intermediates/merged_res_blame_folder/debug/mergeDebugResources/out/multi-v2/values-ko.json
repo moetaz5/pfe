@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.medicasign.app-mergeDebugResources-49:/values-ko/values-ko.xml",
+            "outputFile": "com.medicasign.app-mergeDebugResources-43:/values-ko/values-ko.xml",
             "map": [
                 {
                     "source": "C:\\Users\\LENOVO PRO\\.gradle\\caches\\8.12\\transforms\\f1fb2d9142345f2912f850de782a4baa\\transformed\\appcompat-1.1.0\\res\\values-ko\\values-ko.xml",

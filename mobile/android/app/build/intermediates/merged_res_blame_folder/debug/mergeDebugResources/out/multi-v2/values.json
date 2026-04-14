@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.medicasign.app-mergeDebugResources-49:/values/values.xml",
+            "outputFile": "com.medicasign.app-mergeDebugResources-43:/values/values.xml",
             "map": [
                 {
                     "source": "C:\\Users\\LENOVO PRO\\.gradle\\caches\\8.12\\transforms\\2b47e8c1975652c03961ca2586e68646\\transformed\\jetified-core-viewtree-1.0.0\\res\\values\\values.xml",

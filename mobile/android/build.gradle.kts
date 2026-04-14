@@ -3,6 +3,7 @@ allprojects {
         google()
         mavenCentral()
     }
+    buildDir = file("C:/medica_combined_build/${project.name}")
 }
 
 subprojects {

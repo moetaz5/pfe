@@ -65,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('session_token', token);
       await prefs.setBool('has_session', true);
+      await prefs.setBool('onboarding_done', true);
       
       ApiService().setToken(token); 
       await ApiService().getCurrentUser();
@@ -155,6 +156,11 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() { _loading = true; _error = ''; });
     try {
       await api.login(_emailController.text.trim(), _passwordController.text.trim());
+      
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('has_session', true);
+      await prefs.setBool('onboarding_done', true);
+      
       if (!mounted) return;
       UiUtils.showSuccess(context, 'Connexion réussie. Bienvenue sur Médica-Sign.');
       Navigator.of(context).pushReplacementNamed('/dashboard');

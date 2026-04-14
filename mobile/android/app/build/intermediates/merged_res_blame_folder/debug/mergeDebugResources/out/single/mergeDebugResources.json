@@ -1,46 +1,46 @@
 [
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-xxxhdpi/ic_launcher.png"
+        "merged": "com.medicasign.app-debug-45:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-hdpi_launcher_icon.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-hdpi/launcher_icon.png"
+        "merged": "com.medicasign.app-debug-45:/mipmap-xxxhdpi_launcher_icon.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-xxxhdpi/launcher_icon.png"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/drawable-v21_launch_background.xml.flat",
-        "source": "com.medicasign.app-main-53:/drawable-v21/launch_background.xml"
+        "merged": "com.medicasign.app-debug-45:/mipmap-hdpi_launcher_icon.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-hdpi/launcher_icon.png"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-xxhdpi/ic_launcher.png"
+        "merged": "com.medicasign.app-debug-45:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-xhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-xxhdpi_launcher_icon.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-xxhdpi/launcher_icon.png"
+        "merged": "com.medicasign.app-debug-45:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-mdpi/ic_launcher.png"
+        "merged": "com.medicasign.app-debug-45:/drawable-v21_launch_background.xml.flat",
+        "source": "com.medicasign.app-main-40:/drawable-v21/launch_background.xml"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-xxxhdpi_launcher_icon.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-xxxhdpi/launcher_icon.png"
+        "merged": "com.medicasign.app-debug-45:/mipmap-xhdpi_launcher_icon.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-xhdpi/launcher_icon.png"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-xhdpi/ic_launcher.png"
+        "merged": "com.medicasign.app-debug-45:/mipmap-mdpi_launcher_icon.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-mdpi/launcher_icon.png"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-xhdpi_launcher_icon.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-xhdpi/launcher_icon.png"
+        "merged": "com.medicasign.app-debug-45:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-mdpi_launcher_icon.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-mdpi/launcher_icon.png"
+        "merged": "com.medicasign.app-debug-45:/mipmap-xxhdpi_launcher_icon.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-xxhdpi/launcher_icon.png"
     },
     {
-        "merged": "com.medicasign.app-debug-51:/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "com.medicasign.app-main-53:/mipmap-hdpi/ic_launcher.png"
+        "merged": "com.medicasign.app-debug-45:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.medicasign.app-main-40:/mipmap-hdpi/ic_launcher.png"
     }
 ]

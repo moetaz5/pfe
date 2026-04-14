@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.medicasign.app-mergeDebugResources-49:/values-tr/values-tr.xml",
+            "outputFile": "com.medicasign.app-mergeDebugResources-43:/values-tr/values-tr.xml",
             "map": [
                 {
                     "source": "C:\\Users\\LENOVO PRO\\.gradle\\caches\\8.12\\transforms\\5509f88cb2cdffea8df9a2e41120ff0c\\transformed\\preference-1.2.1\\res\\values-tr\\values-tr.xml",

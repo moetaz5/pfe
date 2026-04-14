@@ -26,14 +26,14 @@ void main() async {
   final onboardingDone = prefs.getBool('onboarding_done') ?? false;
 
   // 🔑 Détermine l'écran initial
-  // 1. Si pas d'onboarding: show onboarding
-  // 2. Si session active + onboarding done: show dashboard
-  // 3. Sinon: show login
+  // Si on a un token, on va au dashboard (l'API gérera si le token est expiré)
   late String initialRoute;
-  if (!onboardingDone) {
-    initialRoute = '/onboarding';
-  } else if (hasSession && sessionToken != null && sessionToken.isNotEmpty) {
+  if (sessionToken != null && sessionToken.isNotEmpty) {
     initialRoute = '/dashboard';
+    // Si on a une session, l'onboarding est forcément considéré comme fait
+    if (!onboardingDone) await prefs.setBool('onboarding_done', true);
+  } else if (!onboardingDone) {
+    initialRoute = '/onboarding';
   } else {
     initialRoute = '/login';
   }

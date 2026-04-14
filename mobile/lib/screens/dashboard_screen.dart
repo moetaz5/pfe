@@ -269,9 +269,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 'Mes transactions': return TransactionsScreen(onNavigate: (r) => setState(() => _currentRoute = r));
       case 'Mes factures': return const FactureScreen();
       case 'Contacter': return const ContactScreen();
-      case 'Acheter des jetons': return BuyTokensScreen(user: _user, subPage: 'buy');
-      case 'Confirmer paiement': return BuyTokensScreen(user: _user, subPage: 'proof');
-      case 'Historique jetons': return BuyTokensScreen(user: _user, subPage: 'history');
+      case 'Acheter des jetons': return BuyTokensScreen(user: _user, subPage: 'buy', onNavigate: (r) => setState(() => _currentRoute = r));
+      case 'Confirmer paiement': return BuyTokensScreen(user: _user, subPage: 'proof', onNavigate: (r) => setState(() => _currentRoute = r));
+      case 'Historique jetons': return BuyTokensScreen(user: _user, subPage: 'history', onNavigate: (r) => setState(() => _currentRoute = r));
       case 'Statistiques Globales': return StatisticsScreen(user: _user);
       case 'Gestion Utilisateurs': return const AdminUserManagementScreen();
       case 'Toutes les transactions': return const AdminTransactionListScreen();

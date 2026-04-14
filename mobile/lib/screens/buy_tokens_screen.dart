@@ -7,7 +7,8 @@ import 'token_requests_screen.dart';
 class BuyTokensScreen extends StatefulWidget {
   final Map<String, dynamic>? user;
   final String subPage;
-  const BuyTokensScreen({super.key, this.user, this.subPage = 'buy'});
+  final Function(String)? onNavigate;
+  const BuyTokensScreen({super.key, this.user, this.subPage = 'buy', this.onNavigate});
 
   @override
   State<BuyTokensScreen> createState() => _BuyTokensScreenState();
@@ -143,6 +144,8 @@ class _BuyTokensScreenState extends State<BuyTokensScreen> {
         _buildHeader('Acquisition de Crédits', 'Alimentez votre portefeuille de jetons certifiés.'),
         const SizedBox(height: 28),
         _buildCreditOverview(),
+        const SizedBox(height: 16),
+        _secondaryBtn('VOIR L\'HISTORIQUE DES ACHATS', () => widget.onNavigate?.call('Historique jetons')),
         const SizedBox(height: 32),
         const Text('PACKS PROFESSIONNELS', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.5, color: Color(0xFF94A3B8))),
         const SizedBox(height: 16),
@@ -301,6 +304,21 @@ class _BuyTokensScreenState extends State<BuyTokensScreen> {
           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
           focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFF0247AA), width: 2)),
         ),
+      ),
+    );
+  }
+
+  Widget _secondaryBtn(String t, VoidCallback fn) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton(
+        onPressed: fn,
+        style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: Color(0xFF0247AA), width: 1.5),
+            foregroundColor: const Color(0xFF0247AA),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
+        child: Text(t, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 0.5)),
       ),
     );
   }

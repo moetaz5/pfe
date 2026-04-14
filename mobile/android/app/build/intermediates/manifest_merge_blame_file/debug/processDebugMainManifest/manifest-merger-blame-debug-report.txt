@@ -68,10 +68,10 @@
 43-->C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\AndroidManifest.xml:56:13-43
 44        </intent>
 45        <intent>
-45-->[:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-12:18
+45-->[:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-12:18
 46            <action android:name="android.intent.action.GET_CONTENT" />
-46-->[:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-72
-46-->[:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:21-69
+46-->[:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-72
+46-->[:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:21-69
 47
 48            <data android:mimeType="*/*" />
 48-->C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\AndroidManifest.xml:56:13-43
@@ -79,8 +79,8 @@
 50    </queries>
 51
 52    <uses-permission android:name="android.permission.VIBRATE" />
-52-->[:flutter_local_notifications] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-66
-52-->[:flutter_local_notifications] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:22-63
+52-->[:flutter_local_notifications] C:\medica_combined_build\flutter_local_notifications\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-66
+52-->[:flutter_local_notifications] C:\medica_combined_build\flutter_local_notifications\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:22-63
 53
 54    <permission
 54-->[androidx.core:core:1.17.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\071918798833ad8f8a3cad7a9089f648\transformed\core-1.17.0\AndroidManifest.xml:22:5-24:47
@@ -156,13 +156,13 @@
 113            android:value="2" />
 114
 115        <activity
-115-->[:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-11:74
+115-->[:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-11:74
 116            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-116-->[:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-74
+116-->[:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-74
 117            android:exported="false"
-117-->[:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:10:13-37
+117-->[:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:10:13-37
 118            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-118-->[:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:11:13-71
+118-->[:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:11:13-71
 119
 120        <uses-library
 120-->[androidx.window:window:1.2.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\6ca1db17970615e3e029777992983e6b\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
