@@ -17,7 +17,8 @@ class NotificationService {
   
   static Timer? _backgroundListener;
   static bool _isListening = false;
-  static final List<int> _processedNotifIds = [];
+  static Set<int> _processedNotifIds = {};
+  static const String _kProcessedIdsKey = 'notif_processed_ids';
 
   /// Initialise le service de notifications au démarrage
   static Future<void> initialize() async {
@@ -25,18 +26,22 @@ class NotificationService {
         AndroidInitializationSettings('@mipmap/launcher_icon');
     
     const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
+        android: initializationSettingsAndroid,
     );
 
     await _notificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        // Gérer le clic sur la notification si besoin
         debugPrint('Notification cliquée: ${response.payload}');
       },
     );
 
-    debugPrint('🔔 NotificationService (Réel) initialisé');
+    // Charger les IDs déjà traités depuis le stockage
+    final prefs = await SharedPreferences.getInstance();
+    final savedIds = prefs.getStringList(_kProcessedIdsKey) ?? [];
+    _processedNotifIds = savedIds.map((id) => int.parse(id)).toSet();
+
+    debugPrint('🔔 NotificationService initialisé avec ${_processedNotifIds.length} IDs connus');
     _startBackgroundListener();
   }
 
@@ -49,12 +54,15 @@ class NotificationService {
   }) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'medicasign_main_channel',
-      'Alertes MedicaSign',
+      'medicasign_notifications',
+      'Médica-Sign Alertes',
       channelDescription: 'Notifications pour les signatures et jetons',
       importance: Importance.max,
       priority: Priority.high,
       showWhen: true,
+      enableVibration: true,
+      playSound: true,
+      styleInformation: BigTextStyleInformation(''),
     );
     
     const NotificationDetails platformChannelSpecifics =
@@ -69,13 +77,13 @@ class NotificationService {
     );
   }
 
-  /// Démarre un listener persistant en arrière-plan (Polling pour la démo, FCM recommandé pour prod)
+  /// Démarre un listener persistant en arrière-plan
   static void _startBackgroundListener() {
     if (_isListening) return;
     _isListening = true;
     
-    // Fréquence réduite à 60s pour économiser la batterie
-    _backgroundListener = Timer.periodic(const Duration(seconds: 60), (_) async {
+    // Polling plus rapide (10s) pour plus de réactivité comme demandé
+    _backgroundListener = Timer.periodic(const Duration(seconds: 10), (_) async {
       try {
         final prefs = await SharedPreferences.getInstance();
         final hasSession = prefs.getBool('has_session') ?? false;
@@ -84,26 +92,46 @@ class NotificationService {
         // Récupérer les notifications depuis le serveur
         final notifList = await ApiService().getNotifications();
         
-        // Mettre à jour le compteur global
-        int newUnread = notifList.where((n) => n['is_read'] == 0).length;
-        if (unreadCount.value != newUnread) {
-          unreadCount.value = newUnread;
-        }
+        // Mettre à jour le compteur global (seulement les non lues)
+        final unreadNotifs = notifList.where((n) => n['is_read'] == 0).toList();
+        unreadCount.value = unreadNotifs.length;
         
-        for (var notif in notifList) {
+        bool newlyAdded = false;
+        for (var notif in unreadNotifs) {
           final id = notif['id'] as int;
+          
           if (!_processedNotifIds.contains(id)) {
             // Afficher dans la barre système
             await showLocalNotification(
               id: id,
               title: notif['title'] ?? 'Nouveau message',
               body: notif['message'] ?? '',
+              payload: id.toString(),
             );
+            
             _processedNotifIds.add(id);
+            newlyAdded = true;
           }
         }
+
+        // Sauvegarder si de nouveaux IDs ont été traités
+        if (newlyAdded) {
+          // On garde les 100 IDs les plus récents pour éviter que la liste ne s'allonge indéfiniment
+          final listToSave = _processedNotifIds.toList();
+          if (listToSave.length > 100) {
+            listToSave.removeRange(0, listToSave.length - 100);
+          }
+          await prefs.setStringList(
+            _kProcessedIdsKey, 
+            listToSave.map((id) => id.toString()).toList(),
+          );
+        }
       } catch (e) {
-        debugPrint('⚠️ Erreur background listener: $e');
+        // Silencieux pour ne pas polluer les logs en arrière-plan
+        if (e.toString().contains('401')) {
+          _isListening = false;
+          _backgroundListener?.cancel();
+        }
       }
     });
   }

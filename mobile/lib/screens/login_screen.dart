@@ -52,37 +52,37 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _handleDeepLink(Uri uri) async {
     final rawToken = uri.queryParameters['token'];
     if (rawToken == null) return;
+    
+    // Si on est déjà en train de charger (ex: polling), on ignore le deep link pour éviter les conflits
+    if (_loading && i > 0) return; 
 
+    await _finalizeLogin(rawToken.trim());
+  }
+
+  Future<void> _finalizeLogin(String token) async {
     setState(() { _loading = true; });
     try {
-      final token = rawToken.trim();
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('session_token', token);
       await prefs.setBool('has_session', true);
       
-      // On rafraîchit l'instance API avec le nouveau token
       ApiService().setToken(token); 
-      
-      // Validation du token en récupérant les infos utilisateur immédiatement
       await ApiService().getCurrentUser();
+      
+      // ✅ NEW: Close the in-app browser if it's still open
+      try { await closeInAppWebView(); } catch (_) { /* ignore */ }
       
       if (!mounted) return;
       UiUtils.showSuccess(context, 'Connexion Google réussie !');
       
-      // Petit délai pour laisser l'UI souffler
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
       });
     } catch (e) {
-      debugPrint('Deep Link Error: $e');
+      debugPrint('Login Finalization Error: $e');
       if (mounted) {
-        // En cas de 401, on tente quand même d'aller au dashboard
-        // car l'injection du cookie pourrait fonctionner lors de l'appel suivant
         if (e.toString().contains('401')) {
-          UiUtils.showInfo(context, 'Finalisation de la session...');
-          Future.delayed(const Duration(milliseconds: 500), () {
-            if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
-          });
+          Navigator.pushReplacementNamed(context, '/dashboard');
         } else {
           UiUtils.showError(context, 'Erreur de session : ${e.toString()}');
         }
@@ -93,8 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _doGoogleLogin() async {
-    // ✅ FIX: Use session_id polling instead of deep links to bypass Google OAuth blocking
-    final sessionId = '${DateTime.now().millisecondsSinceEpoch}_${(_emailController.text.hashCode).toString()}';
+    final sessionId = '${DateTime.now().millisecondsSinceEpoch}_${(DateTime.now().microsecond).toString()}';
     
     final authUrl = Uri.parse(
       '${ApiService.baseUrl}/auth/google?session_id=$sessionId'
@@ -103,67 +102,51 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() { _loading = true; });
     
     try {
-      // 🔐 Launch with In-App Browser (Chrome Custom Tab / Safari View Controller)
-      // This provides an integrated feel and closes more reliably on redirection
+      // ✅ Integrated browser for automatic focus handling
       if (!await launchUrl(
         authUrl,
-        mode: LaunchMode.inAppBrowserView, // Integrated browser
+        mode: LaunchMode.inAppBrowserView,
       )) {
         throw Exception('Could not launch $authUrl');
       }
       
-      // ✅ NEW: Poll for token instead of waiting for deep link
+      // Poll for completion while the browser is open
       await _pollForGoogleToken(sessionId);
       
     } catch (e) {
       debugPrint('Google Login Error: $e');
       if (mounted) {
-        UiUtils.showError(context, 
-          'Erreur Google. Assurez-vous que Chrome ou Safari est installé.');
+        UiUtils.showError(context, 'Erreur Google. Assurez-vous d\'avoir un navigateur à jour.');
       }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
   }
 
-  /// Poll for the Google auth token from server
+  static int i = 0; // Temp counter for polling safety
+  
   Future<void> _pollForGoogleToken(String sessionId) async {
-    const maxAttempts = 60; // 60 attempts × 500ms = 30 seconds
-    const pollInterval = Duration(milliseconds: 500);
+    const maxAttempts = 60; 
+    const pollInterval = Duration(milliseconds: 800);
     
-    for (int i = 0; i < maxAttempts; i++) {
+    for (i = 0; i < maxAttempts; i++) {
+      if (!mounted) return;
       try {
-        // Call exchange endpoint
         final result = await ApiService().getGoogleExchangeToken(sessionId);
         
         if (result != null && result['token'] != null) {
-          final token = result['token'];
-          
-          // ✅ Save session
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('session_token', token);
-          await prefs.setBool('has_session', true);
-          ApiService().setToken(token);
-          
-          if (!mounted) return;
-          UiUtils.showSuccess(context, 'Connexion Google réussie !');
-          
-          Future.delayed(const Duration(milliseconds: 300), () {
-            if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
-          });
+          // Success! Finalize and the finalize function will close browser
+          await _finalizeLogin(result['token']);
           return;
         }
       } catch (e) {
-        // Token not ready yet, continue polling
-        debugPrint('Polling attempt ${i + 1}/$maxAttempts...');
+        // Continue
       }
-      
       await Future.delayed(pollInterval);
     }
     
-    // Timeout after 30 seconds
     if (mounted) {
-      UiUtils.showError(context, 'Délai dépassé. Veuillez réessayer.');
+      UiUtils.showError(context, 'Délai d\'authentification dépassé.');
     }
   }
 
