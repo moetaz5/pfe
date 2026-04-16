@@ -226,8 +226,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  int _getNavIndex() {
+    if (_currentRoute == 'Tableau de bord') return 0;
+    if (_currentRoute == 'Mes transactions') return 1;
+    if (_currentRoute == 'Mes factures') return 2;
+    if (_currentRoute.contains('jetons') || _currentRoute == 'Confirmer paiement') return 3;
+    return 0;
+  }
+
   Widget _buildUserBottomNav() {
-    final routes = ['Tableau de bord', 'Mes transactions', 'Mes factures', 'Acheter des jetons'];
     return Container(
       padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
       decoration: const BoxDecoration(color: Colors.white, border: Border(top: BorderSide(color: Color(0xFFF1F5F9)))),
@@ -236,8 +243,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         selectedItemColor: const Color(0xFF0247AA), unselectedItemColor: const Color(0xFF94A3B8),
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 10),
         unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
-        currentIndex: routes.contains(_currentRoute) ? routes.indexOf(_currentRoute) : 0,
-        onTap: (idx) => setState(() => _currentRoute = routes[idx]),
+        currentIndex: _getNavIndex(),
+        onTap: (idx) {
+          final routes = ['Tableau de bord', 'Mes transactions', 'Mes factures', 'Acheter des jetons'];
+          setState(() => _currentRoute = routes[idx]);
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'ACCUEIL'),
           BottomNavigationBarItem(icon: Icon(Icons.dynamic_feed_rounded), label: 'JOURNAL'),

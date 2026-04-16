@@ -86,8 +86,7 @@ class _FactureScreenState extends State<FactureScreen> {
       elevation: 0,
        automaticallyImplyLeading: false,
       flexibleSpace: const FlexibleSpaceBar(
-        titlePadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        centerTitle: false,
+        centerTitle: true,
         title: Text('Facturation Digitale', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 18, letterSpacing: -0.5)),
       ),
       actions: [

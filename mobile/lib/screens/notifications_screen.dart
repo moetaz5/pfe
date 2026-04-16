@@ -69,24 +69,30 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       children: [
         if (_notifications.any((n) => n['is_read'] == 0))
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 16, 16),
+            padding: const EdgeInsets.fromLTRB(20, 0, 8, 16),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
+                Flexible(
                   child: Text(
                     '${_notifications.where((n) => n['is_read'] == 0).length} NOUVEAUTÉS', 
                     style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFF94A3B8), letterSpacing: 1),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                const SizedBox(width: 4),
                 Flexible(
                   child: TextButton.icon(
-                    style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 4)),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
                     onPressed: _markAllRead,
                     icon: const Icon(Icons.done_all_rounded, size: 14, color: Color(0xFF0247AA)),
                     label: const Text(
-                      'Tout marquer lu', 
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF0247AA)),
+                      'Tout marquer comme lu', 
+                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF0247AA)),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),

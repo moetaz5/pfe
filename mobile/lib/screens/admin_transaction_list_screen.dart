@@ -97,10 +97,9 @@ class _AdminTransactionListScreenState extends State<AdminTransactionListScreen>
       expandedHeight: 120,
       pinned: true,
       backgroundColor: const Color(0xFF0247AA),
-      flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        title: const Text('Surveillance Flux', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 18, letterSpacing: -0.5)),
-        background: Container(color: const Color(0xFF0247AA)),
+      flexibleSpace: const FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text('Surveillance Flux', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 18, letterSpacing: -0.5)),
       ),
     );
   }

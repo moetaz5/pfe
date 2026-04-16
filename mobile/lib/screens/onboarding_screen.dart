@@ -16,7 +16,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _OnboardingPage(
       icon: Icons.verified_user_rounded,
       title: 'Bienvenue sur\nMédica-Sign',
-      subtitle: 'Plateforme me certifiée par la TTN',
+      subtitle: 'Plateforme de certification en ligne',
       body:
           'Créez vos factures en toute sécurité grâce à l\'expertise de MEDICACOM, startup tunisienne dédiée à la norme.',
       bullets: [
@@ -30,10 +30,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'Signature\nélectronique XML & PDF',
       subtitle: 'Conformité légale garantie',
       body:
-          'Signez vos documents fiscaux (factures XML, PDF) conformément au décret 2000-2102 sur la signature électronique en Tunisie.',
+          'Signez vos documents fiscaux (factures XML, PDF) conformément sur la signature électronique en Tunisie.',
       bullets: [
         'Factures XML & PDF signées',
-        'Horodatage certifié',
         'Archivage sécurisé',
       ],
     ),

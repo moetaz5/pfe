@@ -116,7 +116,6 @@ export default function Home() {
           <p>ILS NOUS FONT CONFIANCE</p>
           <div className="trust-logos">
              <div className="trust-logo-item">TTN TRADENET</div>
-             <div className="trust-logo-item">ISET SOLUTIONS</div>
              <div className="trust-logo-item">MEDHEALTH</div>
              <div className="trust-logo-item">PHARMA SYNC</div>
              <div className="trust-logo-item">BIO-TECH TN</div>

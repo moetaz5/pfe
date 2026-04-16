@@ -96,8 +96,7 @@ class _TokenRequestsScreenState extends State<TokenRequestsScreen> {
       backgroundColor: const Color(0xFF0247AA),
       automaticallyImplyLeading: false,
       flexibleSpace: const FlexibleSpaceBar(
-        titlePadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        centerTitle: false,
+        centerTitle: true,
         title: Text('Journal d\'Acquisition', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 18, letterSpacing: -0.5)),
       ),
     );

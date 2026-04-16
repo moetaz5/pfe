@@ -92,10 +92,9 @@ class _AdminUserManagementScreenState extends State<AdminUserManagementScreen> {
       expandedHeight: 120,
       pinned: true,
       backgroundColor: const Color(0xFF0247AA),
-      flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        title: const Text('Sécurité & Accès', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 18, letterSpacing: -0.5)),
-        background: Container(color: const Color(0xFF0247AA)),
+      flexibleSpace: const FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text('Sécurité & Accès', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 18, letterSpacing: -0.5)),
       ),
     );
   }

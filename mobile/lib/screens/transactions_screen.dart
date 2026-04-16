@@ -121,8 +121,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       elevation: 0,
       automaticallyImplyLeading: false,
       flexibleSpace: const FlexibleSpaceBar(
-        titlePadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        centerTitle: false,
+        centerTitle: true,
         title: Text('Journal Transactions', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: -1)),
       ),
       actions: [
@@ -226,10 +225,20 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(t['objet'] ?? 'Transaction', style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: Color(0xFF0247AA), letterSpacing: -0.2)),
-                      Text('Séquence #${t['id']}', style: const TextStyle(fontSize: 10, color: Color(0xFF94A3B8), fontWeight: FontWeight.bold)),
+                      Text(
+                        t['objet'] ?? 'Transaction', 
+                        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: Color(0xFF0247AA), letterSpacing: -0.2),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                      Text(
+                        'Séquence #${t['id']}', 
+                        style: const TextStyle(fontSize: 10, color: Color(0xFF94A3B8), fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ]),
                   ),
+                  const SizedBox(width: 8),
                   _statusBadge(statusRaw),
                 ],
               ),
@@ -237,8 +246,10 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _badge(Icons.corporate_fare_rounded, t['nom_organisation'] ?? 'Individuel'),
+                  Expanded(child: _badge(Icons.corporate_fare_rounded, t['nom_organisation'] ?? 'Individuel')),
+                  const SizedBox(width: 8),
                   _badge(Icons.calendar_month_rounded, dateStr),
+                  const SizedBox(width: 8),
                   const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Color(0xFFCBD5E1)),
                 ],
               ),
@@ -250,11 +261,21 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   }
 
   Widget _badge(IconData i, String t) {
-    return Row(children: [
-      Icon(i, size: 14, color: const Color(0xFF94A3B8)),
-      const SizedBox(width: 8),
-      Text(t, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Color(0xFF475569))),
-    ]);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(i, size: 14, color: const Color(0xFF94A3B8)),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(
+            t, 
+            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Color(0xFF475569)),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _statusBadge(String s) {

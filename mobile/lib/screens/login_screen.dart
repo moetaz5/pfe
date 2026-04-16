@@ -18,6 +18,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  final FocusNode _passwordFocus = FocusNode();
   bool _loading = false;
   bool _showPassword = false;
   String _error = '';
@@ -30,6 +32,22 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _initDeepLinks();
+    _passwordFocus.addListener(_onPasswordFocus);
+  }
+
+  void _onPasswordFocus() {
+    if (_passwordFocus.hasFocus) {
+      // Un petit délai pour attendre que le clavier commence à monter
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent * 0.4, 
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeOutCubic,
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -37,6 +55,8 @@ class _LoginScreenState extends State<LoginScreen> {
     _linkSubscription?.cancel();
     _emailController.dispose();
     _passwordController.dispose();
+    _scrollController.dispose();
+    _passwordFocus.dispose();
     super.dispose();
   }
 
@@ -194,6 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _buildBackgroundDecor(),
           SafeArea(
             child: SingleChildScrollView(
+              controller: _scrollController,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height - 100),
@@ -296,6 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
             style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.alternate_email_rounded, color: Color(0xFF94A3B8), size: 20),
@@ -332,6 +354,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // Password field
           TextFormField(
             controller: _passwordController,
+            focusNode: _passwordFocus,
             obscureText: !_showPassword,
             style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
             decoration: InputDecoration(

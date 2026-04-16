@@ -65,10 +65,9 @@ class _AdminApiManagementScreenState extends State<AdminApiManagementScreen> {
       expandedHeight: 120,
       pinned: true,
       backgroundColor: const Color(0xFF0F172A),
-      flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        title: const Text('Sécurité API', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 18, letterSpacing: -0.5)),
-        background: Container(color: const Color(0xFF0F172A)),
+      flexibleSpace: const FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text('Sécurité API', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 18, letterSpacing: -0.5)),
       ),
     );
   }
