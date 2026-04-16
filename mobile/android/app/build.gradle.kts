@@ -8,12 +8,16 @@ plugins {
 android {
     namespace = "com.medicasign.app"
     
-    if (System.getProperty("os.name").lowercase().contains("windows") && file("C:/medica_combined_build").exists()) {
-        rootProject.layout.buildDirectory.value(rootProject.layout.projectDirectory.dir("C:/medica_combined_build"))
-        buildDir = file("C:/medica_combined_build/app")
+    // Consistent with root build.gradle.kts redirection
+    if (System.getProperty("os.name").lowercase().contains("windows")) {
+        val buildDirBase = File("C:/medica_build")
+        if (buildDirBase.exists() && buildDirBase.canWrite()) {
+            layout.buildDirectory.set(File(buildDirBase, "app"))
+        }
     }
     
     compileSdk = flutter.compileSdkVersion
+
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
