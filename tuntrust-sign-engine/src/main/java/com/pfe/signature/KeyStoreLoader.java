@@ -82,7 +82,7 @@ public class KeyStoreLoader {
             throw e;
         } catch (Exception e) {
             String msg = e.getMessage();
-            System.err.println("❌ Erreur session PKCS11 : " + msg);
+            System.err.println("X Erreur session PKCS11 : " + msg);
             if (msg != null && (
                 msg.contains("CKR_DEVICE_REMOVED") ||
                 msg.contains("CKR_TOKEN_NOT_PRESENT") ||
