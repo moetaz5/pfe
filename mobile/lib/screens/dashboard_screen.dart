@@ -1,3 +1,4 @@
+import 'dart:ui' show ImageFilter;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -30,6 +31,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ApiService api = ApiService();
   bool _loading = true;
   String? _error;
@@ -63,15 +65,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  void _navigateTo(String route) { setState(() => _currentRoute = route); Navigator.of(context).pop(); }
+  void _navigateTo(String route) {
+    setState(() => _currentRoute = route);
+    if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
+      Navigator.of(context).pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     if (_loading) return const Scaffold(backgroundColor: Color(0xFFF8FAFC), body: Center(child: CircularProgressIndicator()));
     final isUser = _user?['role'] == 'USER';
     final isAdmin = _user?['role'] == 'ADMIN';
+    final bool isCertified = (_user?['is_certified'] ?? 0) == 1;
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         centerTitle: false,
@@ -119,10 +128,86 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
       ),
       drawer: _buildDrawer(isUser, isAdmin),
-      body: AnimatedSwitcher(duration: const Duration(milliseconds: 300), child: _buildBody()),
+      body: AnimatedSwitcher(duration: const Duration(milliseconds: 300), child: _buildBody(isUser, isCertified)),
       bottomNavigationBar: isUser ? _buildUserBottomNav() : null,
     );
   }
+
+  /// Routes accessible even without certification
+  static const _freeRoutes = {
+    'Tableau de bord', 'Mes informations', 'Modifier profil',
+    'Changer mot de passe', 'Ma signature', 'Certifier mon compte',
+  };
+
+  void _navigateSafe(String route, bool isCertified) {
+    if (!isCertified && !_freeRoutes.contains(route)) {
+      _showCertificationAlert();
+      return;
+    }
+    _navigateTo(route);
+  }
+
+  void _showCertificationAlert() {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.4),
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+        child: Padding(
+          padding: const EdgeInsets.all(28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFFBEB),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.3), width: 2),
+                ),
+                child: const Icon(Icons.verified_user_rounded, color: Color(0xFFF59E0B), size: 40),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Certification requise',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Color(0xFF0F172A)),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Vous devez certifier votre compte avant d\'accéder à cette fonctionnalité.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.5),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    setState(() => _currentRoute = 'Certifier mon compte');
+                  },
+                  icon: const Icon(Icons.verified_user_rounded, size: 18),
+                  label: const Text('CERTIFIER MON COMPTE', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0247AA),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Plus tard', style: TextStyle(color: Color(0xFF94A3B8), fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 
   Widget _badgeBtn(IconData i, int count, VoidCallback fn) {
     return Stack(alignment: Alignment.center, children: [
@@ -140,6 +225,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildDrawer(bool isUser, bool isAdmin) {
+    final isCertified = (_user?['is_certified'] ?? 0) == 1;
     return Drawer(
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(32), bottomRight: Radius.circular(32))),
@@ -150,19 +236,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                _tile(Icons.grid_view_rounded, 'Tableau de bord'),
+                _tileSafe(Icons.grid_view_rounded, 'Tableau de bord', isCertified),
                 if (isUser) ...[
                   _section('FLUX DE TRAVAIL'),
-                  _tile(Icons.add_task_rounded, 'Création de transaction'),
-                  _tile(Icons.dynamic_feed_rounded, 'Mes transactions'),
-                  _tile(Icons.receipt_long_rounded, 'Mes factures'),
+                  _tileSafe(Icons.add_task_rounded, 'Création de transaction', isCertified),
+                  _tileSafe(Icons.dynamic_feed_rounded, 'Mes transactions', isCertified),
+                  _tileSafe(Icons.receipt_long_rounded, 'Mes factures', isCertified),
                   _section('STRUCTURE'),
-                  _tile(Icons.business_rounded, _hasOrganization ? 'Détail organisation' : 'Créer une organisation'),
-                  _tile(Icons.hub_rounded, 'Transactions organisation'),
+                  _tileSafe(Icons.business_rounded, _hasOrganization ? 'Détail organisation' : 'Créer une organisation', isCertified),
+                  _tileSafe(Icons.hub_rounded, 'Transactions organisation', isCertified),
+                  _section('SÉCURITÉ'),
+                  _tileSafe(Icons.verified_user_rounded, 'Certifier mon compte', isCertified),
                   _section('INFRASTRUCTURE'),
-                  _tile(Icons.wallet_rounded, 'Acheter des jetons'),
-                  _tile(Icons.history_rounded, 'Historique jetons'),
-                  _tile(Icons.mark_chat_read_rounded, 'Contacter'),
+                  _tileSafe(Icons.wallet_rounded, 'Acheter des jetons', isCertified),
+                  _tileSafe(Icons.history_rounded, 'Historique jetons', isCertified),
+                  _tileSafe(Icons.mark_chat_read_rounded, 'Contacter', isCertified),
                 ],
                 if (isAdmin) ...[
                   _section('ANALYTIQUE'),
@@ -205,11 +293,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final bool active = _currentRoute == r;
     return Container(
       margin: const EdgeInsets.only(bottom: 4),
-      decoration: BoxDecoration(color: active ? const Color(0xFF0247AA).withOpacity(0.08) : Colors.transparent, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(color: active ? const Color(0xFF0247AA).withValues(alpha: 0.08) : Colors.transparent, borderRadius: BorderRadius.circular(16)),
       child: ListTile(
         leading: Icon(i, color: active ? const Color(0xFF0247AA) : const Color(0xFF64748B), size: 22),
         title: Text(r, style: TextStyle(color: active ? const Color(0xFF0247AA) : const Color(0xFF475569), fontWeight: active ? FontWeight.w900 : FontWeight.w600, fontSize: 13)),
         onTap: () => _navigateTo(r),
+      ),
+    );
+  }
+
+  Widget _tileSafe(IconData i, String r, bool isCertified) {
+    final bool active = _currentRoute == r;
+    final bool locked = !isCertified && !_freeRoutes.contains(r);
+    return Container(
+      margin: const EdgeInsets.only(bottom: 4),
+      decoration: BoxDecoration(color: active ? const Color(0xFF0247AA).withValues(alpha: 0.08) : Colors.transparent, borderRadius: BorderRadius.circular(16)),
+      child: ListTile(
+        leading: Icon(locked ? Icons.lock_outline_rounded : i,
+          color: locked ? const Color(0xFFCBD5E1) : (active ? const Color(0xFF0247AA) : const Color(0xFF64748B)), size: 22),
+        title: Text(r, style: TextStyle(
+          color: locked ? const Color(0xFFCBD5E1) : (active ? const Color(0xFF0247AA) : const Color(0xFF475569)),
+          fontWeight: active ? FontWeight.w900 : FontWeight.w600, fontSize: 13)),
+        onTap: () => _navigateSafe(r, isCertified),
       ),
     );
   }
@@ -246,7 +351,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         currentIndex: _getNavIndex(),
         onTap: (idx) {
           final routes = ['Tableau de bord', 'Mes transactions', 'Mes factures', 'Acheter des jetons'];
-          setState(() => _currentRoute = routes[idx]);
+          final isCertified = (_user?['is_certified'] ?? 0) == 1;
+          _navigateSafe(routes[idx], isCertified);
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'ACCUEIL'),
@@ -258,9 +364,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(bool isUser, bool isCertified) {
     switch (_currentRoute) {
-      case 'Tableau de bord': return DashboardHome(user: _user, onNavigate: (r) => setState(() => _currentRoute = r));
+      case 'Tableau de bord': return DashboardHome(user: _user, isCertified: isCertified, onNavigate: (r) => _navigateSafe(r, isCertified));
       case 'Mes informations':
       case 'Modifier profil':
       case 'Changer mot de passe':
@@ -271,7 +377,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         if (_currentRoute.contains('mot de passe')) sub = 'password';
         if (_currentRoute.contains('signature')) sub = 'signature';
         if (_currentRoute.contains('Certifier')) sub = 'certification';
-        return ProfileScreen(user: _user, subPage: sub, onNavigate: (r) => setState(() => _currentRoute = r));
+        return ProfileScreen(user: _user, subPage: sub, onNavigate: (r) => setState(() => _currentRoute = r), onRefreshUser: _loadUser);
       case 'Création de transaction': return const CreateTransactionRedirectScreen();
       case 'Créer une organisation':
       case 'Détail organisation': return OrganizationScreen(user: _user, subPage: 'create');

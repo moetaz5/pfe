@@ -8,9 +8,10 @@ plugins {
 android {
     namespace = "com.medicasign.app"
     
-    // FORCE build directory to a path without spaces
-    rootProject.layout.buildDirectory.value(rootProject.layout.projectDirectory.dir("C:/medica_combined_build"))
-    buildDir = file("C:/medica_combined_build/app")
+    if (System.getProperty("os.name").lowercase().contains("windows") && file("C:/medica_combined_build").exists()) {
+        rootProject.layout.buildDirectory.value(rootProject.layout.projectDirectory.dir("C:/medica_combined_build"))
+        buildDir = file("C:/medica_combined_build/app")
+    }
     
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion

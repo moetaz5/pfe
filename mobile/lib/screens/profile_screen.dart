@@ -6,7 +6,8 @@ class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? user;
   final String subPage;
   final Function(String)? onNavigate;
-  const ProfileScreen({super.key, this.user, required this.subPage, this.onNavigate});
+  final VoidCallback? onRefreshUser;
+  const ProfileScreen({super.key, this.user, required this.subPage, this.onNavigate, this.onRefreshUser});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -132,6 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) {
         UiUtils.showSuccess(context, 'Informations de certification enregistrées.');
         _isCertified = true;
+        widget.onRefreshUser?.call();
       }
     } catch (e) {
       if (mounted) UiUtils.showError(context, 'Erreur lors de la certification TTN.');

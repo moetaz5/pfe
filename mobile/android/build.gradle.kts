@@ -3,7 +3,9 @@ allprojects {
         google()
         mavenCentral()
     }
-    buildDir = file("C:/medica_combined_build/${project.name}")
+    if (System.getProperty("os.name").lowercase().contains("windows") && file("C:/medica_combined_build").exists()) {
+        buildDir = file("C:/medica_combined_build/${project.name}")
+    }
 }
 
 subprojects {

@@ -37,18 +37,18 @@ com.medicasign.app-lifecycle-livedata-core-2.7.0-35 C:\Users\LENOVO PRO\.gradle\
 com.medicasign.app-jetified-savedstate-1.2.1-36 C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\ed1f2a84141e93c19d75fdc67842bc1f\transformed\jetified-savedstate-1.2.1\res
 com.medicasign.app-appcompat-1.1.0-37 C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\f1fb2d9142345f2912f850de782a4baa\transformed\appcompat-1.1.0\res
 com.medicasign.app-jetified-tracing-1.2.0-38 C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\f51db27e9bc46f3ecc6c36bd261e5748\transformed\jetified-tracing-1.2.0\res
-com.medicasign.app-debug-39 C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\res
-com.medicasign.app-main-40 C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\res
-com.medicasign.app-pngs-41 C:\medica_combined_build\app\generated\res\pngs\debug
-com.medicasign.app-resValues-42 C:\medica_combined_build\app\generated\res\resValues\debug
-com.medicasign.app-packageDebugResources-43 C:\medica_combined_build\app\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.medicasign.app-packageDebugResources-44 C:\medica_combined_build\app\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.medicasign.app-debug-45 C:\medica_combined_build\app\intermediates\merged_res\debug\mergeDebugResources
-com.medicasign.app-debug-46 C:\medica_combined_build\app_links\intermediates\packaged_res\debug\packageDebugResources
-com.medicasign.app-debug-47 C:\medica_combined_build\file_picker\intermediates\packaged_res\debug\packageDebugResources
-com.medicasign.app-debug-48 C:\medica_combined_build\flutter_local_notifications\intermediates\packaged_res\debug\packageDebugResources
-com.medicasign.app-debug-49 C:\medica_combined_build\flutter_plugin_android_lifecycle\intermediates\packaged_res\debug\packageDebugResources
-com.medicasign.app-debug-50 C:\medica_combined_build\jni\intermediates\packaged_res\debug\packageDebugResources
-com.medicasign.app-debug-51 C:\medica_combined_build\jni_flutter\intermediates\packaged_res\debug\packageDebugResources
-com.medicasign.app-debug-52 C:\medica_combined_build\shared_preferences_android\intermediates\packaged_res\debug\packageDebugResources
-com.medicasign.app-debug-53 C:\medica_combined_build\url_launcher_android\intermediates\packaged_res\debug\packageDebugResources
+com.medicasign.app-debug-39 C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\app_links-6.4.1\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.medicasign.app-debug-40 C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.medicasign.app-debug-41 C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.medicasign.app-debug-42 C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.34\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.medicasign.app-debug-43 C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\jni-1.0.0\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.medicasign.app-debug-44 C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\jni_flutter-1.0.1\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.medicasign.app-debug-45 C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.23\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.medicasign.app-debug-46 C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.medicasign.app-pngs-47 C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\build\generated\res\pngs\debug
+com.medicasign.app-resValues-48 C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\build\generated\res\resValues\debug
+com.medicasign.app-packageDebugResources-49 C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.medicasign.app-packageDebugResources-50 C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.medicasign.app-debug-51 C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.medicasign.app-debug-52 C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\res
+com.medicasign.app-main-53 C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\res

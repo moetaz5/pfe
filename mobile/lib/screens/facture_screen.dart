@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 import '../api_service.dart';
 import '../ui_utils.dart';
 import 'package:intl/intl.dart';
@@ -43,6 +46,216 @@ class _FactureScreenState extends State<FactureScreen> {
     }).toList();
   }
 
+  // ─── Downloads ──────────────────────────────────────────────────────────────
+  void _openDownloadDialog() {
+    if (_factures.isEmpty) {
+      UiUtils.showError(context, 'Aucune facture disponible à télécharger.');
+      return;
+    }
+
+    final Set<int> selected = {};
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setLocal) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+          ),
+          padding: EdgeInsets.only(
+            top: 24, left: 24, right: 24,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle
+              Container(width: 40, height: 4, decoration: BoxDecoration(color: const Color(0xFFE2E8F0), borderRadius: BorderRadius.circular(2))),
+              const SizedBox(height: 20),
+              // Title
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(color: const Color(0xFF0247AA).withValues(alpha: 0.08), shape: BoxShape.circle),
+                    child: const Icon(Icons.download_rounded, color: Color(0xFF0247AA), size: 22),
+                  ),
+                  const SizedBox(width: 14),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Télécharger des Factures', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17, color: Color(0xFF0F172A))),
+                        Text('Sélectionnez les fichiers à télécharger', style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => setLocal(() {
+                      if (selected.length == _factures.length) {
+                        selected.clear();
+                      } else {
+                        selected.addAll(_factures.map<int>((f) => f['id'] as int));
+                      }
+                    }),
+                    child: Text(selected.length == _factures.length ? 'Tout désélect.' : 'Tout sélect.', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF0247AA))),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // File list
+              ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.4),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: _factures.length,
+                  separatorBuilder: (_, __) => const Divider(height: 1, color: Color(0xFFF1F5F9)),
+                  itemBuilder: (_, i) {
+                    final f = _factures[i];
+                    final id = f['id'] as int;
+                    final isChecked = selected.contains(id);
+                    return CheckboxListTile(
+                      value: isChecked,
+                      onChanged: (v) => setLocal(() { if (v == true) { selected.add(id); } else { selected.remove(id); } }),
+                      activeColor: const Color(0xFF0247AA),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                      title: Text('Facture #${f['invoice_number'] ?? id}', style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: Color(0xFF0F172A))),
+                      subtitle: Text(f['filename'] ?? 'Document PDF', style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8)), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      secondary: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEF4444).withOpacity(0.08),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.picture_as_pdf_rounded, color: Color(0xFFEF4444), size: 18),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Info
+              if (selected.isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(color: const Color(0xFF0247AA).withValues(alpha: 0.06), borderRadius: BorderRadius.circular(12)),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.info_outline_rounded, size: 14, color: Color(0xFF0247AA)),
+                      const SizedBox(width: 8),
+                      Text('${selected.length} fichier(s) sélectionné(s)', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF0247AA))),
+                    ],
+                  ),
+                ),
+              // Download button
+              SizedBox(
+                width: double.infinity,
+                height: 54,
+                child: ElevatedButton.icon(
+                  onPressed: selected.isEmpty
+                      ? null
+                      : () {
+                          Navigator.pop(ctx);
+                          _downloadSelected(selected.toList());
+                        },
+                  icon: const Icon(Icons.download_rounded),
+                  label: Text(
+                    selected.isEmpty ? 'SÉLECTIONNEZ DES FICHIERS' : 'TÉLÉCHARGER (${selected.length})',
+                    style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0247AA),
+                    foregroundColor: Colors.white,
+                    disabledBackgroundColor: const Color(0xFFE2E8F0),
+                    disabledForegroundColor: const Color(0xFF94A3B8),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    elevation: 0,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('ANNULER', style: TextStyle(color: Color(0xFF94A3B8), fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _downloadSelected(List<int> ids) async {
+    int success = 0;
+    int failed = 0;
+
+    // Show progress snackbar
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(children: [
+            const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)),
+            const SizedBox(width: 16),
+            Text('Téléchargement de ${ids.length} fichier(s)...'),
+          ]),
+          duration: const Duration(seconds: 60),
+          backgroundColor: const Color(0xFF0247AA),
+        ),
+      );
+    }
+
+    for (final id in ids) {
+      final url = api.getFacturePdfUrl(id);
+      try {
+        if (kIsWeb) {
+          // On web, just open the URL
+          await launchUrl(Uri.parse(url));
+          success++;
+        } else {
+          // On mobile, download to Downloads folder
+          final dir = await _getDownloadDirectory();
+          final filename = 'facture_$id.pdf';
+          final filePath = '${dir.path}/$filename';
+
+          final dio = Dio();
+          await dio.download(url, filePath,
+            options: Options(headers: {'Accept': 'application/pdf'}),
+          );
+          success++;
+        }
+      } catch (e) {
+        failed++;
+      }
+    }
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      if (failed == 0) {
+        UiUtils.showSuccess(context, '$success fichier(s) téléchargé(s) avec succès dans Téléchargements.');
+      } else if (success > 0) {
+        UiUtils.showError(context, '$success réussi(s), $failed échec(s). Vérifiez votre connexion.');
+      } else {
+        UiUtils.showError(context, 'Échec du téléchargement. Vérifiez votre connexion.');
+      }
+    }
+  }
+
+  Future<Directory> _getDownloadDirectory() async {
+    try {
+      // Try to get external storage (Android)
+      final dir = Directory('/storage/emulated/0/Download');
+      if (await dir.exists()) return dir;
+    } catch (_) {}
+    // Fallback to app documents directory
+    return await getApplicationDocumentsDirectory();
+  }
+
+  // ─── Build methods ───────────────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +280,7 @@ class _FactureScreenState extends State<FactureScreen> {
                         if (_filteredFactures.isEmpty)
                           const Center(child: Padding(padding: EdgeInsets.symmetric(vertical: 80), child: Text('Aucune facture disponible.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13))))
                         else
-                          ..._filteredFactures.map((f) => _buildFactureCard(f)).toList(),
+                          ..._filteredFactures.map((f) => _buildFactureCard(f)),
                         const SizedBox(height: 80),
                       ]),
                     ),
@@ -84,13 +297,17 @@ class _FactureScreenState extends State<FactureScreen> {
       pinned: true,
       backgroundColor: const Color(0xFF0247AA),
       elevation: 0,
-       automaticallyImplyLeading: false,
+      automaticallyImplyLeading: false,
       flexibleSpace: const FlexibleSpaceBar(
         centerTitle: true,
         title: Text('Facturation Digitale', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 18, letterSpacing: -0.5)),
       ),
       actions: [
-        IconButton(icon: const Icon(Icons.print_outlined, color: Colors.white60), onPressed: () {}),
+        IconButton(
+          tooltip: 'Télécharger des factures',
+          icon: const Icon(Icons.download_rounded, color: Colors.white),
+          onPressed: _openDownloadDialog,
+        ),
       ],
     );
   }
@@ -160,7 +377,7 @@ class _FactureScreenState extends State<FactureScreen> {
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0247AA).withOpacity(0.02),
+            color: const Color(0xFF0247AA).withValues(alpha: 0.02),
             offset: const Offset(0, 4),
             blurRadius: 10,
           ),
@@ -180,7 +397,7 @@ class _FactureScreenState extends State<FactureScreen> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEF4444).withOpacity(0.08),
+                        color: const Color(0xFFEF4444).withValues(alpha: 0.08),
                         shape: BoxShape.circle
                       ),
                       child: const Icon(Icons.picture_as_pdf_rounded, color: Color(0xFFEF4444), size: 22),
@@ -221,7 +438,20 @@ class _FactureScreenState extends State<FactureScreen> {
                         Text(dateStr, style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8), fontWeight: FontWeight.bold)),
                       ],
                     ),
-                    const Text('VOIR DÉTAILS', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Color(0xFF0247AA), letterSpacing: 0.5)),
+                    GestureDetector(
+                      onTap: () => _downloadSelected([f['id'] as int]),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(color: const Color(0xFF0247AA).withValues(alpha: 0.07), borderRadius: BorderRadius.circular(10)),
+                        child: const Row(
+                          children: [
+                            Icon(Icons.download_rounded, size: 14, color: Color(0xFF0247AA)),
+                            SizedBox(width: 4),
+                            Text('TÉLÉCHARGER', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Color(0xFF0247AA), letterSpacing: 0.5)),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -235,7 +465,7 @@ class _FactureScreenState extends State<FactureScreen> {
   Widget _statusBadge(String s, Color c) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: c.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: c.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
       child: Text(s.toUpperCase(), style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, color: c, letterSpacing: 0.5)),
     );
   }
@@ -292,7 +522,6 @@ class _FactureScreenState extends State<FactureScreen> {
         ),
       );
     } else {
-      // Mobile / Emulator Compatibility
       showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
@@ -315,33 +544,53 @@ class _FactureScreenState extends State<FactureScreen> {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Souhaitez-vous ouvrir ce document avec votre lecteur PDF natif ?',
+                'Souhaitez-vous ouvrir ou télécharger ce document ?',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Color(0xFF64748B), fontSize: 13),
               ),
               const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    final uri = Uri.parse(url);
-                    try {
-                      await launchUrl(uri);
-                    } catch (e) {
-                      if (mounted) UiUtils.showError(this.context, 'Impossible d\'ouvrir la facture : $e');
-                    }
-                  },
-                  icon: const Icon(Icons.open_in_new_rounded),
-                  label: const Text('OUVRIR LE DOCUMENT', style: TextStyle(fontWeight: FontWeight.bold)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0247AA),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    elevation: 0,
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        final uri = Uri.parse(url);
+                        try {
+                          await launchUrl(uri);
+                        } catch (e) {
+                          if (mounted) UiUtils.showError(context, 'Impossible d\'ouvrir la facture : $e');
+                        }
+                      },
+                      icon: const Icon(Icons.open_in_new_rounded, size: 16),
+                      label: const Text('OUVRIR', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF0247AA),
+                        side: const BorderSide(color: Color(0xFF0247AA)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _downloadSelected([f['id'] as int]);
+                      },
+                      icon: const Icon(Icons.download_rounded, size: 16),
+                      label: const Text('TÉLÉCHARGER', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0247AA),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               TextButton(

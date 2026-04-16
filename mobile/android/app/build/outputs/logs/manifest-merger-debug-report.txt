@@ -2,8 +2,8 @@
 application
 INJECTED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\AndroidManifest.xml:5:5-46:19
 INJECTED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\AndroidManifest.xml
-MERGED from [:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-12:19
-MERGED from [:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-12:19
+MERGED from [:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-12:19
+MERGED from [:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-12:19
 MERGED from [androidx.window:window:1.2.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\6ca1db17970615e3e029777992983e6b\transformed\jetified-window-1.2.0\AndroidManifest.xml:22:5-29:19
 MERGED from [androidx.window:window:1.2.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\6ca1db17970615e3e029777992983e6b\transformed\jetified-window-1.2.0\AndroidManifest.xml:22:5-29:19
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\2c40b3605ce1f863a0ab38c5cd772a02\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:23:5-33:19
@@ -28,14 +28,14 @@ MERGED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\ap
 INJECTED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 INJECTED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 INJECTED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\AndroidManifest.xml:1:1-7:12
-MERGED from [:shared_preferences_android] C:\medica_combined_build\shared_preferences_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-15:12
-MERGED from [:flutter_local_notifications] C:\medica_combined_build\flutter_local_notifications\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-10:12
-MERGED from [:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-14:12
-MERGED from [:app_links] C:\medica_combined_build\app_links\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:flutter_plugin_android_lifecycle] C:\medica_combined_build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:jni_flutter] C:\medica_combined_build\jni_flutter\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:jni] C:\medica_combined_build\jni\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:shared_preferences_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.23\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-15:12
+MERGED from [:flutter_local_notifications] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-10:12
+MERGED from [:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-14:12
+MERGED from [:app_links] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\app_links-6.4.1\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:flutter_plugin_android_lifecycle] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.34\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:jni_flutter] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\jni_flutter-1.0.1\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:jni] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\jni-1.0.0\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.media:media:1.1.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\37f925ffea1456e9482e4746d5f854b0\transformed\media-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.preference:preference:1.2.1] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\5509f88cb2cdffea8df9a2e41120ff0c\transformed\preference-1.2.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.browser:browser:1.9.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\d5ba8a3f3d18f4b413ccbb814eeac7c7\transformed\browser-1.9.0\AndroidManifest.xml:2:1-7:12
@@ -112,14 +112,14 @@ ADDED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app
 		ADDED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\AndroidManifest.xml:3:22-76
 uses-permission#android.permission.POST_NOTIFICATIONS
 ADDED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\AndroidManifest.xml:4:5-77
-MERGED from [:flutter_local_notifications] C:\medica_combined_build\flutter_local_notifications\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:5-77
-MERGED from [:flutter_local_notifications] C:\medica_combined_build\flutter_local_notifications\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:5-77
+MERGED from [:flutter_local_notifications] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:5-77
+MERGED from [:flutter_local_notifications] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:5-77
 	android:name
 		ADDED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\AndroidManifest.xml:4:22-74
 queries
 ADDED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\AndroidManifest.xml:52:5-67:15
-MERGED from [:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-13:15
-MERGED from [:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-13:15
+MERGED from [:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-13:15
+MERGED from [:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-13:15
 intent#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+data:scheme:http
 ADDED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\main\AndroidManifest.xml:53:9-57:18
 action#android.intent.action.VIEW
@@ -146,22 +146,22 @@ uses-sdk
 INJECTED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\AndroidManifest.xml
 INJECTED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\AndroidManifest.xml
-MERGED from [:shared_preferences_android] C:\medica_combined_build\shared_preferences_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:shared_preferences_android] C:\medica_combined_build\shared_preferences_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:flutter_local_notifications] C:\medica_combined_build\flutter_local_notifications\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:flutter_local_notifications] C:\medica_combined_build\flutter_local_notifications\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:app_links] C:\medica_combined_build\app_links\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:app_links] C:\medica_combined_build\app_links\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:flutter_plugin_android_lifecycle] C:\medica_combined_build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:flutter_plugin_android_lifecycle] C:\medica_combined_build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:jni_flutter] C:\medica_combined_build\jni_flutter\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:jni_flutter] C:\medica_combined_build\jni_flutter\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:jni] C:\medica_combined_build\jni\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:jni] C:\medica_combined_build\jni\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.23\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.23\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_local_notifications] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_local_notifications] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:app_links] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\app_links-6.4.1\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:app_links] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\app_links-6.4.1\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_plugin_android_lifecycle] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.34\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_plugin_android_lifecycle] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.34\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:jni_flutter] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\jni_flutter-1.0.1\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:jni_flutter] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\jni_flutter-1.0.1\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:jni] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\jni-1.0.0\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:jni] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\jni-1.0.0\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [androidx.media:media:1.1.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\37f925ffea1456e9482e4746d5f854b0\transformed\media-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.media:media:1.1.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\37f925ffea1456e9482e4746d5f854b0\transformed\media-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.preference:preference:1.2.1] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\5509f88cb2cdffea8df9a2e41120ff0c\transformed\preference-1.2.1\AndroidManifest.xml:20:5-22:41
@@ -279,23 +279,23 @@ MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] C:\Users\LENOVO PRO\.gradl
 	android:minSdkVersion
 		INJECTED from C:\Users\LENOVO PRO\OneDrive\Bureau\projet pfe\web\mobile\android\app\src\debug\AndroidManifest.xml
 intent#action:name:android.intent.action.GET_CONTENT+data:mimeType:*/*
-ADDED from [:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-12:18
+ADDED from [:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-12:18
 action#android.intent.action.GET_CONTENT
-ADDED from [:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-72
+ADDED from [:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-72
 	android:name
-		ADDED from [:file_picker] C:\medica_combined_build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:21-69
+		ADDED from [:file_picker] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\file_picker-8.3.7\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:21-69
 uses-permission#android.permission.VIBRATE
-ADDED from [:flutter_local_notifications] C:\medica_combined_build\flutter_local_notifications\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-66
+ADDED from [:flutter_local_notifications] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-66
 	android:name
-		ADDED from [:flutter_local_notifications] C:\medica_combined_build\flutter_local_notifications\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:22-63
+		ADDED from [:flutter_local_notifications] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_local_notifications-17.2.4\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:22-63
 activity#io.flutter.plugins.urllauncher.WebViewActivity
-ADDED from [:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-11:74
+ADDED from [:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-11:74
 	android:exported
-		ADDED from [:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:10:13-37
+		ADDED from [:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:10:13-37
 	android:theme
-		ADDED from [:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:11:13-71
+		ADDED from [:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:11:13-71
 	android:name
-		ADDED from [:url_launcher_android] C:\medica_combined_build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-74
+		ADDED from [:url_launcher_android] C:\Users\LENOVO PRO\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.29\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-74
 uses-library#androidx.window.extensions
 ADDED from [androidx.window:window:1.2.0] C:\Users\LENOVO PRO\.gradle\caches\8.12\transforms\6ca1db17970615e3e029777992983e6b\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
 	android:required

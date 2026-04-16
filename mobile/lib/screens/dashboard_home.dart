@@ -4,7 +4,8 @@ import '../api_service.dart';
 class DashboardHome extends StatefulWidget {
   final Map<String, dynamic>? user;
   final Function(String)? onNavigate;
-  const DashboardHome({super.key, this.user, this.onNavigate});
+  final bool isCertified;
+  const DashboardHome({super.key, this.user, this.onNavigate, this.isCertified = true});
 
   @override
   State<DashboardHome> createState() => _DashboardHomeState();
@@ -89,21 +90,22 @@ class _DashboardHomeState extends State<DashboardHome> {
         scrollDirection: Axis.horizontal,
         clipBehavior: Clip.none,
         children: isAdmin ? [
-          _quickActionItem(Icons.people_alt_rounded, 'Utilisateurs', const Color(0xFF0247AA), () => widget.onNavigate?.call('Gestion Utilisateurs')),
-          _quickActionItem(Icons.corporate_fare_rounded, 'Organisations', const Color(0xFF10B981), () => widget.onNavigate?.call('Toutes les organisations')),
-          _quickActionItem(Icons.receipt_long_rounded, 'Transactions', const Color(0xFF8B5CF6), () => widget.onNavigate?.call('Toutes les transactions')),
-          _quickActionItem(Icons.toll_rounded, 'Flux Jetons', const Color(0xFFF59E0B), () => widget.onNavigate?.call('Demandes de jetons')),
+          _quickActionItem(Icons.people_alt_rounded, 'Utilisateurs', const Color(0xFF0247AA), () => widget.onNavigate?.call('Gestion Utilisateurs'), true),
+          _quickActionItem(Icons.corporate_fare_rounded, 'Organisations', const Color(0xFF10B981), () => widget.onNavigate?.call('Toutes les organisations'), true),
+          _quickActionItem(Icons.receipt_long_rounded, 'Transactions', const Color(0xFF8B5CF6), () => widget.onNavigate?.call('Toutes les transactions'), true),
+          _quickActionItem(Icons.toll_rounded, 'Flux Jetons', const Color(0xFFF59E0B), () => widget.onNavigate?.call('Demandes de jetons'), true),
         ] : [
-          _quickActionItem(Icons.add_circle_rounded, 'Nouvelle\nTransaction', const Color(0xFF0247AA), () => widget.onNavigate?.call('Création de transaction')),
-          _quickActionItem(Icons.toll_rounded, 'Acheter\nJetons', const Color(0xFFF59E0B), () => widget.onNavigate?.call('Acheter des jetons')),
-          _quickActionItem(Icons.verified_user_rounded, 'Certifier\nCompte', const Color(0xFF10B981), () => widget.onNavigate?.call('Certifier mon compte')),
-          _quickActionItem(Icons.support_agent_rounded, 'Support\nClient', const Color(0xFF8B5CF6), () => widget.onNavigate?.call('Contacter')),
+          _quickActionItem(Icons.add_circle_rounded, 'Nouvelle\nTransaction', const Color(0xFF0247AA), () => widget.onNavigate?.call('Création de transaction'), widget.isCertified),
+          _quickActionItem(Icons.toll_rounded, 'Acheter\nJetons', const Color(0xFFF59E0B), () => widget.onNavigate?.call('Acheter des jetons'), widget.isCertified),
+          _quickActionItem(Icons.verified_user_rounded, 'Certifier\nCompte', const Color(0xFF10B981), () => widget.onNavigate?.call('Certifier mon compte'), true),
+          _quickActionItem(Icons.support_agent_rounded, 'Support\nClient', const Color(0xFF8B5CF6), () => widget.onNavigate?.call('Contacter'), widget.isCertified),
         ],
       ),
     );
   }
 
-  Widget _quickActionItem(IconData icon, String label, Color color, VoidCallback onTap) {
+  Widget _quickActionItem(IconData icon, String label, Color color, VoidCallback onTap, bool isFree) {
+    final locked = !isFree;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
@@ -114,14 +116,23 @@ class _DashboardHomeState extends State<DashboardHome> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: const Color(0xFFE2E8F0)),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4))],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            Icon(icon, color: color, size: 28),
-            const SizedBox(height: 10),
-            Text(label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF475569), height: 1.2)),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(child: Icon(icon, color: locked ? color.withValues(alpha: 0.35) : color, size: 28)),
+                const SizedBox(height: 10),
+                Center(child: Text(label, textAlign: TextAlign.center, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: locked ? const Color(0xFFCBD5E1) : const Color(0xFF475569), height: 1.2))),
+              ],
+            ),
+            if (locked)
+              Positioned(
+                top: 8, right: 8,
+                child: Icon(Icons.lock_outline_rounded, size: 12, color: const Color(0xFFCBD5E1).withValues(alpha: 0.8)),
+              ),
           ],
         ),
       ),
