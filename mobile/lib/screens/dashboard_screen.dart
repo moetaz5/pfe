@@ -77,7 +77,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (_loading) return const Scaffold(backgroundColor: Color(0xFFF8FAFC), body: Center(child: CircularProgressIndicator()));
     final isUser = _user?['role'] == 'USER';
     final isAdmin = _user?['role'] == 'ADMIN';
-    final bool isCertified = (_user?['is_certified'] ?? 0) == 1;
+    final bool isCertified = (_user?['certified'] ?? 0) == 1;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -225,7 +225,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildDrawer(bool isUser, bool isAdmin) {
-    final isCertified = (_user?['is_certified'] ?? 0) == 1;
+    final isCertified = (_user?['certified'] ?? 0) == 1;
     return Drawer(
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(32), bottomRight: Radius.circular(32))),
@@ -351,7 +351,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         currentIndex: _getNavIndex(),
         onTap: (idx) {
           final routes = ['Tableau de bord', 'Mes transactions', 'Mes factures', 'Acheter des jetons'];
-          final isCertified = (_user?['is_certified'] ?? 0) == 1;
+          final isCertified = (_user?['certified'] ?? 0) == 1;
           _navigateSafe(routes[idx], isCertified);
         },
         items: const [

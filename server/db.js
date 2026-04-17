@@ -30,6 +30,7 @@ const db = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: dbName, // Permet aux connexions du pool d'aller bdd
+  timezone: "+01:00",
   multipleStatements: true,
   waitForConnections: true,
   connectionLimit: 15,

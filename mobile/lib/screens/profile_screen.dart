@@ -219,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _infoView() {
-    bool isC = (widget.user?['is_certified'] ?? 0) == 1;
+    bool isC = (widget.user?['certified'] ?? 0) == 1;
     return Column(
       children: [
         _section('PROFIL PROFESSIONNEL', [

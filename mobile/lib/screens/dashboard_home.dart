@@ -222,7 +222,7 @@ class _DashboardHomeState extends State<DashboardHome> {
           const Divider(height: 32, color: Color(0xFFF1F5F9)),
           _userInfoRow(Icons.security_rounded, 'Privilèges Système', widget.user?['role'] ?? 'USER'),
           const Divider(height: 32, color: Color(0xFFF1F5F9)),
-          _userInfoRow(Icons.shield_rounded, 'État Certification', widget.user?['is_certified'] == 1 ? 'ENTITÉ VÉRIFIÉE' : 'STANDARD'),
+          _userInfoRow(Icons.shield_rounded, 'État Certification', widget.user?['certified'] == 1 ? 'ENTITÉ VÉRIFIÉE' : 'STANDARD'),
         ],
       ),
     );
