@@ -92,6 +92,7 @@ body {
   display: flex !important;
   flex-direction: column !important;
   height: 100vh !important;
+  height: 100dvh !important; /* Dynamically adaptation for mobile browser bars */
   background: var(--panel) !important;
   overflow: hidden !important;
 }
@@ -267,6 +268,17 @@ body {
   padding: 12px 10px !important;
   border-top: 1px solid var(--border) !important;
   margin-top: auto !important;
+  background: var(--panel) !important;
+  position: sticky !important;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* Fix for mobile Safari/Chrome navigation bar padding */
+@media (max-width: 768px) {
+  .sidebar-footer-pro {
+    padding-bottom: env(safe-area-inset-bottom, 20px) !important;
+  }
 }
 
 /* ── Logout ── */
