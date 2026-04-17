@@ -39,6 +39,10 @@ const db = mysql.createPool({
   keepAliveInitialDelay: 0
 });
 
+db.on("connection", (connection) => {
+  connection.query("SET time_zone = '+01:00';");
+});
+
 // 3. Vérifier que la connexion marche et initialiser les tables
 db.getConnection((err, connection) => {
   if (err) {
