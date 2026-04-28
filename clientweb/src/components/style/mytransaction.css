@@ -382,15 +382,6 @@ h4 {
   align-items: center;
 }
 
-/* Boutons PDF / XML dans la carte facture */
-.facture-btn {
-  flex-shrink: 0;
-  white-space: nowrap;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
 /* =========================
    RESPONSIVE
 ========================= */
@@ -477,86 +468,89 @@ h4 {
     line-height: 1.5;
   }
 
-  /* Bouton télécharger ZIP : pleine largeur */
+  /* Bouton télécharger ZIP : pleine largeur et plus grand */
   .transaction-top > .btn-outline {
     width: 100%;
     justify-content: center;
+    padding: 14px;
+    font-size: 16px;
+    order: 2; /* Passe après les infos si besoin */
   }
 
   /* ---- Titre section Documents ---- */
   .section-title {
-    font-size: 15px;
-    margin-top: 14px;
-    margin-bottom: 10px;
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 12px;
   }
 
   /* ---- Carte facture ---- */
   .facture-card {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
-    padding: 14px 12px;
+    gap: 15px;
+    padding: 16px;
   }
 
   .facture-left {
     width: 100%;
   }
 
-  .facture-left strong {
-    font-size: 14px;
-    word-break: break-word;
-  }
-
-  .facture-left p {
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  /* Actions boutons : pleine largeur à droite */
+  /* Actions boutons : pleine largeur ou alignés */
   .facture-actions {
     width: 100%;
-    justify-content: flex-end;
-    gap: 8px;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Deux colonnes égales pour les boutons PDF/XML */
+    gap: 10px;
   }
 
-  /* Empêcher les boutons PDF/XML de s'étirer */
-  .facture-btn {
-    flex: 0 0 auto;
-    width: auto;
+  .facture-actions .btn {
+    width: 100%;
+    height: 48px; /* Plus grand pour le pouce */
+    justify-content: center;
+    border-radius: 10px;
   }
 
-  /* ---- Ligne transaction liste ---- */
+  /* ---- Ligne transaction liste (MyTransactions) ---- */
   .transaction-row {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 14px 12px;
+    align-items: stretch;
+    gap: 15px;
+    padding: 16px;
   }
 
   .transaction-actions {
     width: 100%;
-    justify-content: flex-end;
+    display: grid;
+    grid-template-columns: 1fr; /* Un bouton par ligne dans la liste sur mobile */
+    gap: 8px;
+  }
+
+  .transaction-actions .btn {
+    width: 100%;
+    justify-content: center;
+    height: 45px;
   }
 
   .transaction-number {
-    font-size: 15px;
+    font-size: 16px;
   }
 
   /* ---- Filtres : 1 colonne ---- */
   .filters-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   /* ---- Signature link box ---- */
   .signature-link-box {
     flex-direction: column;
     align-items: stretch;
-    gap: 8px;
+    gap: 10px;
     margin-left: 0;
-    padding: 10px;
+    padding: 12px;
   }
-
+}
   .signature-link-box input {
     width: 100%;
   }

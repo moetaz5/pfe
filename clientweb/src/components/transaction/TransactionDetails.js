@@ -164,20 +164,18 @@ const TransactionDetails = () => {
 
                     <button
                       onClick={() => handleDownloadDoc(doc.id, "pdf")}
-                      className="btn btn-outline facture-btn"
+                      className="btn btn-icon"
                       title="Télécharger PDF"
                     >
-                      <FileDown size={16} />
-                      PDF
+                      <FileDown size={18} />
                     </button>
 
                     <button
                       onClick={() => handleDownloadDoc(doc.id, "xml")}
-                      className="btn btn-outline facture-btn"
+                      className="btn btn-icon"
                       title="Télécharger XML"
                     >
-                      <FileDown size={16} />
-                      XML
+                      <FileDown size={18} />
                     </button>
 
                   </div>
