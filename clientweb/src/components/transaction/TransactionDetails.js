@@ -106,21 +106,19 @@ const TransactionDetails = () => {
 
             <div className="transaction-top">
               <div className="page-header-left">
-                <Link to="/dashboard/MyTransactions" className="btn btn-icon">
+                <Link to="/dashboard/MyTransactions" className="btn btn-icon" style={{ flexShrink: 0 }}>
                   <ArrowLeft size={18} />
                 </Link>
 
                 <div className="transaction-info">
-                  <h2 style={{ margin: 0 }}>Détails de la transaction</h2>
-                  <p style={{ color: "#6b7280", margin: 0 }}>
+                  <h2 style={{ margin: 0, wordBreak: "break-word" }}>Détails de la transaction</h2>
+                  <p style={{ color: "#6b7280", margin: 0, wordBreak: "break-word", overflowWrap: "break-word" }}>
                     <strong>{transaction.user_name}</strong>
                     <br />
 
                     {/* ✅ ID FORMATÉ */}
                     Transaction ID : {formatTransactionId(transaction.id)}
                     <br />
-
-                    
 
                     {new Date(transaction.date_creation).toLocaleString()}
                     <br />
@@ -129,7 +127,7 @@ const TransactionDetails = () => {
                 </div>
               </div>
 
-              <button className="btn btn-outline" onClick={handleDownloadAllZip}>
+              <button className="btn btn-outline" onClick={handleDownloadAllZip} style={{ flexShrink: 0 }}>
                 <Download size={18} />
                 Télécharger tout (ZIP)
               </button>
