@@ -1,5 +1,6 @@
 import paramiko
 import subprocess
+import sys
 
 def run_local_git_push():
     try:
@@ -21,6 +22,12 @@ def run_local_git_push():
     except Exception as e:
         print(f"Erreur ou rien a pousser sur Git : {e}")
 
+def safe_print(text):
+    """Prints text safely even if it contains emojis on a terminal that doesn't support them."""
+    try:
+        print(text)
+    except UnicodeEncodeError:
+        print(text.encode('ascii', 'ignore').decode('ascii'))
 
 def update_full():
     hostname = '51.178.39.67'
@@ -35,51 +42,51 @@ def update_full():
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     
     try:
-        print(f"\n--- 2. Connexion au serveur {hostname} ---")
+        safe_print(f"\n--- 2. Connexion au serveur {hostname} ---")
         ssh.connect(hostname, username=username, password=password)
         
         # 3. Update Git VPS
-        print("\n--- 3. Mise a jour du code (Git VPS) ---")
+        safe_print("\n--- 3. Mise a jour du code (Git VPS) ---")
         cmd_git = '''
         cd /var/www/medica_sign &&
         git fetch origin &&
         git reset --hard origin/main
         '''
         stdin, stdout, stderr = ssh.exec_command(cmd_git)
-        print(stdout.read().decode())
-        print(stderr.read().decode())
+        safe_print(stdout.read().decode('utf-8', 'ignore'))
+        safe_print(stderr.read().decode('utf-8', 'ignore'))
         
         # 4. Build React (TRES IMPORTANT)
-        print("\n--- 4. Build React (clientweb) ---")
+        safe_print("\n--- 4. Build React (clientweb) ---")
         cmd_build = '''
         cd /var/www/medica_sign/clientweb &&
         npm install &&
         npm run build
         '''
         stdin, stdout, stderr = ssh.exec_command(cmd_build)
-        print(stdout.read().decode())
-        print(stderr.read().decode())
+        safe_print(stdout.read().decode('utf-8', 'ignore'))
+        safe_print(stderr.read().decode('utf-8', 'ignore'))
         
         # 5. Reload Nginx
-        print("\n--- 5. Reload Nginx ---")
+        safe_print("\n--- 5. Reload Nginx ---")
         cmd_nginx = '''
         sudo cp /var/www/medica_sign/nginx_medica_sign.conf /etc/nginx/sites-available/medica_sign &&
         sudo systemctl reload nginx
         '''
         stdin, stdout, stderr = ssh.exec_command(cmd_nginx)
-        print(stdout.read().decode())
-        print(stderr.read().decode())
+        safe_print(stdout.read().decode('utf-8', 'ignore'))
+        safe_print(stderr.read().decode('utf-8', 'ignore'))
         
         # 6. Restart PM2
-        print("\n--- 6. Restart Node (PM2) ---")
+        safe_print("\n--- 6. Restart Node (PM2) ---")
         stdin, stdout, stderr = ssh.exec_command('pm2 restart medica_sign')
-        print(stdout.read().decode())
-        print(stderr.read().decode())
+        safe_print(stdout.read().decode('utf-8', 'ignore'))
+        safe_print(stderr.read().decode('utf-8', 'ignore'))
         
-        print("\nMISE A JOUR COMPLETE TERMINEE AVEC SUCCES !")
+        safe_print("\nMISE A JOUR COMPLETE TERMINEE AVEC SUCCES !")
         
     except Exception as e:
-        print(f"Erreur : {e}")
+        safe_print(f"Erreur : {e}")
         
     finally:
         ssh.close()
