@@ -382,6 +382,15 @@ h4 {
   align-items: center;
 }
 
+/* Boutons PDF / XML dans la carte facture */
+.facture-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 /* =========================
    RESPONSIVE
 ========================= */
@@ -508,6 +517,13 @@ h4 {
     width: 100%;
     justify-content: flex-end;
     gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  /* Empêcher les boutons PDF/XML de s'étirer */
+  .facture-btn {
+    flex: 0 0 auto;
+    width: auto;
   }
 
   /* ---- Ligne transaction liste ---- */
