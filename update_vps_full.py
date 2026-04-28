@@ -3,23 +3,23 @@ import subprocess
 
 def run_local_git_push():
     try:
-        print("\n--- 1. Mise à jour locale (Git Push) ---")
+        print("\n--- 1. Mise a jour locale (Git Push) ---")
         
         subprocess.run(["git", "add", "."], check=True)
         
-        # Commit (ignore si rien à commit)
+        # Commit (ignore si rien a commit)
         subprocess.run(
-            ["git", "commit", "-m", "Mise à jour automatique FULL"],
+            ["git", "commit", "-m", "Mise a jour automatique FULL"],
             capture_output=True
         )
         
-        # ⚠️ force push (important après reset)
+        # Force push
         subprocess.run(["git", "push", "--force", "origin", "main"], check=True)
         
-        print("✅ Push GitHub réussi !")
+        print("Push GitHub reussi !")
         
     except Exception as e:
-        print(f"⚠️ Erreur ou rien à pousser sur Git : {e}")
+        print(f"Erreur ou rien a pousser sur Git : {e}")
 
 
 def update_full():
@@ -39,7 +39,7 @@ def update_full():
         ssh.connect(hostname, username=username, password=password)
         
         # 3. Update Git VPS
-        print("\n--- 3. Mise à jour du code (Git VPS) ---")
+        print("\n--- 3. Mise a jour du code (Git VPS) ---")
         cmd_git = '''
         cd /var/www/medica_sign &&
         git fetch origin &&
@@ -49,7 +49,7 @@ def update_full():
         print(stdout.read().decode())
         print(stderr.read().decode())
         
-        # 4. Build React (TRÈS IMPORTANT 🔥)
+        # 4. Build React (TRES IMPORTANT)
         print("\n--- 4. Build React (clientweb) ---")
         cmd_build = '''
         cd /var/www/medica_sign/clientweb &&
@@ -76,10 +76,10 @@ def update_full():
         print(stdout.read().decode())
         print(stderr.read().decode())
         
-        print("\n✅ MISE À JOUR COMPLÈTE TERMINÉE AVEC SUCCÈS !")
+        print("\nMISE A JOUR COMPLETE TERMINEE AVEC SUCCES !")
         
     except Exception as e:
-        print(f"❌ Erreur : {e}")
+        print(f"Erreur : {e}")
         
     finally:
         ssh.close()
