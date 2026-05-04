@@ -34,8 +34,9 @@ def update_server():
         
         print("\n--- 4. Redemarrage du processus PM2 (medica_sign) ---")
         stdin, stdout, stderr = ssh.exec_command('pm2 restart medica_sign')
-        # On utilise errors='ignore' pour éviter les crashs sur les caractères spéciaux PM2 (✓)
-        print(stdout.read().decode('utf-8', errors='ignore'))
+        # On evite tout caractere non-ascii pour le print local
+        out_str = stdout.read().decode('utf-8', errors='ignore')
+        print(out_str.encode('ascii', 'ignore').decode('ascii'))
         
         print("MISE A JOUR SERVEUR TERMINEE !")
         
