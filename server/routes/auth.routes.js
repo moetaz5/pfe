@@ -116,7 +116,6 @@ app.get("/api/my-api-token", verifyToken, async (req, res) => {
   }
 });
 
-
 /* ===================== GOOGLE AUTH ===================== */
 app.get("/api/auth/google", (req, res, next) => {
   const { session_id } = req.query;
@@ -136,25 +135,20 @@ app.get("/api/auth/google", (req, res, next) => {
 app.get(
   "/api/auth/google/callback",
   (req, res, next) => {
-    // 🔗 Déterminer l'origine pour la redirection en cas d'échec
-    // Si c'est une session mobile (state != web_client), on redirige vers le domaine par défaut
-    const state = req.query.state || "web_client";
-    const baseUrl = "https://medicasign.medicacom.tn";
-    
+    const redirectTo = req.query.state || "https://medicasign.medicacom.tn";
     passport.authenticate("google", {
       session: false,
-      failureRedirect: `${baseUrl}/login?error=google_failed`,
-      accessType: "offline", 
-      prompt: "consent",
-      state: state
+      failureRedirect: `${redirectTo}/login?error=google_failed`,
+      accessType: "offline", // ✅ Maintain consistency
+      prompt: "consent", // ✅ Maintain consistency
     })(req, res, next);
   },
   async (req, res) => {
     try {
-      const baseUrl = "https://medicasign.medicacom.tn";
-
       if (!req.user) {
-        return res.redirect(`${baseUrl}/login?error=auth_failed`);
+        return res.redirect(
+          `https://medicasign.medicacom.tn/login?error=auth_failed`,
+        );
       }
 
       // 🔎 Vérifier le statut réel en base
@@ -165,28 +159,29 @@ app.get(
         ]);
 
       if (!rows.length) {
-        return res.redirect(`${baseUrl}/login?error=user_not_found`);
+        return res.redirect(
+          `https://medicasign.medicacom.tn/login?error=user_not_found`,
+        );
       }
 
       const user = rows[0];
 
       // ❌ Compte désactivé
       if (user.statut === 0) {
-        return res.redirect(`${baseUrl}/login?error=disabled`);
+        return res.redirect(
+          `https://medicasign.medicacom.tn/login?error=disabled`,
+        );
       }
 
-      // 🔐 Génération d'un JWT de session (10 jours pour mobile, 1 jour pour web)
-      const expiresIn = (req.query.state && req.query.state !== "web_client") ? "10d" : "1d";
+      // 🔐 Génération d'un JWT de session
       const token = jwt.sign(
         { id: user.id, role: user.role },
         process.env.JWT_SECRET,
-        { expiresIn }
+        { expiresIn: "10d" },
       );
 
       // ✅ NEW: Store token with session_id for mobile polling
       const sessionId = req.query.state;
-      console.log("GOOGLE CALLBACK - Session ID:", sessionId, "User:", user.email);
-
       if (sessionId && sessionId !== "web_client") {
         // Mobile app is waiting - store token for it to retrieve
         googleExchangeTokens.set(sessionId, {
@@ -195,46 +190,16 @@ app.get(
           role: user.role,
           expires: Date.now() + 5 * 60 * 1000, // 5 minutes
         });
-        
-        console.log("✅ GOOGLE AUTH SUCCESS (MOBILE) - Token stored for session:", sessionId);
+        console.log(
+          "✅ GOOGLE AUTH SUCCESS (MOBILE) - Token stored for session:",
+          sessionId,
+        );
 
-        // ✅ FIX: Rediriger vers l'application mobile via HTML pour plus de fiabilité sur mobile
-        const deepLink = `medicasign://auth-callback?token=${token}&session_id=${encodeURIComponent(sessionId)}`;
-        
-        return res.send(`
-          <html>
-            <head>
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Authentification Réussie</title>
-              <style>
-                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; padding: 20px; background-color: #f5f7fb; }
-                .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 400px; width: 100%; }
-                .loader { border: 4px solid #f3f3f3; border-top: 4px solid #0247AA; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
-                @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-                .btn { display: inline-block; background: #0247AA; color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: bold; margin-top: 20px; }
-                h2 { color: #1e293b; margin-top: 0; }
-                p { color: #64748b; }
-              </style>
-            </head>
-            <body>
-              <div class="card">
-                <h2>Connexion Réussie !</h2>
-                <p>Nous vous redirigeons vers l'application MedicaSign...</p>
-                <div class="loader"></div>
-                <p>Si l'application ne s'ouvre pas automatiquement :</p>
-                <a href="${deepLink}" class="btn">Ouvrir l'application</a>
-              </div>
-              <script>
-                // Tentative de redirection automatique
-                setTimeout(function() {
-                  window.location.href = "${deepLink}";
-                }, 500);
-              </script>
-            </body>
-          </html>
-        `);
+        // ✅ FIX: Rediriger vers l'application mobile via Deep Link pour retour automatique
+        return res.redirect(
+          `medicasign://auth-callback?token=${token}&session_id=${sessionId}`,
+        );
       }
-
 
       // 🔐 Web client - use exchange token
       const exchangeToken = crypto.randomBytes(32).toString("hex");
@@ -244,18 +209,22 @@ app.get(
         expires: Date.now() + 5 * 60 * 1000, // 5 minutes
       });
 
-      console.log("GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.");
+      console.log(
+        "GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.",
+      );
 
-      // Rediriger vers le frontend avec le token d'échange
-      return res.redirect(`${baseUrl}/google/callback?exchange_token=${exchangeToken}`);
+      // Rediriger vers le frontend IP avec le token d'échange
+      return res.redirect(
+        `https://medicasign.medicacom.tn/google/callback?exchange_token=${exchangeToken}`,
+      );
     } catch (error) {
       console.error("GOOGLE CALLBACK ERROR:", error);
-      const baseUrl = "https://medicasign.medicacom.tn";
-      return res.redirect(`${baseUrl}/login?error=server`);
+      return res.redirect(`https://medicasign.medicacom.tn/login?error=server`);
     }
   },
 );
 
+/* =================== GOOGLE EXCHANGE TOKEN ENDPOINT =================== */
 // Échange un token temporaire contre un cookie de session valide
 // Résout le problème cross-domain entre nip.io et l'IP directe
 app.post("/api/auth/exchange-google-token", async (req, res) => {
