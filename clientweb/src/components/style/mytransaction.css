@@ -18,6 +18,10 @@
   --transition: 0.2s ease-in-out;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 /* =========================
    GLOBAL PAGE
 ========================= */
@@ -392,27 +396,29 @@ h4 {
 
   .transaction-row {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   .transaction-actions {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: center;
   }
 
   .transaction-top {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 20px;
   }
 
   .facture-card {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 16px;
   }
 
   .facture-actions {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: center;
   }
 }
 
@@ -487,7 +493,7 @@ h4 {
   /* ---- Carte facture ---- */
   .facture-card {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 15px;
     padding: 16px;
   }
@@ -499,13 +505,13 @@ h4 {
   /* Actions boutons : pleine largeur ou alignés */
   .facture-actions {
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Deux colonnes égales pour les boutons PDF/XML */
+    display: flex;
     gap: 10px;
   }
 
   .facture-actions .btn {
-    width: 100%;
+    flex: 1;
+    width: auto;
     height: 48px; /* Plus grand pour le pouce */
     justify-content: center;
     border-radius: 10px;

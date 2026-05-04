@@ -462,14 +462,64 @@
 }
 
 @media (max-width: 768px) {
+  .invoice-card-header {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .invoice-search-container {
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 100%;
+  }
+
+  .invoice-search-wrapper {
+    max-width: 100%;
+  }
+
+  .invoice-filters {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    .invoice-filters {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .filter-group, .results-badge {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .filter-group select {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .invoice-actions-group {
+    width: 100%;
+  }
+
+  .inv-btn.sec-refresh {
+    width: 100%;
+    justify-content: center;
+  }
+
   .invoice-row {
     grid-template-columns: 1fr;
     gap: 15px;
+    padding: 16px;
   }
   
   .inv-status {
     margin-right: 0;
     width: fit-content;
+    margin-bottom: 8px;
   }
   
   .inv-actions {
@@ -478,6 +528,7 @@
   
   .inv-btn {
     flex: 1;
+    justify-content: center;
   }
 
   .pagination-container {
