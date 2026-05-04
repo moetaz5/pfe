@@ -185,6 +185,8 @@ app.get(
 
       // ✅ NEW: Store token with session_id for mobile polling
       const sessionId = req.query.state;
+      console.log("GOOGLE CALLBACK - Session ID:", sessionId, "User:", user.email);
+
       if (sessionId && sessionId !== "web_client") {
         // Mobile app is waiting - store token for it to retrieve
         googleExchangeTokens.set(sessionId, {
@@ -196,12 +198,43 @@ app.get(
         
         console.log("✅ GOOGLE AUTH SUCCESS (MOBILE) - Token stored for session:", sessionId);
 
-        // ✅ FIX: Rediriger vers l'application mobile via Deep Link
-        // On utilise encodeURIComponent pour la sécurité
-        return res.redirect(
-          `medicasign://auth-callback?token=${token}&session_id=${encodeURIComponent(sessionId)}`
-        );
+        // ✅ FIX: Rediriger vers l'application mobile via HTML pour plus de fiabilité sur mobile
+        const deepLink = `medicasign://auth-callback?token=${token}&session_id=${encodeURIComponent(sessionId)}`;
+        
+        return res.send(`
+          <html>
+            <head>
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Authentification Réussie</title>
+              <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; padding: 20px; background-color: #f5f7fb; }
+                .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 400px; width: 100%; }
+                .loader { border: 4px solid #f3f3f3; border-top: 4px solid #0247AA; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+                @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                .btn { display: inline-block; background: #0247AA; color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: bold; margin-top: 20px; }
+                h2 { color: #1e293b; margin-top: 0; }
+                p { color: #64748b; }
+              </style>
+            </head>
+            <body>
+              <div class="card">
+                <h2>Connexion Réussie !</h2>
+                <p>Nous vous redirigeons vers l'application MedicaSign...</p>
+                <div class="loader"></div>
+                <p>Si l'application ne s'ouvre pas automatiquement :</p>
+                <a href="${deepLink}" class="btn">Ouvrir l'application</a>
+              </div>
+              <script>
+                // Tentative de redirection automatique
+                setTimeout(function() {
+                  window.location.href = "${deepLink}";
+                }, 500);
+              </script>
+            </body>
+          </html>
+        `);
       }
+
 
       // 🔐 Web client - use exchange token
       const exchangeToken = crypto.randomBytes(32).toString("hex");
