@@ -60,8 +60,22 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _initDeepLinks() {
+  Future<void> _initDeepLinks() async {
     _appLinks = AppLinks();
+    
+    // Check initial link (if app was closed)
+    try {
+      final initialUri = await _appLinks.getInitialLink();
+      if (initialUri != null) {
+        if (initialUri.scheme == 'medicasign' && initialUri.host == 'auth-callback') {
+          _handleDeepLink(initialUri);
+        }
+      }
+    } catch (e) {
+      debugPrint('Error getting initial link: $e');
+    }
+
+    // Handle links while app is running
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
       if (uri.scheme == 'medicasign' && uri.host == 'auth-callback') {
         _handleDeepLink(uri);

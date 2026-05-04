@@ -196,9 +196,9 @@ app.get(
         );
 
         // ✅ FIX: Rediriger vers l'application mobile via Deep Link pour retour automatique
-        return res.redirect(
-          `medicasign://auth-callback?token=${token}&session_id=${sessionId}`,
-        );
+        return res.send(`<html><script>window.location.href="medicasign://auth-callback?token=${token}&session_id=${sessionId}";</script><body style="text-align:center;padding:50px;"><h2>Authentification réussie !</h2><p>Redirection en cours...</p><a href="medicasign://auth-callback?token=${token}&session_id=${sessionId}" style="padding:10px 20px;background:#0247AA;color:white;text-decoration:none;border-radius:5px;">Ouvrir l'application</a></body></html>`);
+
+
       }
 
       // 🔐 Web client - use exchange token
