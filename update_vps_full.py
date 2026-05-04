@@ -50,12 +50,12 @@ def update_full():
         print(stderr.read().decode())
         
         # 4. Build React (TRÈS IMPORTANT 🔥)
-        print("\n--- 4. Build React (clientweb) ---")
-        cmd_build = '''
-        cd /var/www/medica_sign/clientweb &&
-        npm install &&
-        npm run build
-        '''
+        #print("\n--- 4. Build React (clientweb) ---")
+        #cmd_build = '''
+        #cd /var/www/medica_sign/clientweb &&
+        #npm install &&
+        #npm run build
+        #'''
         stdin, stdout, stderr = ssh.exec_command(cmd_build)
         print(stdout.read().decode())
         print(stderr.read().decode())

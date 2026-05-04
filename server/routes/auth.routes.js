@@ -106,101 +106,6 @@ app.get("/api/my-api-token", verifyToken, async (req, res) => {
       .promise()
       .query("SELECT api_token FROM users WHERE id = ?", [req.user.id]);
 
-/* ===================== GENERATE API TOKEN ===================== */
-app.post("/api/generate-api-token", verifyToken, async (req, res) => {
-  try {
-    // vérifier si déjà généré
-    const [rows] = await db
-      .promise()
-      .query("SELECT api_token, name, email FROM users WHERE id = ?", [
-        req.user.id,
-      ]);
-
-    if (!rows.length) {
-      return res.status(404).json({ message: "Utilisateur introuvable" });
-    }
-
-    const user = rows[0];
-
-    // Si token déjà existe -> renvoyer le même
-    if (user.api_token) {
-      return res.json({ apiToken: user.api_token });
-    }
-
-    // Générer JWT API TOKEN
-    const apiToken = jwt.sign(
-      {
-        id: req.user.id,
-        name: user.name,
-        email: user.email,
-        type: "api",
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "10y", // longue durée
-      },
-    );
-
-    // stocker en base
-    await db
-      .promise()
-      .query("UPDATE users SET api_token = ? WHERE id = ?", [
-        apiToken,
-        req.user.id,
-      ]);
-
-    res.json({ apiToken });
-  } catch (err) {
-    console.error("API TOKEN ERROR:", err);
-    res.status(500).json({ message: "Erreur serveur" });
-  }
-});
-
-/**************************regenerer tocken */
-app.post("/api/regenerate-api-token", verifyToken, async (req, res) => {
-  try {
-    const [rows] = await db
-      .promise()
-      .query("SELECT name, email FROM users WHERE id = ?", [req.user.id]);
-
-    if (!rows.length) {
-      return res.status(404).json({ message: "Utilisateur introuvable" });
-    }
-
-    const user = rows[0];
-
-    const newToken = jwt.sign(
-      {
-        id: req.user.id,
-        name: user.name,
-        email: user.email,
-        type: "api",
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "10y" },
-    );
-
-    await db
-      .promise()
-      .query("UPDATE users SET api_token = ? WHERE id = ?", [
-        newToken,
-        req.user.id,
-      ]);
-
-    res.json({ apiToken: newToken });
-  } catch (err) {
-    console.error("REGENERATE TOKEN ERROR:", err);
-    res.status(500).json({ message: "Erreur serveur" });
-  }
-});
-
-/*========================get tocken existant==================*/
-app.get("/api/my-api-token", verifyToken, async (req, res) => {
-  try {
-    const [rows] = await db
-      .promise()
-      .query("SELECT api_token FROM users WHERE id = ?", [req.user.id]);
-
     if (!rows.length) {
       return res.status(404).json({ message: "Utilisateur introuvable" });
     }
@@ -230,17 +135,12 @@ app.get("/api/auth/google", (req, res, next) => {
 app.get(
   "/api/auth/google/callback",
   (req, res, next) => {
-    const state = req.query.state;
-    const isMobile = state && state !== "web_client";
-    const baseRedirect = "https://medicasign.medicacom.tn";
-
+    const redirectTo = req.query.state || "https://medicasign.medicacom.tn";
     passport.authenticate("google", {
       session: false,
-      failureRedirect: isMobile 
-        ? `medicasign://auth-callback?error=google_failed` 
-        : `${baseRedirect}/login?error=google_failed`,
-      accessType: "offline",
-      prompt: "consent",
+      failureRedirect: `${redirectTo}/login?error=google_failed`,
+      accessType: "offline", // ✅ Maintain consistency
+      prompt: "consent", // ✅ Maintain consistency
     })(req, res, next);
   },
   async (req, res) => {
@@ -295,83 +195,10 @@ app.get(
           sessionId,
         );
 
-        // ✅ FIX: Use an intermediate HTML page to trigger the deep link reliably
-        return res.send(`
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Authentification réussie</title>
-              <style>
-                body { 
-                  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-                  display: flex; flex-direction: column; align-items: center; justify-content: center; 
-                  height: 100vh; margin: 0; background-color: #f8fafc; text-align: center; padding: 20px;
-                }
-                .card { 
-                  background: white; padding: 40px; border-radius: 24px; 
-                  box-shadow: 0 10px 25px rgba(2, 71, 170, 0.1); 
-                  max-width: 450px; width: 100%; 
-                }
-                .icon { font-size: 64px; margin-bottom: 24px; }
-                h1 { font-size: 24px; margin-bottom: 12px; color: #1e293b; font-weight: 800; }
-                p { font-size: 16px; color: #64748b; margin-bottom: 32px; line-height: 1.6; }
-                .btn { 
-                  background: #0247AA; color: white; padding: 16px 32px; 
-                  border-radius: 14px; text-decoration: none; font-weight: 700; 
-                  display: inline-block; transition: all 0.2s;
-                  box-shadow: 0 4px 12px rgba(2, 71, 170, 0.2);
-                }
-                .btn:hover { background: #013b8d; transform: translateY(-2px); }
-                .loader {
-                  border: 3px solid #f3f3f3;
-                  border-top: 3px solid #0247AA;
-                  border-radius: 50%;
-                  width: 20px;
-                  height: 20px;
-                  animation: spin 1s linear infinite;
-                  display: inline-block;
-                  margin-right: 10px;
-                  vertical-align: middle;
-                }
-                @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-              </style>
-            </head>
-            <body>
-              <div class="card">
-                <div class="icon">🚀</div>
-                <h1>Connexion réussie</h1>
-                <p>Authentification confirmée. Nous vous redirigeons vers l'application Medica Sign...</p>
-                
-                <a href="medicasign://auth-callback?token=${token}&session_id=${sessionId}" class="btn">
-                  Ouvrir l'application
-                </a>
-                
-                <div style="margin-top: 24px; font-size: 13px; color: #94a3b8;">
-                  <div class="loader"></div> Redirection automatique en cours...
-                </div>
-              </div>
-              <script>
-                // URL de redirection profonde
-                const deepLink = "medicasign://auth-callback?token=${token}&session_id=${sessionId}";
-                
-                // Tentative immédiate
-                window.location.href = deepLink;
-                
-                // Deuxième tentative après 500ms (parfois nécessaire sur certains navigateurs mobiles)
-                setTimeout(function() {
-                  window.location.href = deepLink;
-                }, 500);
-
-                // Optionnel : fermer la fenêtre après un délai si elle est toujours ouverte
-                setTimeout(function() {
-                  document.querySelector('p').innerText = "Si l'application ne s'est pas ouverte, veuillez cliquer sur le bouton ci-dessus.";
-                }, 5000);
-              </script>
-            </body>
-          </html>
-        `);
+        // ✅ FIX: Rediriger vers l'application mobile via Deep Link pour retour automatique
+        return res.redirect(
+          `medicasign://auth-callback?token=${token}&session_id=${sessionId}`,
+        );
       }
 
       // 🔐 Web client - use exchange token
@@ -397,6 +224,7 @@ app.get(
   },
 );
 
+/* =================== GOOGLE EXCHANGE TOKEN ENDPOINT =================== */
 // Échange un token temporaire contre un cookie de session valide
 // Résout le problème cross-domain entre nip.io et l'IP directe
 app.post("/api/auth/exchange-google-token", async (req, res) => {
