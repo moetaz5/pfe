@@ -101,7 +101,7 @@ Tu es un assistant SaaS premium niveau international.
         headers: {
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": "http://51.178.39.67",
+          "HTTP-Referer": "https://medicasign.medicacom.tn",
           "X-Title": "Medica-Sign",
         },
       },

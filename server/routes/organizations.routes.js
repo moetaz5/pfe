@@ -478,7 +478,7 @@ app.post("/api/organizations/:id/invite", verifyToken, async (req, res) => {
       [id, invitedUserId, email, token, expiresAt],
     );
 
-    const inviteLink = `http://51.178.39.67/organization/invite/${token}`;
+    const inviteLink = `https://medicasign.medicacom.tn/organization/invite/${token}`;
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,

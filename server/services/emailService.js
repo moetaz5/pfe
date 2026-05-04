@@ -7,7 +7,7 @@ const sendSignatureEmail = async (
   transactionId,
   host = "medicasign.medicacom.tn",
 ) => {
-  const link = `http://${host}/signature/${transactionId}`;
+  const link = `https://${host}/signature/${transactionId}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
