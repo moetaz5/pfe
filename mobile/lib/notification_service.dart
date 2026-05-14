@@ -97,21 +97,38 @@ class NotificationService {
         unreadCount.value = unreadNotifs.length;
         
         bool newlyAdded = false;
-        for (var notif in unreadNotifs) {
-          final id = notif['id'] as int;
+        final newNotifs = unreadNotifs.where((n) => !_processedNotifIds.contains(n['id'] as int)).toList();
+        
+        if (newNotifs.isNotEmpty) {
+          bool isFirstLoad = _processedNotifIds.isEmpty;
           
-          if (!_processedNotifIds.contains(id)) {
-            // Afficher dans la barre système
+          // Si c'est l'ouverture du compte ou s'il y a trop de notifications d'un coup,
+          // on n'affiche que la plus récente (qui est la première car ORDER BY created_at DESC)
+          if (isFirstLoad || newNotifs.length > 3) {
+            final notif = newNotifs.first;
             await showLocalNotification(
-              id: id,
+              id: notif['id'] as int,
               title: notif['title'] ?? 'Nouveau message',
               body: notif['message'] ?? '',
-              payload: id.toString(),
+              payload: notif['id'].toString(),
             );
-            
-            _processedNotifIds.add(id);
-            newlyAdded = true;
+          } else {
+            // Sinon on affiche les quelques nouvelles notifications
+            for (var notif in newNotifs) {
+              await showLocalNotification(
+                id: notif['id'] as int,
+                title: notif['title'] ?? 'Nouveau message',
+                body: notif['message'] ?? '',
+                payload: notif['id'].toString(),
+              );
+            }
           }
+          
+          // Marquer toutes les nouvelles comme traitées en mémoire
+          for (var notif in newNotifs) {
+            _processedNotifIds.add(notif['id'] as int);
+          }
+          newlyAdded = true;
         }
 
         // Sauvegarder si de nouveaux IDs ont été traités

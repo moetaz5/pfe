@@ -1,8 +1,4 @@
-/* ==========================================================
-   CreateTransaction.jsx
-   Version: Exclusive mode (Upload Only) + Toastify + FaHome
-   + NEW: Modal Position (QR + REF) applied to current imported PDF
-   ========================================================== */
+
 
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -567,7 +563,7 @@ const CreateTransaction = () => {
                   </MiniList>
                 )}
 
-                {/* ✅ NEW: Button to open position modal (only if PDF ready) */}
+                {/*Button to open position modal (only if PDF ready) */}
                 {pdfFiles.length === 1 && (
                   <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
                     <button
