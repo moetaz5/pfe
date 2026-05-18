@@ -269,6 +269,8 @@ const CreateTransaction = () => {
   
   // ✅ Mode IA Auto Generate
   const [autoGenerateXml, setAutoGenerateXml] = useState(false);
+  const [isGeneratingXml, setIsGeneratingXml] = useState(false);
+  const [previewXml, setPreviewXml] = useState(null);
 
   // UI
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -331,7 +333,44 @@ const CreateTransaction = () => {
       return false;
     }
 
-    return true;
+  };
+
+  /* ==========================================================
+     NEW: Génération de l'aperçu XML avec l'IA
+     ========================================================== */
+  const handleGenerateXmlPreview = async () => {
+    if (pdfFiles.length !== 1) {
+      notify.error("Veuillez d'abord importer un fichier PDF.");
+      return;
+    }
+
+    setIsGeneratingXml(true);
+    setPreviewXml(null);
+
+    const formData = new FormData();
+    formData.append("pdf_file", pdfFiles[0]);
+
+    try {
+      const res = await fetch("/api/transactions/generate-xml-preview", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setPreviewXml(data.xml);
+        notify.success("XML généré avec succès !");
+      } else {
+        notify.error(data?.message || "Erreur lors de la génération de l'XML.");
+      }
+    } catch (err) {
+      console.error("GENERATE XML PREVIEW ERROR:", err);
+      notify.error("Erreur de connexion au serveur");
+    } finally {
+      setIsGeneratingXml(false);
+    }
   };
 
   /* ==========================================================
@@ -514,6 +553,7 @@ const CreateTransaction = () => {
                         setPdfFiles([]);
                         setQrConfig(null);
                         setRefConfig(null);
+                        setPreviewXml(null);
                         if (pdfInputRef.current) pdfInputRef.current.value = "";
                         notify.info("PDF supprimé");
                       }}
@@ -546,6 +586,7 @@ const CreateTransaction = () => {
                       // reset configs if pdf changed
                       setQrConfig(null);
                       setRefConfig(null);
+                      setPreviewXml(null);
 
                       notify.success(`${files.length} PDF sélectionné(s).`);
                     }}
@@ -647,8 +688,93 @@ const CreateTransaction = () => {
                     <div style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>
                       Extrait instantanément les données du PDF pour créer un XML TEIF conforme.
                     </div>
-                  </div>
                 </div>
+
+                {autoGenerateXml && (
+                  <div style={{ marginBottom: 15 }}>
+                    {pdfFiles.length !== 1 ? (
+                      <div style={{
+                        padding: 12,
+                        borderRadius: 12,
+                        background: "#fffbeb",
+                        border: "1px solid #fef3c7",
+                        color: "#b45309",
+                        fontSize: 13,
+                        display: "flex",
+                        gap: 8,
+                        alignItems: "center"
+                      }}>
+                        <AlertTriangle size={16} />
+                        <span>Veuillez d'abord importer un PDF dans la section ci-dessus pour pouvoir générer et prévisualiser son XML.</span>
+                      </div>
+                    ) : (
+                      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                        <button
+                          type="button"
+                          className="btn"
+                          style={{
+                            background: "#0247AA",
+                            color: "#fff",
+                            fontWeight: 700,
+                            padding: "10px 16px",
+                            borderRadius: 10,
+                            border: "none",
+                            cursor: isGeneratingXml ? "not-allowed" : "pointer",
+                            width: "fit-content",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                          }}
+                          onClick={handleGenerateXmlPreview}
+                          disabled={isGeneratingXml}
+                        >
+                          {isGeneratingXml ? "🤖 Analyse et génération en cours..." : "⚙️ Générer & prévisualiser le XML"}
+                        </button>
+
+                        {previewXml && (
+                          <div style={{ border: "1px solid #cbd5e1", borderRadius: 12, overflow: "hidden", background: "#fff", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)" }}>
+                            <div style={{ background: "#f8fafc", padding: "10px 15px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #cbd5e1" }}>
+                              <span style={{ fontWeight: 700, fontSize: 13, color: "#1e293b", display: "flex", alignItems: "center", gap: 6 }}>
+                                <CheckCircle2 size={16} color="#10b981" /> XML TEIF Généré avec succès !
+                              </span>
+                              <button
+                                type="button"
+                                className="btn btn-outline"
+                                style={{ padding: "4px 8px", fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}
+                                onClick={() => {
+                                  const blob = new Blob([previewXml], { type: "application/xml" });
+                                  const url = URL.createObjectURL(blob);
+                                  const a = document.createElement("a");
+                                  a.href = url;
+                                  a.download = `Facture_${factureNumber || "IA_TEIF"}.xml`;
+                                  a.click();
+                                }}
+                              >
+                                📥 Télécharger
+                              </button>
+                            </div>
+                            <pre style={{
+                              margin: 0,
+                              padding: 15,
+                              background: "#0f172a",
+                              color: "#38bdf8",
+                              fontSize: 12.5,
+                              maxHeight: 280,
+                              overflow: "auto",
+                              fontFamily: "Fira Code, Consolas, Monaco, monospace",
+                              whiteSpace: "pre-wrap",
+                              wordBreak: "break-all",
+                              textAlign: "left"
+                            }}>
+                              {previewXml}
+                            </pre>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {!autoGenerateXml && (
                   <>

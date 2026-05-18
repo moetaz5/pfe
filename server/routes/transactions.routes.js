@@ -74,6 +74,26 @@ module.exports = function(app, locals) {
     },
   );
 
+  /* ===================== PRÉVISUALISATION XML AVANT CRÉATION ===================== */
+  app.post(
+    "/api/transactions/generate-xml-preview",
+    verifyToken,
+    upload.single("pdf_file"),
+    async (req, res) => {
+      try {
+        if (!req.file) {
+          return res.status(400).json({ message: "Veuillez fournir un fichier PDF." });
+        }
+        console.log("[AI XML PREVIEW] Génération de l'XML pour :", req.file.originalname);
+        const xmlText = await generateXmlFromPdf(req.file.buffer);
+        res.json({ xml: xmlText });
+      } catch (err) {
+        console.error("GENERATE XML PREVIEW ERROR:", err);
+        res.status(500).json({ message: "Erreur lors de la génération du XML: " + err.message });
+      }
+    }
+  );
+
   /* ===================== CRÉATION TRANSACTION ===================== */
   app.post(
     "/api/transactions",
