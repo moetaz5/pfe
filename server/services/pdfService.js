@@ -325,19 +325,19 @@ Consignes strictes :
    - Émetteur (PartnerDetails functionCode="I-62") : Matricule Fiscal, Nom, Adresse, Rue, Ville, Code Postal, Téléphone, Email, Forme juridique (SARL, SA, etc.)
    - Client (PartnerDetails functionCode="I-64") : Matricule Fiscal, Nom, Adresse, Ville, Code Postal
    - Lignes de facture (LinSection/Lin) :
-     * <Quantity> dans <LinQty> : DOIT être dynamique. Ne copie JAMAIS la valeur d'exemple "1" du template XML. Elle DOIT être calculée comme [Montant HT de la ligne (I-183)] / [Prix Unitaire Net (I-171)]. Par exemple, si le Montant HT est 1400.000 et le Prix Unitaire est 350.000, la valeur de <Quantity> DOIT ÊTRE EXACTEMENT 4. Toute valeur de quantité incohérente (comme laisser 1 alors que le calcul ou la facture indique 4) rendra le XML invalide.
+     * <Quantity> dans <LinQty> : DOIT être dynamique et correspondre à la quantité réelle indiquée sur la facture. Elle doit être validée comme [Montant HT de la ligne (I-183)] / [Prix Unitaire Net (I-171)]. Par exemple, si la facture contient un lot unique (ex: 1 lot de 1000 jetons pour 500.000 HT), la quantité est bien 1 et le prix unitaire est 500.000. Si la facture indique une quantité de 4 pour un total de 1400.000, la quantité doit être 4 et le prix unitaire 350.000. Ne force jamais une quantité artificielle (comme 3) si la facture indique clairement 1.
      * Dans <LinMoa> :
-       - Le premier <MoaDetails> avec amountTypeCode="I-183" DOIT être le Montant HT total de la ligne (par exemple, 1400.000).
-       - Le second <MoaDetails> avec amountTypeCode="I-171" DOIT être le Prix Unitaire Net de la ligne (par exemple, 350.000). Ne mets JAMAIS le montant de la TVA ou autre chose ici.
+       - Le premier <MoaDetails> avec amountTypeCode="I-183" DOIT être le Montant HT total de la ligne (par exemple, 500.000).
+       - Le second <MoaDetails> avec amountTypeCode="I-171" DOIT être le Prix Unitaire Net de la ligne (par exemple, 500.000). Ne mets JAMAIS le montant de la TVA ou autre chose ici.
      * RÈGLE D'OR ARITHMÉTIQUE INVIOLABLE : Fais obligatoirement une validation mathématique pour chaque ligne ! La formule [Quantité] x [Prix Unitaire Net (I-171)] DOIT être rigoureusement égale au [Montant HT de la ligne (I-183)]. 
         Ne devine jamais des valeurs qui ne figurent pas dans le texte brut.
-      * COMMENT DÉCODER LES COLONNES CONCATÉNÉES (ex: "4350.00019266.00001 400.0001 666.000") :
+      * COMMENT DÉCODER LES COLONNES CONCATÉNÉES (ex: "11000 JETONS1500.0001995.0000500.000595.000") :
         Le parseur PDF peut coller les chiffres des colonnes sans espace. Décode toujours en analysant les nombres de droite à gauche et en faisant des validations arithmétiques croisées :
         - L'ordre logique des colonnes de gauche à droite est toujours : [Quantité][Prix Unitaire][Taux TVA][Montant TVA][Remise][Total HT][Total TTC].
-        - Repère le Total HT de la ligne (ex: "1 400.000" ou "1400.000") et le Total TTC de la ligne (ex: "1 666.000" ou "1666.000").
-        - Repère le Taux TVA (ex: 19) et le Montant TVA (ex: 266.000), qui forment ensemble la chaîne "19266.000".
-        - Isole ce qui se trouve à l'extrême gauche (ex: "4350.000").
-        - La formule [Quantité] x [Prix Unitaire] doit faire exactement le Total HT (1400.000). Le seul découpage possible de "4350.000" qui satisfait [Quantité] x [Prix Unitaire] = 1400.000 est Quantité = 4 et Prix Unitaire = 350.000.
+        - Repère le Total HT de la ligne (ex: "500.000") et le Total TTC de la ligne (ex: "595.000").
+        - Repère le Taux TVA (ex: 19) et le Montant TVA (ex: 95.000), qui forment ensemble la chaîne "1995.000".
+        - Isole ce qui se trouve avant la TVA (ex: "1500.000").
+        - La formule [Quantité] x [Prix Unitaire] doit faire exactement le Total HT (500.000). Le seul découpage possible de "1500.000" qui satisfait [Quantité] x [Prix Unitaire] = 500.000 est Quantité = 1 et Prix Unitaire = 500.000.
         - Applique ce raisonnement logique rigoureux à chaque ligne fusionnée pour extraire la Quantité exacte et le Prix Unitaire exact.
      * Le taux de TVA (TaxRate) de la ligne dans <LinTax> (par exemple 19).
     - Totaux de facture dans <InvoiceMoa> :
