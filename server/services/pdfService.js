@@ -323,7 +323,12 @@ Consignes strictes :
    - Numero de facture (Bgm/DocumentIdentifier)
    - Date formatee en ddMMyy (ex: "110526" pour le 11 mai 2026)
    - Emetteur (PartnerDetails functionCode="I-62") : Matricule Fiscal, Nom, Adresse, Rue, Ville, Code Postal, Email
+     OBLIGATOIRE : Ajouter apres </Nad> les RffSection suivants pour l emetteur :
+     <RffSection><Reference refID="I-815">[Numero Registre de Commerce]</Reference></RffSection>
+     <RffSection><Reference refID="I-816">[Forme Juridique ex: SARL/SA]</Reference></RffSection>
    - Client (PartnerDetails functionCode="I-64") : Matricule Fiscal, Nom, Adresse, Ville, Code Postal
+     OBLIGATOIRE : Ajouter apres </Nad> la RffSection suivante pour le client :
+     <RffSection><Reference refID="I-81">[Matricule Fiscale du client]</Reference></RffSection>
 
    - Lignes de facture (LinSection/Lin) via ALGORITHME UNIVERSEL en 5 ETAPES :
 
@@ -360,37 +365,45 @@ Consignes strictes :
 
         TROIS EXEMPLES REELS (references absolues) :
 
-        Exemple A : Bloc = "11000 JETONS1500.0001995.0000500.000595.000"
-          Extraction : TTC=595.000 | HT=500.000 | Remise=0 | TVA=95.000 | Taux=19
-          Reste gauche : "1500.000"
-          Test Qte=1 x PU=500.000 = 500.000 [OK]
-          => <Quantity>1</Quantity> | I-183=500.000 | I-171=500.000
+        DEFINITION ABSOLUE DES CODES LinMoa :
+          I-183 = Montant HT TOTAL de la ligne (Quantite x Prix Unitaire)
+          I-171 = Prix Unitaire HT NET (montant pour 1 unite)
+          REGLES DE VALIDATION : Quantite x I-171 = I-183 (toujours)
 
-        Exemple B : Bloc = "4350.00019266.00001 400.0001 666.000" (description sur ligne separee)
-          Extraction : TTC=1666.000 | HT=1400.000 | Remise=0 | TVA=266.000 | Taux=19
-          Reste gauche : "4350.000"
-          Test Qte=4 x PU=350.000 = 1400.000 [OK]
-          => <Quantity>4</Quantity> | I-183=1400.000 | I-171=350.000
+        Exemple A : Qte=1, PU=500 DT HT, TVA 19%
+          Total HT ligne = 1 x 500 = 500.000
+          Total TTC ligne = 500 + 95 = 595.000
+          => <Quantity>1</Quantity>
+          => I-183 = 500.000  (Total HT ligne)
+          => I-171 = 500.000  (Prix unitaire = HT total car Qte=1)
 
-        Exemple C (Multi-articles avec TVA 20% et Timbre 0) : Facture multi-produits (ex: "mon produit", qte=2, prix=50 et "mon service", qte=3, prix=100)
-          - Ligne 1 ("mon produit") : Qte = 2 | Prix Unitaire = 50.000 | Total HT (I-183) = 100.000 | TVA = 20.000 | Taux = 20
-          - Ligne 2 ("mon service") : Qte = 3 | Prix Unitaire = 100.000 | Total HT (I-183) = 300.000 | TVA = 60.000 | Taux = 20
-          - Totaux globaux de la facture :
-            * Total HT (I-176) = 400.000 (100.000 + 300.000)
-            * Base Imposable (I-182) = 400.000
-            * Total TVA (I-181) = 80.000 (20.000 + 60.000)
-            * Timbre Fiscal (I-181 / I-178 timbre) = 0.000
-            * Total TTC (I-180) = 480.000 (400.000 + 80.000) avec description "quatre cent quatre-vingts dinars"
+        Exemple B : Qte=4, PU=350 DT HT, TVA 19%
+          Total HT ligne = 4 x 350 = 1400.000
+          Total TTC ligne = 1400 + 266 = 1666.000
+          => <Quantity>4</Quantity>
+          => I-183 = 1400.000  (Total HT ligne = 4 x 350)
+          => I-171 = 350.000   (Prix unitaire HT)
+          VERIFICATION : 4 x 350 = 1400 [OK]
+
+        Exemple C : Qte=1, PU=6000 DT HT, TVA 19%, Timbre=1 DT
+          Total HT ligne = 1 x 6000 = 6000.000
+          TVA = 6000 x 0.19 = 1140.000
+          Total TTC = 6000 + 1140 + 1 = 7141.000
+          => <Quantity>1</Quantity>
+          => I-183 = 6000.000  (Total HT ligne)
+          => I-171 = 6000.000  (Prix unitaire = HT total car Qte=1)
+          => InvoiceMoa : I-176=6000 | I-182=6000 | I-181=1140 | I-180=7141
 
       ETAPE 5 - Validation croisee finale (OBLIGATOIRE avant de generer le XML) :
-        [OK] Quantite x I-171 = I-183
-        [OK] I-183 x Taux / 100 = Montant TVA (a 0.001 pres)
-        [OK] I-183 + Montant TVA + Timbre = Total TTC (a 0.001 pres)
+        [OK] Quantite x I-171 = I-183  (validation mathematique obligatoire)
+        [OK] Somme(I-183 de toutes les lignes) = I-176 (Total HT global)
+        [OK] I-176 x Taux / 100 = I-181 (Montant TVA global, a 0.001 pres)
+        [OK] I-176 + I-181 + Timbre = I-180 (Total TTC, a 0.001 pres)
         Si un test echoue : recommencer ETAPE 4 avec une autre coupure.
 
       Remplissage de <LinMoa> :
-        - amountTypeCode="I-183" = Montant HT TOTAL de la ligne (Quantite x Prix Unitaire).
-        - amountTypeCode="I-171" = Prix Unitaire NET. Differe de I-183 si Quantite > 1.
+        - amountTypeCode="I-183" = Montant HT TOTAL de la ligne (Quantite x Prix Unitaire HT).
+        - amountTypeCode="I-171" = Prix Unitaire HT NET (= I-183 / Quantite). Egal a I-183 si Qte=1.
       Remplissage de <LinTax> : TaxRate = valeur isolee a l Etape 3e.
 
    - Totaux dans <InvoiceMoa> :
