@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEIF xmlns:ns0="http://www.w3.org/2000/09/xmldsig#" 
+      xmlns:ns1="http://uri.etsi.org/01903/v1.3.2#" 
+      controlingAgency="TTN" 
+      version="1.0">
+  
+  <!-- En-tête de la Facture Électronique Tunisienne (TEIF Header) -->
+  <InvoiceHeader>
+    <!-- Identifiant fiscal de l'émetteur (Votre Matricule Fiscal de Test) -->
+    <MessageSenderIdentifier type="V">1234567ABC</MessageSenderIdentifier>
+    <!-- Identifiant fiscal du destinataire/client -->
+    <MessageRecieverIdentifier type="V">9876543XYZ</MessageRecieverIdentifier>
+  </InvoiceHeader>
+  
+  <!-- Corps de la Facture Électronique (TEIF Body) -->
+  <InvoiceBody>
+    <!-- Informations Générales de la Facture -->
+    <Bgm>
+      <!-- Numéro de facture unique -->
+      <DocumentIdentifier>FAC-2026-0042</DocumentIdentifier>
+      <!-- Type de document (380 = Facture commerciale) -->
+      <DocumentType code="380"/>
+    </Bgm>
+    
+    <!-- Dates (Dtm Section) -->
+    <Dtm>
+      <!-- Date d'émission de la facture -->
+      <DateText format="CCYYMMDD" functionCode="137">20260518</DateText>
+      <!-- Date de prestation / livraison -->
+      <DateText format="CCYYMMDD" functionCode="138">20260518</DateText>
+      <!-- Date d'exigibilité du paiement -->
+      <DateText format="CCYYMMDD" functionCode="140">20260518</DateText>
+    </Dtm>
+    
+    <!-- Sections des Partenaires (Fournisseur & Client) -->
+    <PartnerSection>
+      <!-- Fournisseur (Émetteur - Médica-Sign) -->
+      <PartnerDetails functionCode="SU">
+        <Nad>
+          <PartnerIdentifier type="V">1234567ABC</PartnerIdentifier>
+          <PartnerName nameType="A">Société Médica-Sign S.A.</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>Avenue Habib Bourguiba</AdressDescription>
+            <Street>Avenue Habib Bourguiba</Street>
+            <CityName>Tunis</CityName>
+            <PostalCode>1000</PostalCode>
+            <Country codeList="TN"/>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="1234567ABC"/>
+        </RffSection>
+        <CtaSection>
+          <Contact functionCode="IC">
+            <ContactIdentifier>1</ContactIdentifier>
+            <ContactName>Support Médica-Sign</ContactName>
+          </Contact>
+          <Communication>
+            <ComMeansType>EM</ComMeansType>
+            <ComAdress>support@medicasign.tn</ComAdress>
+          </Communication>
+        </CtaSection>
+      </PartnerDetails>
+      
+      <!-- Acheteur / Destinataire (Client - Clinique Carthage) -->
+      <PartnerDetails functionCode="BY">
+        <Nad>
+          <PartnerIdentifier type="V">9876543XYZ</PartnerIdentifier>
+          <PartnerName nameType="A">Clinique de Carthage S.A.</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>Les Berges du Lac 2</AdressDescription>
+            <Street>Rue des Cliniques</Street>
+            <CityName>Tunis</CityName>
+            <PostalCode>1053</PostalCode>
+            <Country codeList="TN"/>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="9876543XYZ"/>
+        </RffSection>
+      </PartnerDetails>
+    </PartnerSection>
+    
+    <!-- Section de Paiement (RIB & Conditions) -->
+    <PytSection>
+      <PytSectionDetails>
+        <Pyt>
+          <PaymentTearmsTypeCode>10</PaymentTearmsTypeCode>
+          <PaymentTearmsDescription>Paiement à réception</PaymentTearmsDescription>
+        </Pyt>
+      </PytSectionDetails>
+      <PytSectionDetails>
+        <Pyt>
+          <PaymentTearmsTypeCode>10</PaymentTearmsTypeCode>
+          <PaymentTearmsDescription>Virement Bancaire (RIB)</PaymentTearmsDescription>
+        </Pyt>
+        <PytFii functionCode="PB">
+          <AccountHolder>
+            <AccountNumber>01234567890123456789</AccountNumber>
+            <OwnerIdentifier>1234567ABC</OwnerIdentifier>
+          </AccountHolder>
+          <InstitutionIdentification nameCode="BIAT">
+            <BranchIdentifier>Tunis Lac</BranchIdentifier>
+            <InstitutionName>BIAT S.A.</InstitutionName>
+          </InstitutionIdentification>
+        </PytFii>
+      </PytSectionDetails>
+    </PytSection>
+    
+    <!-- Lignes de la Facture (Articles) -->
+    <LinSection>
+      <Lin>
+        <ItemIdentifier>1</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>SERV-SIGN</ItemCode>
+          <ItemDescription>Abonnement Annuel Solution de Signature Electronique Médica-Sign Pro</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="P1">1.000</Quantity>
+        </LinQty>
+        <LinTax>
+          <TaxTypeName code="TVA"/>
+          <TaxDetails>
+            <TaxRate>19.00</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <!-- Montant Ligne Hors Taxes (HT) -->
+          <LinMoaDetails>
+            <Moa amountTypeCode="203" currencyCodeList="TND">
+              <Amount currencyIdentifier="TND">1000.000</Amount>
+            </Moa>
+          </LinMoaDetails>
+          <!-- Montant TVA de la Ligne -->
+          <LinMoaDetails>
+            <Moa amountTypeCode="38" currencyCodeList="TND">
+              <Amount currencyIdentifier="TND">190.000</Amount>
+            </Moa>
+          </LinMoaDetails>
+        </LinMoa>
+      </Lin>
+    </LinSection>
+    
+    <!-- Montants Globaux de la Facture -->
+    <InvoiceMoa>
+      <AmountDetails>
+        <!-- Total Net à payer (TTC) -->
+        <Moa amountTypeCode="86" currencyCodeList="TND">
+          <Amount currencyIdentifier="TND">1191.000</Amount>
+          <AmountDescription lang="fr">Mille cent quatre-vingt-onze Dinars et Zéro millimes</AmountDescription>
+        </Moa>
+      </AmountDetails>
+    </InvoiceMoa>
+    
+    <!-- Récapitulatif des Taxes Fiscales (TVA globale) -->
+    <InvoiceTax>
+      <InvoiceTaxDetails>
+        <Tax>
+          <TaxTypeName code="TVA"/>
+          <TaxDetails>
+            <TaxRate>19.00</TaxRate>
+          </TaxDetails>
+        </Tax>
+        <AmountDetails>
+          <Moa amountTypeCode="124" currencyCodeList="TND">
+            <Amount currencyIdentifier="TND">190.000</Amount>
+          </Moa>
+        </AmountDetails>
+      </InvoiceTaxDetails>
+    </InvoiceTax>
+    
+    <!-- Droits Aditionnels (Droit de Timbre) -->
+    <InvoiceAlc>
+      <AllowanceDetails>
+        <Alc allowanceCode="DT">
+          <AllowanceIdentifier>TIMBRE</AllowanceIdentifier>
+          <SpecialServices lang="fr">Droit de Timbre Fiscal Tunisien</SpecialServices>
+        </Alc>
+        <Moa amountTypeCode="131" currencyCodeList="TND">
+          <Amount currencyIdentifier="TND">1.000</Amount>
+        </Moa>
+      </AllowanceDetails>
+    </InvoiceAlc>
+  </InvoiceBody>
+</TEIF>

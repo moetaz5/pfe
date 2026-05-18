@@ -1,0 +1,604 @@
+=== LOGS STANDARDS DE MEDICA SIGN ===
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+✅ Tables et base de données initialisées avec succès
+Table notifications prête
+OK Table api_routes synchronisee (102 APIs).
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: 1777885585421_485
+✅ GOOGLE AUTH SUCCESS (MOBILE) - Token stored for session: 1777885585421_485
+GOOGLE AUTH START - Session ID: 1777885931002_483
+✅ GOOGLE AUTH SUCCESS (MOBILE) - Token stored for session: 1777885931002_483
+GOOGLE AUTH START - Session ID: 1777886015910_reg_1
+✅ GOOGLE AUTH SUCCESS (MOBILE) - Token stored for session: 1777886015910_reg_1
+GOOGLE AUTH START - Session ID: 1777886072260_318
+✅ GOOGLE AUTH SUCCESS (MOBILE) - Token stored for session: 1777886072260_318
+GOOGLE AUTH START - Session ID: 1777909774815_599
+✅ GOOGLE AUTH SUCCESS (MOBILE) - Token stored for session: 1777909774815_599
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+[TTN] Début de traitement en tâche de fond pour TX #34
+[TTN] Traitement doc 34 (facture_5)
+[TTN] raw saveRes for doc 34: HTTP 200, RAW: <?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
+    <soap:Body>
+        <tns:saveEfactResponse>
+            <return>SUCCESS: Invoice saved successfully. idSaveEfact=100023, Reference ...
+[TTN] returnText/fault for doc 34: returnText: SUCCESS: Invoice saved successfully. idSaveEfact=100023, Reference TTN=None20260505080743761431, fault: null
+[TTN] Consultation TTN avec idSaveEfact: 100023
+[TTN] Document 34 terminé avec succès (signée_ttn)
+📧 PDF envoyés au client: moetazkobbi@gmail.com
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: 1777969023039_616
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[TTN] Début de traitement en tâche de fond pour TX #32
+[TTN] Traitement doc 32 (facture_5)
+[TTN] raw saveRes for doc 32: HTTP 200, RAW: <?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
+    <soap:Body>
+        <tns:saveEfactResponse>
+            <return>SUCCESS: Invoice saved successfully. idSaveEfact=100024, Reference ...
+[TTN] returnText/fault for doc 32: returnText: SUCCESS: Invoice saved successfully. idSaveEfact=100024, Reference TTN=None20260518075510771294, fault: null
+[TTN] Consultation TTN avec idSaveEfact: 100024
+[TTN] Document 32 terminé avec succès (signée_ttn)
+📧 PDF envoyés au client: moetazkobbi@gmail.com
+[TTN] Début de traitement en tâche de fond pour TX #35
+[TTN] Traitement doc 35 (facture_5)
+[TTN] raw saveRes for doc 35: HTTP 200, RAW: <?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
+    <soap:Body>
+        <tns:saveEfactResponse>
+            <return>SUCCESS: Invoice saved successfully. idSaveEfact=100025, Reference ...
+[TTN] returnText/fault for doc 35: returnText: SUCCESS: Invoice saved successfully. idSaveEfact=100025, Reference TTN=None20260518075615044848, fault: null
+[TTN] Consultation TTN avec idSaveEfact: 100025
+[TTN] Document 35 terminé avec succès (signée_ttn)
+📧 PDF envoyés au client: moetazkobbi@gmail.com
+[TTN] Début de traitement en tâche de fond pour TX #30
+[TTN] Traitement doc 30 (facture_5)
+[TTN] raw saveRes for doc 30: HTTP 200, RAW: <?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
+    <soap:Body>
+        <tns:saveEfactResponse>
+            <return>SUCCESS: Invoice saved successfully. idSaveEfact=100026, Reference ...
+[TTN] returnText/fault for doc 30: returnText: SUCCESS: Invoice saved successfully. idSaveEfact=100026, Reference TTN=None20260518075757001886, fault: null
+[TTN] Consultation TTN avec idSaveEfact: 100026
+[TTN] Document 30 terminé avec succès (signée_ttn)
+📧 PDF envoyés au client: moetazkobbi@gmail.com
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+✅ Tables et base de données initialisées avec succès
+Table notifications prête
+OK Table api_routes synchronisee (102 APIs).
+[TTN] Début de traitement en tâche de fond pour TX #28
+[TTN] Traitement doc 28 (facture_5)
+[TTN] raw saveRes for doc 28: HTTP 200, RAW: <?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
+    <soap:Body>
+        <tns:saveEfactResponse>
+            <return>SUCCESS: Invoice saved successfully. idSaveEfact=100027, Reference ...
+[TTN] returnText/fault for doc 28: returnText: SUCCESS: Invoice saved successfully. idSaveEfact=100027, Reference TTN=None20260518080401725192, fault: null
+[TTN] Consultation TTN avec idSaveEfact: 100027
+[TTN] Document 28 terminé avec succès (signée_ttn)
+📧 PDF envoyés au client: moetazkobbi@gmail.com
+[TTN] Début de traitement en tâche de fond pour TX #37
+[TTN] Traitement doc 37 (facture_5)
+[TTN] raw saveRes for doc 37: HTTP 200, RAW: <?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
+    <soap:Body>
+        <tns:saveEfactResponse>
+            <return>SUCCESS: Invoice saved successfully. idSaveEfact=100028, Reference ...
+[TTN] returnText/fault for doc 37: returnText: SUCCESS: Invoice saved successfully. idSaveEfact=100028, Reference TTN=1234567ABC20260518081906892142, fault: null
+[TTN] Consultation TTN avec idSaveEfact: 100028
+[TTN] Document 37 terminé avec succès (signée_ttn)
+📧 PDF envoyés au client: moetazkobbi@gmail.com
+[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[TTN] Début de traitement en tâche de fond pour TX #38
+[TTN] Traitement doc 38 (facture_5)
+[TTN] raw saveRes for doc 38: HTTP 200, RAW: <?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
+    <soap:Body>
+        <tns:saveEfactResponse>
+            <return>SUCCESS: Invoice saved successfully. idSaveEfact=100029, Reference ...
+[TTN] returnText/fault for doc 38: returnText: SUCCESS: Invoice saved successfully. idSaveEfact=100029, Reference TTN=1234567ABC20260518082111323628, fault: null
+[TTN] Consultation TTN avec idSaveEfact: 100029
+[TTN] Document 38 terminé avec succès (signée_ttn)
+📧 PDF envoyés au client: moetazkobbi@gmail.com
+[dotenv@17.2.3] injecting env (13) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+GOOGLE AUTH START - Session ID: undefined
+GOOGLE CALLBACK SUCCESS (WEB) - Exchange token generated, redirecting.
+[TTN] Début de traitement en tâche de fond pour TX #39
+[TTN] Traitement doc 39 (facture_5)
+[TTN] raw saveRes for doc 39: HTTP 200, RAW: <?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
+    <soap:Body>
+        <tns:saveEfactResponse>
+            <return>SUCCESS: Invoice saved successfully. idSaveEfact=100030, Reference ...
+[TTN] returnText/fault for doc 39: returnText: SUCCESS: Invoice saved successfully. idSaveEfact=100030, Reference TTN=1234567ABC20260518082515257168, fault: null
+[TTN] Consultation TTN avec idSaveEfact: 100030
+[TTN] Document 39 terminé avec succès (signée_ttn)
+📧 PDF envoyés au client: moetazkobbi@gmail.com
+[dotenv@17.2.3] injecting env (18) from .env -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[dotenv@17.2.3] injecting env (18) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[dotenv@17.2.3] injecting env (18) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[dotenv@17.2.3] injecting env (18) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[TTN] Début de traitement en tâche de fond pour TX #40
+[TTN] Traitement doc 40 (facture_5)
+[TTN] Début de traitement en tâche de fond pour TX #40
+[TTN] Traitement doc 40 (facture_5)
+
+
+=== LOGS D'ERREUR DE MEDICA SIGN ===
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+/var/www/medica_sign/server/routes/auth.routes.js:1134
+};
+^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+    at Module._compile (node:internal/modules/cjs/loader:1786:20)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
+    at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
+EXTERNAL LIST FACTURES ERROR: Error: Table 'medica_sign.factures' doesn't exist
+    at PromisePool.query (/var/www/medica_sign/server/node_modules/mysql2/lib/promise/pool.js:36:22)
+    at /var/www/medica_sign/server/routes/external.routes.js:289:39
+    at Layer.handleRequest (/var/www/medica_sign/server/node_modules/router/lib/layer.js:152:17)
+    at next (/var/www/medica_sign/server/node_modules/router/lib/route.js:157:13)
+    at verifyApiToken (/var/www/medica_sign/server/middleware/authMiddleware.js:97:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sql: '\n' +
+    '        SELECT \n' +
+    '          id,\n' +
+    '          file_name,\n' +
+    '          statut,\n' +
+    '          date_facture\n' +
+    '        FROM factures\n' +
+    '        WHERE user_id = 9\n' +
+    '        ORDER BY id DESC\n' +
+    '        ',
+  sqlState: '42S02',
+  sqlMessage: "Table 'medica_sign.factures' doesn't exist"
+}
+EXTERNAL LIST FACTURES ERROR: Error: Table 'medica_sign.factures' doesn't exist
+    at PromisePool.query (/var/www/medica_sign/server/node_modules/mysql2/lib/promise/pool.js:36:22)
+    at /var/www/medica_sign/server/routes/external.routes.js:289:39
+    at Layer.handleRequest (/var/www/medica_sign/server/node_modules/router/lib/layer.js:152:17)
+    at next (/var/www/medica_sign/server/node_modules/router/lib/route.js:157:13)
+    at verifyApiToken (/var/www/medica_sign/server/middleware/authMiddleware.js:97:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sql: '\n' +
+    '        SELECT \n' +
+    '          id,\n' +
+    '          file_name,\n' +
+    '          statut,\n' +
+    '          date_facture\n' +
+    '        FROM factures\n' +
+    '        WHERE user_id = 9\n' +
+    '        ORDER BY id DESC\n' +
+    '        ',
+  sqlState: '42S02',
+  sqlMessage: "Table 'medica_sign.factures' doesn't exist"
+}

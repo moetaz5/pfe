@@ -17,9 +17,9 @@ def update_remote_env():
             f.write(env_content)
         sftp.close()
         ssh.exec_command('pm2 restart medica_sign')
-        print("✅ VPS .env updated and server restarted.")
+        print("SUCCESS: VPS .env updated and server restarted.")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"ERROR: {e}")
     finally:
         ssh.close()
 

@@ -11,24 +11,27 @@ def stream_logs():
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     
     try:
-        print(f"Connexion au serveur {hostname} pour LIRE LES LOGS EN TEMPS RÉEL (PM2)...\n")
-        print("Appuyez sur Ctrl+C pour arrêter le flux.\n")
+        print(f"Connexion au serveur {hostname} pour LIRE LES LOGS EN TEMPS REEL (PM2)...\n")
+        print("Appuyez sur Ctrl+C pour arreter le flux.\n")
         
         ssh.connect(hostname, username=username, password=password)
         
-        # On lance pm2 logs sans "--nostream" pour avoir le temps réel
+        # On lance pm2 logs sans "--nostream" pour avoir le temps reel
         stdin, stdout, stderr = ssh.exec_command('pm2 logs medica_sign')
         
+        encoding = sys.stdout.encoding or 'utf-8'
         for line in iter(stdout.readline, ""):
-            print(line, end="")
+            safe_line = line.encode(encoding, errors='replace').decode(encoding)
+            print(safe_line, end="")
             sys.stdout.flush()
             
     except KeyboardInterrupt:
-        print("\nArrêt du flux de logs.")
+        print("\nArret du flux de logs.")
     except Exception as e:
-        print(f"\n❌ Erreur : {e}")
+        print(f"\n[Error] : {e}")
     finally:
         ssh.close()
 
 if __name__ == '__main__':
     stream_logs()
+

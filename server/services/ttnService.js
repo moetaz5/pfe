@@ -132,13 +132,27 @@ const processTTNSubmission = async (
 
       try {
         // 📡 SAVE TTN
-        const saveRes = await saveEfactTTN(doc.xml_signed);
+        let saveRes;
+        try {
+          saveRes = await saveEfactTTN(doc.xml_signed);
+        } catch (networkErr) {
+          console.error(`\n[TTN 🔴 ERREUR RÉSEAU / TIMEOUT] Impossible de se connecter au serveur Tunisie TradeNet (TTN).`);
+          console.error(`- URL cible : ${TTN_URL}`);
+          console.error(`- Erreur système : ${networkErr.message} (Code: ${networkErr.code || 'UNKNOWN'})`);
+          console.error(`- Diagnostic : Cela indique généralement que l'adresse IP du serveur (${process.env.VPS_IP || '51.178.39.67'}) est bloquée par le pare-feu géographique de TTN (whitelisting obligatoire).`);
+          throw networkErr;
+        }
+
         console.log(
           `[TTN] raw saveRes for doc ${doc.id}: HTTP ${saveRes.httpStatus}, RAW: ${saveRes.raw?.substring(0, 300)}...`,
         );
-        console.log(
-          `[TTN] returnText/fault for doc ${doc.id}: returnText: ${saveRes.returnText}, fault: ${saveRes.fault}`,
-        );
+
+        if (saveRes.fault) {
+          console.error(`\n[TTN 🔴 REFUS DU SERVEUR TTN (SOAP Fault)] Le serveur a renvoyé un message d'erreur.`);
+          console.error(`- Motif du refus : ${saveRes.fault}`);
+          console.error(`- HTTP Status : ${saveRes.httpStatus}`);
+          throw new Error(`TTN_SOAP_FAULT: ${saveRes.fault}`);
+        }
 
         const idMatch = saveRes.returnText?.match(/idSaveEfact=(\d+)/i);
         const refMatch = saveRes.returnText?.match(
@@ -149,10 +163,17 @@ const processTTNSubmission = async (
         const referenceTTN = refMatch ? refMatch[1] : null;
 
         if (!idSaveEfact) {
+          console.error(`\n[TTN 🔴 RÉPONSE TTN INVALIDE] Le serveur a répondu sans renvoyer d'identifiant de signature.`);
+          console.error(`- Texte de retour : ${saveRes.returnText}`);
+          console.error(`- HTTP Status : ${saveRes.httpStatus}`);
           throw new Error(
             `TTN_ID_NOT_FOUND (returnText was: ${saveRes.returnText})`,
           );
         }
+
+        console.log(`\n[TTN 🟢 SIGNATURE TTN RÉUSSIE] Facture enregistrée et signée par le serveur réel TTN !`);
+        console.log(`- ID de sauvegarde TTN (idSaveEfact) : ${idSaveEfact}`);
+        console.log(`- Référence unique TTN générée : ${referenceTTN}`);
 
         // 🔁 CONSULT TTN
         console.log(`[TTN] Consultation TTN avec idSaveEfact: ${idSaveEfact}`);
@@ -190,7 +211,7 @@ const processTTNSubmission = async (
           `[TTN] Document ${doc.id} terminé avec succès (signée_ttn)`,
         );
       } catch (ttnErr) {
-        console.error(`[TTN] Document ${doc.id} ÉCHEC:`, ttnErr.message);
+        console.error(`\n[TTN 🔴 TRAITEMENT ÉCHOUÉ] Facture ${doc.id} rejetée par le système :`, ttnErr.message);
         // 💾 UPDATE DOCUMENT to 'refusée par TTN'
         await db
           .promise()

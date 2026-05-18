@@ -13,13 +13,13 @@ def run_local_git_push():
             capture_output=True
         )
         
-        # ⚠️ force push (important après reset)
+        # force push (important apres reset)
         subprocess.run(["git", "push", "--force", "origin", "main"], check=True)
         
-        print("✅ Push GitHub réussi !")
+        print("SUCCESS: Push GitHub reussi !")
         
     except Exception as e:
-        print(f"⚠️ Erreur ou rien à pousser sur Git : {e}")
+        print(f"WARNING: Erreur ou rien a pousser sur Git : {e}")
 
 
 def update_full():
@@ -49,7 +49,7 @@ def update_full():
         print(stdout.read().decode())
         print(stderr.read().decode())
         
-        # 4. Build React (TRÈS IMPORTANT 🔥)
+        # 4. Build React (TRES IMPORTANT)
         print("\n--- 4. Build React (clientweb) ---")
         cmd_build = '''
         cd /var/www/medica_sign/clientweb &&
@@ -76,10 +76,10 @@ def update_full():
         print(stdout.read().decode())
         print(stderr.read().decode())
         
-        print("\n✅ MISE À JOUR COMPLÈTE TERMINÉE AVEC SUCCÈS !")
+        print("\nSUCCESS: MISE A JOUR COMPLETE TERMINEE AVEC SUCCES !")
         
     except Exception as e:
-        print(f"❌ Erreur : {e}")
+        print(f"ERROR : {e}")
         
     finally:
         ssh.close()
