@@ -684,7 +684,7 @@ const CreateTransaction = () => {
                   </div>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: "15px", color: autoGenerateXml ? "#1d4ed8" : "#475569" }}>
-                      ⚡ Générer le XML automatiquement avec l'IA
+                      Générer le XML automatiquement avec l'IA
                     </div>
                     <div style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>
                       Extrait instantanément les données du PDF pour créer un XML TEIF conforme.
@@ -731,7 +731,7 @@ const CreateTransaction = () => {
                           onClick={handleGenerateXmlPreview}
                           disabled={isGeneratingXml}
                         >
-                          {isGeneratingXml ? "🤖 Analyse et génération en cours..." : "⚙️ Générer & prévisualiser le XML"}
+                          {isGeneratingXml ? "Analyse et génération en cours..." : "Générer & prévisualiser le XML"}
                         </button>
 
                         {previewXml && (
