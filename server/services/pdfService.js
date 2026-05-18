@@ -330,7 +330,15 @@ Consignes strictes :
        - Le premier <MoaDetails> avec amountTypeCode="I-183" DOIT être le Montant HT total de la ligne (par exemple, 1400.000).
        - Le second <MoaDetails> avec amountTypeCode="I-171" DOIT être le Prix Unitaire Net de la ligne (par exemple, 350.000). Ne mets JAMAIS le montant de la TVA ou autre chose ici.
      * RÈGLE D'OR ARITHMÉTIQUE INVIOLABLE : Fais obligatoirement une validation mathématique pour chaque ligne ! La formule [Quantité] x [Prix Unitaire Net (I-171)] DOIT être rigoureusement égale au [Montant HT de la ligne (I-183)]. 
-       Si le texte extrait du PDF fusionne les colonnes sous la forme "4 350.000" ou "4350.000", et que le montant HT de la ligne est "1400.000", déduis mathématiquement que la quantité est 4 (car 1400 / 350 = 4) et insère "4" dans <Quantity> et "350.000" dans le Moa I-171.
+        Ne devine jamais des valeurs qui ne figurent pas dans le texte brut.
+      * COMMENT DÉCODER LES COLONNES CONCATÉNÉES (ex: "4350.00019266.00001 400.0001 666.000") :
+        Le parseur PDF peut coller les chiffres des colonnes sans espace. Décode toujours en analysant les nombres de droite à gauche et en faisant des validations arithmétiques croisées :
+        - L'ordre logique des colonnes de gauche à droite est toujours : [Quantité][Prix Unitaire][Taux TVA][Montant TVA][Remise][Total HT][Total TTC].
+        - Repère le Total HT de la ligne (ex: "1 400.000" ou "1400.000") et le Total TTC de la ligne (ex: "1 666.000" ou "1666.000").
+        - Repère le Taux TVA (ex: 19) et le Montant TVA (ex: 266.000), qui forment ensemble la chaîne "19266.000".
+        - Isole ce qui se trouve à l'extrême gauche (ex: "4350.000").
+        - La formule [Quantité] x [Prix Unitaire] doit faire exactement le Total HT (1400.000). Le seul découpage possible de "4350.000" qui satisfait [Quantité] x [Prix Unitaire] = 1400.000 est Quantité = 4 et Prix Unitaire = 350.000.
+        - Applique ce raisonnement logique rigoureux à chaque ligne fusionnée pour extraire la Quantité exacte et le Prix Unitaire exact.
      * Le taux de TVA (TaxRate) de la ligne dans <LinTax> (par exemple 19).
    - Totaux de facture (InvoiceMoa & InvoiceTax) : Total TTC (Moa I-180), Total HT (Moa I-176), Total TVA (Moa I-181), Timbre fiscal (Moa I-178 = 1.000 par défaut si non spécifié), TVA par taux.
    - Montant en toutes lettres en français (Moa I-180/AmountDescription, ex: 'cinq cent quatre-vingt-seize dinars').
