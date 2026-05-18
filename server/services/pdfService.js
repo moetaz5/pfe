@@ -334,7 +334,8 @@ Consignes strictes :
      * Le taux de TVA (TaxRate) de la ligne dans <LinTax> (par exemple 19).
    - Totaux de facture (InvoiceMoa & InvoiceTax) : Total TTC (Moa I-180), Total HT (Moa I-176), Total TVA (Moa I-181), Timbre fiscal (Moa I-178 = 1.000 par défaut si non spécifié), TVA par taux.
    - Montant en toutes lettres en français (Moa I-180/AmountDescription, ex: 'cinq cent quatre-vingt-seize dinars').
-2. Renvoie UNIQUEMENT le code XML brut complet et valide. Aucun texte explicatif, aucun bloc markdown de code (ne commence pas par \`\`\`xml). Le premier caractère doit être '<'.`;
+2. Le XML DOIT être parfaitement bien formé et syntaxiquement valide. Révise attentivement toutes les balises fermantes (par exemple, la balise <InvoiceMoa> doit OBLIGATOIREMENT se fermer par </InvoiceMoa>, et <InvoiceTax> par </InvoiceTax>). Ne mélange jamais les balises fermantes et n'oublie aucune fermeture.
+3. Renvoie UNIQUEMENT le code XML brut complet et valide. Aucun texte explicatif, aucun bloc markdown de code (ne commence pas par \`\`\`xml). Le premier caractère doit être '<'.`;
 
     const openRouterResponse = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
