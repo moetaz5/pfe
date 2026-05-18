@@ -1,41 +1,4 @@
 === LOGS STANDARDS DE MEDICA SIGN ===
-[dotenv@17.2.3] injecting env (13) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
-[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
-[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
-[dotenv@17.2.3] injecting env (13) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
-[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  override existing env vars with { override: true }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
-[dotenv@17.2.3] injecting env (13) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
-[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
-[dotenv@17.2.3] injecting env (13) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
-[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (13) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
-[dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
 [dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
 [dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
 [dotenv@17.2.3] injecting env (13) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
@@ -299,20 +262,46 @@ OK Table api_routes synchronisee (102 APIs).
 [TTN] Traitement doc 40 (facture_5)
 [TTN] Début de traitement en tâche de fond pour TX #40
 [TTN] Traitement doc 40 (facture_5)
+📧 Email de refus envoyé au client: kobbi.moetez@medicacom.tn
+📧 Email de refus envoyé au client: kobbi.moetez@medicacom.tn
+[TTN] Début de traitement en tâche de fond pour TX #41
+[TTN] Traitement doc 41 (facture_5)
+[TTN] Début de traitement en tâche de fond pour TX #41
+[TTN] Traitement doc 41 (facture_5)
+📧 Email de refus envoyé au client: moetazkobbi@gmail.com
+📧 Email de refus envoyé au client: moetazkobbi@gmail.com
+[dotenv@17.2.3] injecting env (18) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[TTN] Début de traitement en tâche de fond pour TX #41
+[TTN] Traitement doc 41 (facture_5)
+📧 Email de refus envoyé au client: moetazkobbi@gmail.com
+[dotenv@17.2.3] injecting env (18) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[dotenv@17.2.3] injecting env (18) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+🚀 Server running on port 5000
+✅ MySQL connecté au serveur (via Pool)
+Table notifications prête
+✅ Tables et base de données initialisées avec succès
+OK Table api_routes synchronisee (102 APIs).
+[TTN] Début de traitement en tâche de fond pour TX #41
+[TTN] Traitement doc 41 (facture_5)
 
 
 === LOGS D'ERREUR DE MEDICA SIGN ===
-    at Object.<anonymous> (/var/www/medica_sign/server/server.js:180:1)
-/var/www/medica_sign/server/routes/auth.routes.js:1134
-};
-^
-
-SyntaxError: Missing catch or finally after try
-    at wrapSafe (node:internal/modules/cjs/loader:1743:18)
-    at Module._compile (node:internal/modules/cjs/loader:1786:20)
-    at Object..js (node:internal/modules/cjs/loader:1943:10)
-    at Module.load (node:internal/modules/cjs/loader:1533:32)
-    at Module._load (node:internal/modules/cjs/loader:1335:12)
     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
     at Module.<anonymous> (node:internal/modules/cjs/loader:1556:12)
     at Hook._require.Module.require (/usr/local/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
@@ -602,3 +591,14 @@ EXTERNAL LIST FACTURES ERROR: Error: Table 'medica_sign.factures' doesn't exist
   sqlState: '42S02',
   sqlMessage: "Table 'medica_sign.factures' doesn't exist"
 }
+[TTN] Document 40 ÉCHEC: timeout of 60000ms exceeded
+[TTN] Document 40 ÉCHEC: timeout of 60000ms exceeded
+[TTN] Document 41 ÉCHEC: timeout of 60000ms exceeded
+[TTN] Document 41 ÉCHEC: timeout of 60000ms exceeded
+
+[TTN 🔴 ERREUR RÉSEAU / TIMEOUT] Impossible de se connecter au serveur Tunisie TradeNet (TTN).
+- URL cible : https://test.elfatoora.tn:443/ElfatouraServices/EfactService
+- Erreur système : timeout of 60000ms exceeded (Code: ECONNABORTED)
+- Diagnostic : Cela indique généralement que l'adresse IP du serveur (51.178.39.67) est bloquée par le pare-feu géographique de TTN (whitelisting obligatoire).
+
+[TTN 🔴 TRAITEMENT ÉCHOUÉ] Facture 41 rejetée par le système : timeout of 60000ms exceeded

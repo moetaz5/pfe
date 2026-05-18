@@ -175,7 +175,7 @@ const processTTNSubmission = async (
         console.log(`- ID de sauvegarde TTN (idSaveEfact) : ${idSaveEfact}`);
         console.log(`- Référence unique TTN générée : ${referenceTTN}`);
 
-        // 🔁 CONSULT TTN
+        //CONSULT TTN
         console.log(`[TTN] Consultation TTN avec idSaveEfact: ${idSaveEfact}`);
         const xmlSignedTTN = await consultEfactTTN(idSaveEfact);
         const xmlDecoded = decodeXmlB64(xmlSignedTTN);
@@ -193,7 +193,7 @@ const processTTNSubmission = async (
           refConfig,
         });
 
-        // 💾 UPDATE DOCUMENT to 'signée_ttn'
+        //UPDATE DOCUMENT to 'signée_ttn'
         await db.promise().query(
           `
           UPDATE transaction_documents
@@ -222,7 +222,7 @@ const processTTNSubmission = async (
       }
     }
 
-    // 🔄 UPDATE TRANSACTION status based on documents
+    //UPDATE TRANSACTION status based on documents
     const [finalDocs] = await db
       .promise()
       .query(
