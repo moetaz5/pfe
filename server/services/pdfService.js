@@ -406,7 +406,7 @@ Consignes strictes :
     const openRouterResponse = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "openai/gpt-4o",
+        model: "openai/gpt-4o-mini",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: `Voici le texte brut extrait du PDF de la facture :\n\n${extractedText}` }
