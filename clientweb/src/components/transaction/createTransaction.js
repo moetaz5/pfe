@@ -688,6 +688,7 @@ const CreateTransaction = () => {
                     <div style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>
                       Extrait instantanément les données du PDF pour créer un XML TEIF conforme.
                     </div>
+                  </div>
                 </div>
 
                 {autoGenerateXml && (
