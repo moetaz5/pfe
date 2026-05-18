@@ -60,6 +60,16 @@ def update_full():
         print(stdout.read().decode())
         print(stderr.read().decode())
         
+        # 4.5 Install Backend Dependencies
+        print("\n--- 4.5. Install Backend Dependencies (server) ---")
+        cmd_backend = '''
+        cd /var/www/medica_sign/server &&
+        npm install
+        '''
+        stdin, stdout, stderr = ssh.exec_command(cmd_backend)
+        print(stdout.read().decode())
+        print(stderr.read().decode())
+        
         # 5. Reload Nginx
         print("\n--- 5. Reload Nginx ---")
         cmd_nginx = '''
