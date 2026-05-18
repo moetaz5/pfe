@@ -350,6 +350,14 @@ Consignes strictes :
         ou : Quantite x Prix Unitaire = Total HT ligne (a 0.001 pres).
         INTERDICTION de presupposer la quantite avant le calcul.
 
+        REGLE CRITIQUE - NE JAMAIS INFERER LA QUANTITE DEPUIS LA DESCRIPTION :
+        La description textuelle de l article (ex: "abonnement... les mois fevrier-mars-avril-mai")
+        ne determine JAMAIS la quantite. Meme si la description evoque plusieurs mois ou unites,
+        la quantite DOIT etre extraite exclusivement du bloc numerique par validation mathematique.
+        Exemple concret : "4350.00019266.00001 400.0001 666.000" => la description est sur une
+        ligne separee, mais le "4" au debut du bloc numerique est la Quantite, et "350.000" est
+        le Prix Unitaire, car 4 x 350.000 = 1400.000 = Total HT. Ne pas mettre Quantite=1.
+
         DEUX EXEMPLES REELS (references absolues) :
 
         Exemple A : Bloc = "11000 JETONS1500.0001995.0000500.000595.000"
@@ -398,7 +406,7 @@ Consignes strictes :
     const openRouterResponse = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "openai/gpt-4o-mini",
+        model: "openai/gpt-4o",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: `Voici le texte brut extrait du PDF de la facture :\n\n${extractedText}` }
