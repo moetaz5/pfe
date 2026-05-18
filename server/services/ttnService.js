@@ -8,7 +8,7 @@ const { sendSignedPdfsToClient, sendRejectionEmailToClient } = require("./emailS
 
 // ==========================================================
 //**TTN*================ */
-const TTN_URL = process.env.TTN_URL || "http://127.0.0.1:5001/ElfatouraServices/EfactService";
+const TTN_URL = process.env.TTN_URL || "https://test.elfatoora.tn/ElfatouraServices/EfactService";
 const TTN_LOGIN = process.env.TTN_LOGIN || "testuser";
 const TTN_PASSWORD = process.env.TTN_PASSWORD || "testpass";
 const TTN_MATRICULE = process.env.TTN_MATRICULE || "1234567ABC";
@@ -22,14 +22,14 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const extractSoapReturn = (xmlText) => {
   const match = String(xmlText || "").match(
-    /<[^>]*return[^>]*>([\s\S]*?)<\/[^>]*return>/i,
+    /<[^>]*:?return[^>]*>([\s\S]*?)<\/[^>]*:?return>/i,
   );
   return match ? match[1].trim() : null;
 };
 
 const extractSoapFault = (xmlText) => {
   const match = String(xmlText || "").match(
-    /<[^>]*faultstring[^>]*>([\s\S]*?)<\/[^>]*faultstring>/i,
+    /<[^>]*:?faultstring[^>]*>([\s\S]*?)<\/[^>]*:?faultstring>/i,
   );
   return match ? match[1].trim() : null;
 };
@@ -51,7 +51,7 @@ const saveEfactTTN = async (xmlBase64) => {
     timeout: 60000,
     headers: {
       "Content-Type": "text/xml; charset=utf-8",
-      SOAPAction: "",
+      SOAPAction: "saveEfact",
     },
     httpsAgent: TTN_URL.startsWith("https") ? httpsAgent : undefined,
     validateStatus: () => true,
@@ -87,7 +87,7 @@ const consultEfactTTN = async (idSaveEfact) => {
       timeout: 60000,
       headers: {
         "Content-Type": "text/xml; charset=utf-8",
-        SOAPAction: "",
+        SOAPAction: "consultEfact",
       },
       httpsAgent: TTN_URL.startsWith("https") ? httpsAgent : undefined,
       validateStatus: () => true,
