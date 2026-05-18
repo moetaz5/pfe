@@ -1,4 +1,5 @@
 const axios = require("axios");
+const https = require("https");
 const db = require("../db");
 const { resolveConfig, extractReferenceCEVFromXml, generateQrPngBase64, stampPdfWithTTN } = require("./pdfService");
 const { cleanBase64, decodeXmlB64 } = require("../utils/base64Utils");
@@ -7,13 +8,15 @@ const { sendSignedPdfsToClient, sendRejectionEmailToClient } = require("./emailS
 
 // ==========================================================
 //**TTN*================ */
-const TTN_URL = "http://127.0.0.1:5001/ElfatouraServices/EfactService";
+const TTN_URL = process.env.TTN_URL || "http://127.0.0.1:5001/ElfatouraServices/EfactService";
+const TTN_LOGIN = process.env.TTN_LOGIN || "testuser";
+const TTN_PASSWORD = process.env.TTN_PASSWORD || "testpass";
+const TTN_MATRICULE = process.env.TTN_MATRICULE || "1234567ABC";
 
-const TTN_LOGIN = "testuser";
-
-const TTN_PASSWORD = "testpass";
-
-const TTN_MATRICULE = "1234567ABC";
+// HTTPS SSL Agent for TTN Integration
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: process.env.TTN_REJECT_UNAUTHORIZED !== "false",
+});
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -50,6 +53,7 @@ const saveEfactTTN = async (xmlBase64) => {
       "Content-Type": "text/xml; charset=utf-8",
       SOAPAction: "",
     },
+    httpsAgent: TTN_URL.startsWith("https") ? httpsAgent : undefined,
     validateStatus: () => true,
   });
 
@@ -85,6 +89,7 @@ const consultEfactTTN = async (idSaveEfact) => {
         "Content-Type": "text/xml; charset=utf-8",
         SOAPAction: "",
       },
+      httpsAgent: TTN_URL.startsWith("https") ? httpsAgent : undefined,
       validateStatus: () => true,
     });
 
