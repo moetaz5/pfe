@@ -329,6 +329,8 @@ Consignes strictes :
      * Dans <LinMoa> :
        - Le premier <MoaDetails> avec amountTypeCode="I-183" DOIT être le Montant HT total de la ligne (par exemple, 1400.000).
        - Le second <MoaDetails> avec amountTypeCode="I-171" DOIT être le Prix Unitaire Net de la ligne (par exemple, 350.000). Ne mets JAMAIS le montant de la TVA ou autre chose ici.
+     * RÈGLE D'OR ARITHMÉTIQUE : Fais obligatoirement une vérification mathématique pour chaque ligne ! La multiplication [Quantité] x [Prix Unitaire Net (I-171)] DOIT être rigoureusement égale au [Montant HT de la ligne (I-183)]. 
+       Par exemple, si le texte extrait du PDF fusionne ou colle la quantité et le prix unitaire sous la forme "4 350.000" ou "4350.000", et que le montant HT de la ligne est "1400.000", déduis mathématiquement et logiquement que la quantité est 4 et le prix unitaire est 350.000 (car 4 x 350 = 1400). Ajuste les valeurs pour que l'équation soit toujours 100% exacte !
      * Le taux de TVA (TaxRate) de la ligne dans <LinTax> (par exemple 19).
    - Totaux de facture (InvoiceMoa & InvoiceTax) : Total TTC (Moa I-180), Total HT (Moa I-176), Total TVA (Moa I-181), Timbre fiscal (Moa I-178 = 1.000 par défaut si non spécifié), TVA par taux.
    - Montant en toutes lettres en français (Moa I-180/AmountDescription, ex: 'cinq cent quatre-vingt-seize dinars').
