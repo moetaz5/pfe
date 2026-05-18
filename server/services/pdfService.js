@@ -324,7 +324,12 @@ Consignes strictes :
    - Date de facture formatée en ddMMyy (ex: DateText = "160426" pour le 16 avril 2026)
    - Émetteur (PartnerDetails functionCode="I-62") : Matricule Fiscal, Nom, Adresse, Rue, Ville, Code Postal, Téléphone, Email, Forme juridique (SARL, SA, etc.)
    - Client (PartnerDetails functionCode="I-64") : Matricule Fiscal, Nom, Adresse, Ville, Code Postal
-   - Lignes de facture (LinSection/Lin) : itemCode, itemDescription, qty, unit, taxRate, unitPrice, amountHt
+   - Lignes de facture (LinSection/Lin) :
+     * <Quantity> dans <LinQty> : DOIT être la quantité EXACTE extraite du PDF (par exemple 4). Ne mets JAMAIS 1 par défaut si la quantité réelle dans la facture est différente.
+     * Dans <LinMoa> :
+       - Le premier <MoaDetails> avec amountTypeCode="I-183" DOIT être le Montant HT total de la ligne (par exemple, 1400.000).
+       - Le second <MoaDetails> avec amountTypeCode="I-171" DOIT être le Prix Unitaire Net de la ligne (par exemple, 350.000). Ne mets JAMAIS le montant de la TVA ou autre chose ici.
+     * Le taux de TVA (TaxRate) de la ligne dans <LinTax> (par exemple 19).
    - Totaux de facture (InvoiceMoa & InvoiceTax) : Total TTC (Moa I-180), Total HT (Moa I-176), Total TVA (Moa I-181), Timbre fiscal (Moa I-178 = 1.000 par défaut si non spécifié), TVA par taux.
    - Montant en toutes lettres en français (Moa I-180/AmountDescription, ex: 'cinq cent quatre-vingt-seize dinars').
 2. Renvoie UNIQUEMENT le code XML brut complet et valide. Aucun texte explicatif, aucun bloc markdown de code (ne commence pas par \`\`\`xml). Le premier caractère doit être '<'.`;
