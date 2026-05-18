@@ -1,0 +1,9 @@
+[dotenv@17.2.3] injecting env (18) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+✅ MySQL connecté au serveur (via Pool)
+✅ Tables et base de données initialisées avec succès
+=== FILENAME: Facture_FC-2026-0009 (1) ===
+"\n\nFACTURE N° 0009\nDate : 2026-04-16\nC L I E N T \nMEDIPHARM  —  MF : 1367438TAM000\nAV. des Martyrs KELIBIA\nCodeDescriptionQtéP.UTVAMnt TVARemiseTotal HTTotal TTC\n11000 JETONS1500.0001995.0000500.000595.000\nMERCI POUR VOTRE CONFIANCE !\nA R R Ê T É   À   L A   S O M M E   D E   : \nCinq cent quatre-vingt-seize dinars\nTotal HT500.000 DT\nTVA95.000 DT\nTimbre fiscal1.000\nTotal TTC596.000 DT\nMEDICACOM\nMatricule fiscale : 1688843N | Sfax Ville \ncontact@medicacom.tn"
+
+=== FILENAME: Facture_FC-2026-0010 ===
+"\n\nFACTURE N° 0010\nDate : 2026-05-11\nC L I E N T \nConseil National de L'ordre des Pharmaciens de Tunisie  —  MF : 0033498/W\n1082, Belvédère, 56 Rue Ibn Charaf, Tunis\nCodeDescriptionQtéP.UTVAMnt TVARemiseTotal HTTotal TTC\nabonnement Chatbot \"IBN \njezzar\" les mois fevri-\ner-mars-avril-mai\n4350.00019266.00001 400.0001 666.000\nMERCI POUR VOTRE CONFIANCE !\nA R R Ê T É   À   L A   S O M M E   D E   : \nMille six cent soixante-sept dinars\nTotal HT1 400.000 DT\nTVA266.000 DT\nTimbre fiscal1.000\nTotal TTC1 667.000 DT\nMEDICACOM\nMatricule fiscale : 1688843N | Sfax Ville \ncontact@medicacom.tn"
+
