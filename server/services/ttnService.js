@@ -36,14 +36,14 @@ const extractSoapFault = (xmlText) => {
 
 const saveEfactTTN = async (xmlBase64) => {
   const soapBody = `<?xml version="1.0" encoding="UTF-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
   <soap:Body>
-    <saveEfact xmlns="http://services.elfatoura.tradenet.com.tn/">
-      <login>${TTN_LOGIN}</login>
-      <password>${TTN_PASSWORD}</password>
-      <matricule>${TTN_MATRICULE}</matricule>
-      <documentEfact>${cleanBase64(xmlBase64)}</documentEfact>
-    </saveEfact>
+    <tns:saveEfact>
+      <arg0>${TTN_LOGIN}</arg0>
+      <arg1>${TTN_PASSWORD}</arg1>
+      <arg2>${TTN_MATRICULE}</arg2>
+      <arg3>${cleanBase64(xmlBase64)}</arg3>
+    </tns:saveEfact>
   </soap:Body>
 </soap:Envelope>`;
 
@@ -70,16 +70,16 @@ const saveEfactTTN = async (xmlBase64) => {
 const consultEfactTTN = async (idSaveEfact) => {
   for (let attempt = 1; attempt <= 3; attempt++) {
     const soapBody = `<?xml version="1.0" encoding="UTF-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://services.elfatoura.tradenet.com.tn/">
   <soap:Body>
-    <consultEfact xmlns="http://services.elfatoura.tradenet.com.tn/">
-      <login>${TTN_LOGIN}</login>
-      <password>${TTN_PASSWORD}</password>
-      <matricule>${TTN_MATRICULE}</matricule>
-      <efactCriteria>
+    <tns:consultEfact>
+      <arg0>${TTN_LOGIN}</arg0>
+      <arg1>${TTN_PASSWORD}</arg1>
+      <arg2>${TTN_MATRICULE}</arg2>
+      <arg3>
         <idSaveEfact>${idSaveEfact}</idSaveEfact>
-      </efactCriteria>
-    </consultEfact>
+      </arg3>
+    </tns:consultEfact>
   </soap:Body>
 </soap:Envelope>`;
 
