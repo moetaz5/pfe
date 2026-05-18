@@ -333,6 +333,7 @@ const CreateTransaction = () => {
       return false;
     }
 
+    return true;
   };
 
   /* ==========================================================
