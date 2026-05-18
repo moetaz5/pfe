@@ -340,8 +340,16 @@ Consignes strictes :
         - La formule [Quantité] x [Prix Unitaire] doit faire exactement le Total HT (1400.000). Le seul découpage possible de "4350.000" qui satisfait [Quantité] x [Prix Unitaire] = 1400.000 est Quantité = 4 et Prix Unitaire = 350.000.
         - Applique ce raisonnement logique rigoureux à chaque ligne fusionnée pour extraire la Quantité exacte et le Prix Unitaire exact.
      * Le taux de TVA (TaxRate) de la ligne dans <LinTax> (par exemple 19).
-   - Totaux de facture (InvoiceMoa & InvoiceTax) : Total TTC (Moa I-180), Total HT (Moa I-176), Total TVA (Moa I-181), Timbre fiscal (Moa I-178 = 1.000 par défaut si non spécifié), TVA par taux.
-   - Montant en toutes lettres en français (Moa I-180/AmountDescription, ex: 'cinq cent quatre-vingt-seize dinars').
+    - Totaux de facture dans <InvoiceMoa> :
+      * Le premier <AmountDetails> avec <Moa amountTypeCode="I-180"> : DOIT être le Total TTC de la facture (ex: 1667.000). Il contient obligatoirement l'élément enfant <AmountDescription lang="fr"> avec le montant TTC écrit en toutes lettres en français (ex: 'mille six cent soixante-sept dinars').
+      * Le second <AmountDetails> avec <Moa amountTypeCode="I-176"> : DOIT être le Total HT global de la facture (ex: 1400.000).
+      * Le troisième <AmountDetails> avec <Moa amountTypeCode="I-182"> : DOIT être la Base Imposable Globale soumise à TVA (ex: 1400.000). Ne mets jamais le montant de la TVA ici.
+      * Le quatrième <AmountDetails> avec <Moa amountTypeCode="I-181"> : DOIT être le Montant de TVA total de la facture (ex: 266.000). Ne mets jamais le timbre fiscal ou le TTC ici.
+    - Taxes de facture dans <InvoiceTax> :
+      * Le premier <InvoiceTaxDetails> pour le droit de timbre avec <TaxTypeName code="I-1601">droit de timbre</TaxTypeName> et TaxRate = 0 : DOIT contenir un unique <AmountDetails> avec <Moa amountTypeCode="I-178"> égal au montant du timbre fiscal (ex: 1.000).
+      * Le second <InvoiceTaxDetails> pour chaque taux de TVA avec <TaxTypeName code="I-1602">TVA 19</TaxTypeName> (ou autre taux s'il y a lieu) : DOIT obligatoirement contenir deux blocs <AmountDetails> successifs :
+        - Le premier <AmountDetails> avec <Moa amountTypeCode="I-177"> : DOIT être la Base Imposable soumise à ce taux (ex: 1400.000).
+        - Le second <AmountDetails> avec <Moa amountTypeCode="I-178"> : DOIT être le Montant de TVA associé à ce taux (ex: 266.000).
 2. Le XML DOIT être parfaitement bien formé et syntaxiquement valide. Révise attentivement toutes les balises fermantes (par exemple, la balise <InvoiceMoa> doit OBLIGATOIREMENT se fermer par </InvoiceMoa>, et <InvoiceTax> par </InvoiceTax>). Ne mélange jamais les balises fermantes et n'oublie aucune fermeture.
 3. Renvoie UNIQUEMENT le code XML brut complet et valide. Aucun texte explicatif, aucun bloc markdown de code (ne commence pas par \`\`\`xml). Le premier caractère doit être '<'.`;
 
