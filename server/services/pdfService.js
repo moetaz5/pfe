@@ -325,12 +325,12 @@ Consignes strictes :
    - Émetteur (PartnerDetails functionCode="I-62") : Matricule Fiscal, Nom, Adresse, Rue, Ville, Code Postal, Téléphone, Email, Forme juridique (SARL, SA, etc.)
    - Client (PartnerDetails functionCode="I-64") : Matricule Fiscal, Nom, Adresse, Ville, Code Postal
    - Lignes de facture (LinSection/Lin) :
-     * <Quantity> dans <LinQty> : DOIT être la quantité EXACTE extraite du PDF (par exemple 4). Ne mets JAMAIS 1 par défaut si la quantité réelle dans la facture est différente.
+     * <Quantity> dans <LinQty> : DOIT être dynamique. Ne copie JAMAIS la valeur d'exemple "1" du template XML. Elle DOIT être calculée comme [Montant HT de la ligne (I-183)] / [Prix Unitaire Net (I-171)]. Par exemple, si le Montant HT est 1400.000 et le Prix Unitaire est 350.000, la valeur de <Quantity> DOIT ÊTRE EXACTEMENT 4. Toute valeur de quantité incohérente (comme laisser 1 alors que le calcul ou la facture indique 4) rendra le XML invalide.
      * Dans <LinMoa> :
        - Le premier <MoaDetails> avec amountTypeCode="I-183" DOIT être le Montant HT total de la ligne (par exemple, 1400.000).
        - Le second <MoaDetails> avec amountTypeCode="I-171" DOIT être le Prix Unitaire Net de la ligne (par exemple, 350.000). Ne mets JAMAIS le montant de la TVA ou autre chose ici.
-     * RÈGLE D'OR ARITHMÉTIQUE : Fais obligatoirement une vérification mathématique pour chaque ligne ! La multiplication [Quantité] x [Prix Unitaire Net (I-171)] DOIT être rigoureusement égale au [Montant HT de la ligne (I-183)]. 
-       Par exemple, si le texte extrait du PDF fusionne ou colle la quantité et le prix unitaire sous la forme "4 350.000" ou "4350.000", et que le montant HT de la ligne est "1400.000", déduis mathématiquement et logiquement que la quantité est 4 et le prix unitaire est 350.000 (car 4 x 350 = 1400). Ajuste les valeurs pour que l'équation soit toujours 100% exacte !
+     * RÈGLE D'OR ARITHMÉTIQUE INVIOLABLE : Fais obligatoirement une validation mathématique pour chaque ligne ! La formule [Quantité] x [Prix Unitaire Net (I-171)] DOIT être rigoureusement égale au [Montant HT de la ligne (I-183)]. 
+       Si le texte extrait du PDF fusionne les colonnes sous la forme "4 350.000" ou "4350.000", et que le montant HT de la ligne est "1400.000", déduis mathématiquement que la quantité est 4 (car 1400 / 350 = 4) et insère "4" dans <Quantity> et "350.000" dans le Moa I-171.
      * Le taux de TVA (TaxRate) de la ligne dans <LinTax> (par exemple 19).
    - Totaux de facture (InvoiceMoa & InvoiceTax) : Total TTC (Moa I-180), Total HT (Moa I-176), Total TVA (Moa I-181), Timbre fiscal (Moa I-178 = 1.000 par défaut si non spécifié), TVA par taux.
    - Montant en toutes lettres en français (Moa I-180/AmountDescription, ex: 'cinq cent quatre-vingt-seize dinars').
