@@ -94,6 +94,9 @@ const consultEfactTTN = async (idSaveEfact) => {
     });
 
     const raw = response.data;
+    console.log(`\n[TTN 📜 RÉPONSE CONSULTATION BRUTE (XML) DU SERVEUR TTN] :`);
+    console.log(raw);
+    console.log(`----------------------------------------------------------------------\n`);
 
     const xmlMatch = raw.match(
       /<[^>]*xmlContent[^>]*>([\s\S]*?)<\/[^>]*xmlContent>/i,
@@ -143,9 +146,9 @@ const processTTNSubmission = async (
           throw networkErr;
         }
 
-        console.log(
-          `[TTN] raw saveRes for doc ${doc.id}: HTTP ${saveRes.httpStatus}, RAW: ${saveRes.raw?.substring(0, 300)}...`,
-        );
+        console.log(`\n[TTN 📜 RÉPONSE BRUTE (XML) DU SERVEUR TTN (Identique à Postman)] :`);
+        console.log(saveRes.raw);
+        console.log(`----------------------------------------------------------------------\n`);
 
         if (saveRes.fault) {
           console.error(`\n[TTN 🔴 REFUS DU SERVEUR TTN (SOAP Fault)] Le serveur a renvoyé un message d'erreur.`);
