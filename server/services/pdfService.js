@@ -358,7 +358,7 @@ Consignes strictes :
         ligne separee, mais le "4" au debut du bloc numerique est la Quantite, et "350.000" est
         le Prix Unitaire, car 4 x 350.000 = 1400.000 = Total HT. Ne pas mettre Quantite=1.
 
-        DEUX EXEMPLES REELS (references absolues) :
+        TROIS EXEMPLES REELS (references absolues) :
 
         Exemple A : Bloc = "11000 JETONS1500.0001995.0000500.000595.000"
           Extraction : TTC=595.000 | HT=500.000 | Remise=0 | TVA=95.000 | Taux=19
@@ -371,6 +371,16 @@ Consignes strictes :
           Reste gauche : "4350.000"
           Test Qte=4 x PU=350.000 = 1400.000 [OK]
           => <Quantity>4</Quantity> | I-183=1400.000 | I-171=350.000
+
+        Exemple C (Multi-articles avec TVA 20% et Timbre 0) : Facture multi-produits (ex: "mon produit", qte=2, prix=50 et "mon service", qte=3, prix=100)
+          - Ligne 1 ("mon produit") : Qte = 2 | Prix Unitaire = 50.000 | Total HT (I-183) = 100.000 | TVA = 20.000 | Taux = 20
+          - Ligne 2 ("mon service") : Qte = 3 | Prix Unitaire = 100.000 | Total HT (I-183) = 300.000 | TVA = 60.000 | Taux = 20
+          - Totaux globaux de la facture :
+            * Total HT (I-176) = 400.000 (100.000 + 300.000)
+            * Base Imposable (I-182) = 400.000
+            * Total TVA (I-181) = 80.000 (20.000 + 60.000)
+            * Timbre Fiscal (I-181 / I-178 timbre) = 0.000
+            * Total TTC (I-180) = 480.000 (400.000 + 80.000) avec description "quatre cent quatre-vingts dinars"
 
       ETAPE 5 - Validation croisee finale (OBLIGATOIRE avant de generer le XML) :
         [OK] Quantite x I-171 = I-183

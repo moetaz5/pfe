@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEIF controlingAgency="TTN" version="1.8.9">
+
+<InvoiceHeader>
+<MessageSenderIdentifier type="I-01">1688843N</MessageSenderIdentifier>
+<MessageRecieverIdentifier type="I-04">CLIENT001</MessageRecieverIdentifier>
+</InvoiceHeader>
+
+<InvoiceBody>
+
+<Bgm>
+<DocumentIdentifier>0001</DocumentIdentifier>
+<DocumentType code="I-11">Facture</DocumentType>
+</Bgm>
+
+<Dtm>
+<DateText format="ddMMyy" functionCode="I-31">180526</DateText>
+</Dtm>
+
+<PartnerSection>
+
+<PartnerDetails functionCode="I-62">
+<Nad>
+<PartnerIdentifier type="I-01">1688843N</PartnerIdentifier>
+<PartnerName nameType="Qualification">MEDICACOM</PartnerName>
+
+<PartnerAdresses lang="fr">
+<AdressDescription>Société MEDICACOM</AdressDescription>
+<Street>56 Rue Ibn Charaf</Street>
+<CityName>SFAX</CityName>
+<PostalCode>3000</PostalCode>
+<Country codeList="ISO_3166-1">TN</Country>
+</PartnerAdresses>
+
+</Nad>
+
+<CtaSection>
+<Contact functionCode="I-94">
+<ContactIdentifier>MEDICACOM</ContactIdentifier>
+<ContactName>MEDICACOM</ContactName>
+</Contact>
+
+<Communication>
+<ComMeansType>I-103</ComMeansType>
+<ComAdress>contact@medicacom.tn</ComAdress>
+</Communication>
+
+</CtaSection>
+</PartnerDetails>
+
+<PartnerDetails functionCode="I-64">
+<Nad>
+
+<PartnerIdentifier type="I-04">CLIENT001</PartnerIdentifier>
+
+<PartnerName nameType="Qualification">CLIENT TEST</PartnerName>
+
+<PartnerAdresses lang="fr">
+<AdressDescription>Adresse Client</AdressDescription>
+<Street>Tunis Centre</Street>
+<CityName>Tunis</CityName>
+<PostalCode>1000</PostalCode>
+<Country codeList="ISO_3166-1">TN</Country>
+</PartnerAdresses>
+
+</Nad>
+</PartnerDetails>
+
+</PartnerSection>
+
+<LinSection>
+
+<Lin>
+
+<ItemIdentifier>1</ItemIdentifier>
+
+<LinImd lang="fr">
+<ItemCode>1</ItemCode>
+<ItemDescription>Abonnement plateforme MedicaSign</ItemDescription>
+</LinImd>
+
+<LinQty>
+<Quantity measurementUnit="UNIT">4</Quantity>
+</LinQty>
+
+<LinTax>
+<TaxTypeName code="I-1602">TVA</TaxTypeName>
+
+<TaxDetails>
+<TaxRate>19</TaxRate>
+</TaxDetails>
+
+</LinTax>
+
+<LinMoa>
+
+<MoaDetails>
+<Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+<Amount currencyIdentifier="TND">1400.000</Amount>
+</Moa>
+</MoaDetails>
+
+<MoaDetails>
+<Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+<Amount currencyIdentifier="TND">350.000</Amount>
+</Moa>
+</MoaDetails>
+
+</LinMoa>
+
+</Lin>
+
+</LinSection>
+
+<InvoiceMoa>
+
+<AmountDetails>
+<Moa amountTypeCode="I-180" currencyCodeList="ISO_4217">
+<Amount currencyIdentifier="TND">1667.000</Amount>
+<AmountDescription lang="fr">
+mille six cent soixante sept dinars
+</AmountDescription>
+</Moa>
+</AmountDetails>
+
+<AmountDetails>
+<Moa amountTypeCode="I-176" currencyCodeList="ISO_4217">
+<Amount currencyIdentifier="TND">1400.000</Amount>
+</Moa>
+</AmountDetails>
+
+<AmountDetails>
+<Moa amountTypeCode="I-182" currencyCodeList="ISO_4217">
+<Amount currencyIdentifier="TND">266.000</Amount>
+</Moa>
+</AmountDetails>
+
+<AmountDetails>
+<Moa amountTypeCode="I-181" currencyCodeList="ISO_4217">
+<Amount currencyIdentifier="TND">1.000</Amount>
+</Moa>
+</AmountDetails>
+
+</InvoiceMoa>
+
+<InvoiceTax>
+
+<InvoiceTaxDetails>
+
+<Tax>
+<TaxTypeName code="I-1601">droit de timbre</TaxTypeName>
+
+<TaxDetails>
+<TaxRate>0</TaxRate>
+</TaxDetails>
+
+</Tax>
+
+<AmountDetails>
+<Moa amountTypeCode="I-178" currencyCodeList="ISO_4217">
+<Amount currencyIdentifier="TND">1.000</Amount>
+</Moa>
+</AmountDetails>
+
+</InvoiceTaxDetails>
+
+<InvoiceTaxDetails>
+
+<Tax>
+<TaxTypeName code="I-1602">TVA 19</TaxTypeName>
+
+<TaxDetails>
+<TaxRate>19</TaxRate>
+</TaxDetails>
+
+</Tax>
+
+<AmountDetails>
+<Moa amountTypeCode="I-177" currencyCodeList="ISO_4217">
+<Amount currencyIdentifier="TND">1400.000</Amount>
+</Moa>
+</AmountDetails>
+
+<AmountDetails>
+<Moa amountTypeCode="I-178" currencyCodeList="ISO_4217">
+<Amount currencyIdentifier="TND">266.000</Amount>
+</Moa>
+</AmountDetails>
+
+</InvoiceTaxDetails>
+
+</InvoiceTax>
+
+</InvoiceBody>
+
+<!-- SIGNATURE TUNTRUST ICI -->
+
+</TEIF>
