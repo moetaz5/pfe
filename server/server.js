@@ -18,7 +18,7 @@ const passport = require("./googleAuth");
 // ===================== MODULES EXTRAITS =====================
 const { bufferToB64, b64ToBuffer, ensureBase64String, cleanBase64, decodeXmlB64 } = require('./utils/base64Utils');
 const { createNotification, notifyAdmins } = require('./services/notificationService');
-const { safeJsonParse, resolveConfig, extractReferenceCEVFromXml, extractReferenceTTNFromXml, generateQrPngBase64, stampPdfWithTTN } = require('./services/pdfService');
+const { safeJsonParse, resolveConfig, extractReferenceCEVFromXml, extractReferenceTTNFromXml, generateQrPngBase64, stampPdfWithTTN, generateXmlFromPdf } = require('./services/pdfService');
 const { transporter, sendSignatureEmail, sendSignedPdfsToClient, sendRejectionEmailToClient, sendVerificationEmail, EMAIL_REGEX, isValidEmail, sanitizeEmailHtml, sendTokenRequestPaymentPendingEmail, sendTokenRequestDecisionEmail } = require('./services/emailService');
 const { TTN_URL, TTN_LOGIN, TTN_PASSWORD, TTN_MATRICULE, sleep, extractSoapReturn, extractSoapFault, saveEfactTTN, consultEfactTTN, processTTNSubmission, handleResendTTNCore } = require('./services/ttnService');
 const { googleExchangeTokens, verifyToken, verifyRole, verifyApiToken } = require('./middleware/authMiddleware');
@@ -151,6 +151,7 @@ const locals = {
   extractReferenceTTNFromXml,
   generateQrPngBase64,
   stampPdfWithTTN,
+  generateXmlFromPdf,
   bufferToB64,
   b64ToBuffer,
   ensureBase64String,

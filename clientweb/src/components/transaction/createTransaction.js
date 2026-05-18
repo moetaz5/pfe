@@ -266,6 +266,9 @@ const CreateTransaction = () => {
 
   // ✅ Mode exclusif pour l'upload
   const [pdfSourceMode, setPdfSourceMode] = useState(PDF_SOURCE.UPLOAD);
+  
+  // ✅ Mode IA Auto Generate
+  const [autoGenerateXml, setAutoGenerateXml] = useState(false);
 
   // UI
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -315,8 +318,8 @@ const CreateTransaction = () => {
       }
     }
 
-    if (xmlFiles.length !== 1) {
-      notify.error("Importez un seul XML.");
+    if (!autoGenerateXml && xmlFiles.length !== 1) {
+      notify.error("Importez un seul XML ou activez la génération automatique avec l'IA.");
       return false;
     }
 
@@ -355,9 +358,12 @@ const CreateTransaction = () => {
       formData.append("pdf_files", pdfFiles[0]);
     }
 
-    // Ajout du fichier XML
-    if (xmlFiles.length === 1) {
+    // Ajout du fichier XML ou de l'option auto_generate
+    if (!autoGenerateXml && xmlFiles.length === 1) {
       formData.append("xml_files", xmlFiles[0]);
+    }
+    if (autoGenerateXml) {
+      formData.append("auto_generate_xml", "true");
     }
 
     try {
@@ -603,82 +609,118 @@ const CreateTransaction = () => {
               </div>
 
               {/* ==================================================
-                 Section: XML Upload (Always mandatory)
+                 Section: XML Upload (Always mandatory unless auto-generated)
                  ================================================== */}
               <div style={{ marginTop: 18 }}>
                 <SectionTitle
                   icon={<FileText size={18} />}
-                  title="Importer le XML"
-                  subtitle="Obligatoire dans tous les cas"
+                  title="Source XML"
+                  subtitle="Générer automatiquement avec l'IA ou importer manuellement"
                 />
 
-                <div
-                  className="upload-box"
-                  style={{ cursor: "pointer", position: "relative" }}
+                <div 
+                  onClick={() => {
+                    setAutoGenerateXml(!autoGenerateXml);
+                    if (!autoGenerateXml) setXmlFiles([]);
+                  }}
+                  style={{ 
+                    marginBottom: 15, 
+                    display: "flex", 
+                    alignItems: "center", 
+                    gap: 12, 
+                    padding: "16px 20px", 
+                    borderRadius: "14px", 
+                    background: autoGenerateXml ? "#eff6ff" : "#f8fafc", 
+                    border: autoGenerateXml ? "2px solid #3b82f6" : "1px solid #e2e8f0", 
+                    cursor: "pointer", 
+                    transition: "all 0.2s",
+                    boxShadow: autoGenerateXml ? "0 4px 12px rgba(59, 130, 246, 0.15)" : "none"
+                  }}
                 >
-                  <div 
-                    onClick={() => xmlInputRef.current?.click()}
-                    style={{ flex: 1, display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <FileText size={18} />
-                    {xmlFiles.length ? "1 XML importé" : "Importer un XML (obligatoire)"}
+                  <div style={{ display: "grid", placeItems: "center", width: 28, height: 28, borderRadius: 8, background: autoGenerateXml ? "#3b82f6" : "#cbd5e1", color: "#fff", transition: "all 0.2s" }}>
+                    {autoGenerateXml ? <CheckCircle2 size={18} /> : null}
                   </div>
-
-                  {xmlFiles.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setXmlFiles([]);
-                        if (xmlInputRef.current) xmlInputRef.current.value = "";
-                        notify.info("XML supprimé");
-                      }}
-                      style={{
-                        background: "transparent",
-                        color: "#dc2626",
-                        border: "none",
-                        borderRadius: "8px",
-                        padding: "8px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        transition: "all 0.2s"
-                      }}
-                      title="Supprimer le XML"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  )}
-
-                  <input
-                    ref={xmlInputRef}
-                    hidden
-                    type="file"
-                    accept="application/xml"
-                    onChange={(e) => {
-                      const files = Array.from(e.target.files || []);
-                      setXmlFiles(files);
-                      notify.success(`${files.length} XML sélectionné(s).`);
-                    }}
-                  />
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: "15px", color: autoGenerateXml ? "#1d4ed8" : "#475569" }}>
+                      ⚡ Générer le XML automatiquement avec l'IA
+                    </div>
+                    <div style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>
+                      Extrait instantanément les données du PDF pour créer un XML TEIF conforme.
+                    </div>
+                  </div>
                 </div>
 
-                {xmlFiles.length > 0 && (
-                  <MiniList>
-                    {xmlFiles.map((f) => (
-                      <MiniItem
-                        key={f.name}
-                        left={
-                          <>
-                            <span>🧾</span>
-                            <span>{f.name}</span>
-                          </>
-                        }
-                        titleRemove="Retirer"
+                {!autoGenerateXml && (
+                  <>
+                    <div
+                      className="upload-box"
+                      style={{ cursor: "pointer", position: "relative" }}
+                    >
+                      <div 
+                        onClick={() => xmlInputRef.current?.click()}
+                        style={{ flex: 1, display: "flex", alignItems: "center", gap: 10 }}
+                      >
+                        <FileText size={18} />
+                        {xmlFiles.length ? "1 XML importé" : "Importer un XML manuellement"}
+                      </div>
+
+                      {xmlFiles.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setXmlFiles([]);
+                            if (xmlInputRef.current) xmlInputRef.current.value = "";
+                            notify.info("XML supprimé");
+                          }}
+                          style={{
+                            background: "transparent",
+                            color: "#dc2626",
+                            border: "none",
+                            borderRadius: "8px",
+                            padding: "8px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            transition: "all 0.2s"
+                          }}
+                          title="Supprimer le XML"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+
+                      <input
+                        ref={xmlInputRef}
+                        hidden
+                        type="file"
+                        accept="application/xml"
+                        onChange={(e) => {
+                          const files = Array.from(e.target.files || []);
+                          setXmlFiles(files);
+                          notify.success(`${files.length} XML sélectionné(s).`);
+                        }}
                       />
-                    ))}
-                  </MiniList>
+                    </div>
+
+                    {xmlFiles.length > 0 && (
+                      <MiniList>
+                        {xmlFiles.map((f) => (
+                          <MiniItem
+                            key={f.name}
+                            left={
+                              <>
+                                <span>🧾</span>
+                                <span>{f.name}</span>
+                              </>
+                            }
+                            titleRemove="Retirer"
+                          />
+                        ))}
+                      </MiniList>
+                    )}
+                  </>
                 )}
               </div>
 
