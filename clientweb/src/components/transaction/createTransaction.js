@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Info,
+  Loader2,
 } from "lucide-react";
 
 // ✅ react-icons
@@ -731,7 +732,14 @@ const CreateTransaction = () => {
                           onClick={handleGenerateXmlPreview}
                           disabled={isGeneratingXml}
                         >
-                          {isGeneratingXml ? "Analyse et génération en cours..." : "Générer & prévisualiser le XML"}
+                          {isGeneratingXml ? (
+                            <>
+                              <Loader2 className="loader-spin" size={18} />
+                              Analyse et génération en cours...
+                            </>
+                          ) : (
+                            "Générer & prévisualiser le XML"
+                          )}
                         </button>
 
                         {previewXml && (
@@ -856,8 +864,26 @@ const CreateTransaction = () => {
                  Submit
                  ================================================== */}
               <div className="form-actions" style={{ marginTop: 18 }}>
-                <button className="btn btn-primary" disabled={isSubmitting}>
-                  <Save size={18} /> {isSubmitting ? "Création..." : "Créer"}
+                <button 
+                  className="btn btn-primary" 
+                  disabled={isSubmitting || isGeneratingXml}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="loader-spin" size={18} />
+                      Création...
+                    </>
+                  ) : isGeneratingXml ? (
+                    <>
+                      <Loader2 className="loader-spin" size={18} />
+                      IA en cours...
+                    </>
+                  ) : (
+                    <>
+                      <Save size={18} />
+                      Créer
+                    </>
+                  )}
                 </button>
               </div>
 

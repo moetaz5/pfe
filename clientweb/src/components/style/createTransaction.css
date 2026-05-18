@@ -307,3 +307,29 @@
 .modal-large {
   max-width: 1200px;
 }
+
+/* Premium disabled buttons */
+.btn:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  background: #cbd5e1 !important;
+  color: #64748b !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Spinner loading animation */
+.loader-spin {
+  animation: loader-spin-animation 1s linear infinite;
+}
+
+@keyframes loader-spin-animation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
